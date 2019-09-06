@@ -147,9 +147,29 @@ public class DatabaseConnection{
     }
     
     static public void drop(Connection conn) throws SQLException{
-       Statement stmt = conn.createStatement();
-       String query = "DROP SCHEME PUBLIC CASCADE";           
-       stmt.executeUpdate(query);
-       stmt.close();
+       Statement statement = conn.createStatement();
+       String myExam = "DROP TABLE Exams";      
+       String myRecipe = "DROP TABLE Recipes"; 
+       String myPrescription = "DROP TABLE Prescriptions"; 
+       String myDrug = "DROP TABLE Drugs"; 
+       String myTicket = "DROP TABLE Tickets"; 
+       String myExamination = "DROP TABLE Examinations"; 
+       String mySpecialist = "DROP TABLE Specialists"; 
+       String myPatient = "DROP TABLE Patients"; 
+       String myDoctor = "DROP TABLE GeneralDoctors"; 
+       String myAllDoctors = "DROP TABLE AllDoctors"; 
+       
+       statement.executeUpdate(myExam);
+       statement.executeUpdate(myRecipe);
+       statement.executeUpdate(myPrescription);
+       statement.executeUpdate(myDrug);
+       statement.executeUpdate(myTicket);
+       statement.executeUpdate(myExamination);
+       statement.executeUpdate(mySpecialist);
+       statement.executeUpdate(myPatient);
+       statement.executeUpdate(myDoctor);
+       statement.executeUpdate(myAllDoctors);                   
+             
+       statement.close();
     }
 }
