@@ -56,13 +56,18 @@ public class DatabaseConnection{
     
     static public void create(Connection conn) throws SQLException{
        Statement statement;
-                        
+             
+            String myUser = "CREATE TABLE Users(\n"+
+            "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
+            "Type CHAR(10) NOT NULL);";
+                    
             String myAllDoctors = "CREATE TABLE AllDoctors( \n" +
             "Name CHAR(40) NOT NULL,\n"+
             "Surname CHAR(40) NOT NULL,\n" +
             "BirthDate DATE NOT NULL,\n"+
             "BirthPlace CHAR(40) NOT NULL, \n"+
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
+            "FOREIGN KEY(SSD) REFERENCES Users(SSD), \n" +
             "Email CHAR(80) NOT NULL);";
             
             String myDoctor = "CREATE TABLE GeneralDoctors( \n" +
@@ -79,6 +84,7 @@ public class DatabaseConnection{
             "Photos INT NOT NULL,\n" +
             "GeneralDoctor CHAR(16),\n" +
             "Email CHAR(80) NOT NULL,\n "+
+            "FOREIGN KEY(SSD) REFERENCES Users(SSD),\n" +
             "FOREIGN KEY(GeneralDoctor) REFERENCES GeneralDoctors(SSD));";
 
             String mySpecialist = "CREATE TABLE Specialists( \n" +
@@ -132,6 +138,7 @@ public class DatabaseConnection{
             "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));" ;
             
             statement = conn.createStatement();
+            statement.executeUpdate(myUser);
             statement.executeUpdate(myAllDoctors);
             statement.executeUpdate(myDoctor);
             statement.executeUpdate(myPatient);               
@@ -158,6 +165,7 @@ public class DatabaseConnection{
        String myPatient = "DROP TABLE Patients"; 
        String myDoctor = "DROP TABLE GeneralDoctors"; 
        String myAllDoctors = "DROP TABLE AllDoctors"; 
+       String myUser = "DROP TABLE Users";
        
        statement.executeUpdate(myExam);
        statement.executeUpdate(myRecipe);
@@ -168,7 +176,8 @@ public class DatabaseConnection{
        statement.executeUpdate(mySpecialist);
        statement.executeUpdate(myPatient);
        statement.executeUpdate(myDoctor);
-       statement.executeUpdate(myAllDoctors);                   
+       statement.executeUpdate(myAllDoctors);
+       statement.executeUpdate(myUser);
              
        statement.close();
     }
