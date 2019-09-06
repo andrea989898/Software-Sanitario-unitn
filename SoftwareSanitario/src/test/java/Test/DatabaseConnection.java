@@ -38,7 +38,12 @@ public class DatabaseConnection{
       
         DatabaseConnection app = new DatabaseConnection();
         Connection conn = app.connect();
-
+            try{
+                drop(conn); //cancello tabella person
+            }
+            catch(SQLException e){
+                System.out.println("Errore drop tabelle");
+            }
             try{
                 create(conn); //creo tabella person                
             }
@@ -46,68 +51,61 @@ public class DatabaseConnection{
                 System.out.println("Errore create tabelle");
             }
             
-            /*try{
-                drop(conn); //cancello tabella person
-            }
-            catch(SQLException e){
-                System.out.println("Errore drop tabelle");
-            }*/
+            
     }
     
     static public void create(Connection conn) throws SQLException{
        Statement statement;
                         
-            String myAllDoctors = "CREATE TABLE allDoctors( \n" +
-            "Nome CHAR(40) NOT NULL,\n"+
-            "Cognome CHAR(40) NOT NULL,\n" +
-            "Nascita DATE NOT NULL,\n"+
-            "LuogoNascita CHAR(40) NOT NULL, \n"+
-            "CodiceFiscale CHAR(16) PRIMARY KEY NOT NULL, \n"+
-            "Email CHAR(80) NOT NULL;";
+            String myAllDoctors = "CREATE TABLE AllDoctors( \n" +
+            "Name CHAR(40) NOT NULL,\n"+
+            "Surname CHAR(40) NOT NULL,\n" +
+            "BirthDate DATE NOT NULL,\n"+
+            "BirthPlace CHAR(40) NOT NULL, \n"+
+            "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
+            "Email CHAR(80) NOT NULL);";
             
-            String myPatient = "CREATE TABLE Patient(\n" +
-            "Nome CHAR(40) NOT NULL,\n"+
-            "Cognome CHAR(40) NOT NULL,\n"+
-            "Nascita DATE NOT NULL, \n"+
-            "LuogoNascita CHAR(40) NOT NULL, \n" +
-            "CodiceFiscale CHAR(16) PRIMARY KEY NOT NULL, \n"+
-            "Sesso CHAR(2) NOT NULL,\n" +
-            "FotoPaziente INT NOT NULL,\n" +
-            "MedicoBase CHAR(16),\n" +
-            "Email CHAR(80) NOT NULL); "+
-            "FOREIGN KEY(MedicoBase) REFERENCES MediciBase(CodiceFiscale));";
+            String myDoctor = "CREATE TABLE GeneralDoctors( \n" +
+            "SSD CHAR(16) PRIMARY KEY NOT NULL, \n" +
+            "FOREIGN KEY(SSD) REFERENCES AllDoctors(SSD));";
+            
+            String myPatient = "CREATE TABLE Patients(\n" +
+            "Name CHAR(40) NOT NULL,\n"+
+            "Surname CHAR(40) NOT NULL,\n"+
+            "BirthDate DATE NOT NULL, \n"+
+            "BirthPlace CHAR(40) NOT NULL, \n" +
+            "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
+            "Gender CHAR(2) NOT NULL,\n" +
+            "Photos INT NOT NULL,\n" +
+            "GeneralDoctor CHAR(16),\n" +
+            "Email CHAR(80) NOT NULL,\n "+
+            "FOREIGN KEY(GeneralDoctor) REFERENCES GeneralDoctors(SSD));";
 
-
-
-            String myDoctor = "CREATE TABLE Doctors( \n" +
-            "CodiceFiscale CHAR(16) PRIMARY KEY NOT NULL, \n" +
-            "FOREIGN KEY(CodiceFiscale) REFERENCES Medici(CodiceFiscale));";
-
-            String mySpecialist = "CREATE TABLE Specialist( \n" +
-            "Specializzazione CHAR(70), \n" +
-            "CodiceFiscale CHAR(16) PRIMARY KEY NOT NULL,\n"+  
-            "FOREIGN KEY(CodiceFiscale) REFERENCES Medici(CodiceFiscale));";
+            String mySpecialist = "CREATE TABLE Specialists( \n" +
+            "Specialization CHAR(70), \n" +
+            "SSD CHAR(16) PRIMARY KEY NOT NULL,\n"+  
+            "FOREIGN KEY(SSD) REFERENCES AllDoctors(SSD));";
 
             String myExamination = "CREATE TABLE Examinations( \n" +
-            "IDVisita INT PRIMARY KEY NOT NULL,\n" +
-            "IDPaziente CHAR(16) NOT NULL,\n" +
-            "IDMedico CHAR(16)NOT NULL,\n" +
-            "Orario TIME,\n" +
-            "Luogo CHAR(20),\n" +
+            "IDExamination INT PRIMARY KEY NOT NULL,\n" +
+            "IDPatient CHAR(16) NOT NULL,\n" +
+            "IDDoctor CHAR(16)NOT NULL,\n" +
+            "Time TIME,\n" +
+            "Place CHAR(20),\n" +
             "IsDone BOOLEAN NOT NULL,\n"+
             "IsSpecial BOOLEAN NOT NULL,\n" +
-            "DataVisita DATE,\n"+
-            "Argomento CHAR(100),\n" +
-            "FOREIGN KEY(IDMedico) REFERENCES Medici(CodiceFiscale)," +
-            "FOREIGN KEY(IDPaziente) REFERENCES Pazienti(CodiceFiscale));";
+            "ExaminationDate DATE,\n"+
+            "Argument CHAR(100),\n" +
+            "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD)," +
+            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD));";
 
 
             String myTicket = "CREATE TABLE Tickets( \n"+
-            "Codice INT PRIMARY KEY NOT NULL,\n" +
-            "IDVisita INT,\n" +
-            "FOREIGN KEY (IDVisita) REFERENCES Visite(IDVisita));";
+            "Code INT PRIMARY KEY NOT NULL,\n" +
+            "IDExamination INT,\n" +
+            "FOREIGN KEY (IDExamination) REFERENCES Examinations(IDExamination));";
             
-            String myDrugs = "CREATE TABLE Drugs( \n"+
+            String myDrug = "CREATE TABLE Drugs( \n"+
             "Code INT PRIMARY KEY NOT NULL,\n"+
             "IsForPrescription BOOLEAN NOT NULL,\n"+
             "Name char(100))";
@@ -115,9 +113,9 @@ public class DatabaseConnection{
             String myPrescription = "CREATE TABLE Prescriptions( \n" +
             "Code INT PRIMARY KEY NOT NULL,\n" +
             "IDDrug INT, \n" +
-            "FOREIGN KEY (IDMedicina) REFERENCES Medicine(Codice));";
+            "FOREIGN KEY (IDDrug) REFERENCES Drugs(Code));";
 
-            String myRecipes = "CREATE TABLE Recipes( \n"+
+            String myRecipe = "CREATE TABLE Recipes( \n"+
             "Code INT PRIMARY KEY NOT NULL,\n"+
             "IDDrug INT,\n"+
             "FOREIGN KEY (IDDrug) REFERENCES Drugs(Code));";
@@ -131,17 +129,26 @@ public class DatabaseConnection{
             "IsDone BOOLEAN NOT NULL,\n" +
             "FOREIGN KEY (IDExamination) REFERENCES Examinations(IDExamination),\n"+
             "FOREIGN KEY (IDPrescription) REFERENCES Prescriptions(Code),\n" +
-            "FOREIGN KEY (IDRecipe) REFERENCES Ricipes(Code));" ;
+            "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));" ;
             
             statement = conn.createStatement();
-            statement.executeUpdate(myPatient);   
+            statement.executeUpdate(myAllDoctors);
+            statement.executeUpdate(myDoctor);
+            statement.executeUpdate(myPatient);               
+            statement.executeUpdate(mySpecialist); 
+            statement.executeUpdate(myExamination); 
+            statement.executeUpdate(myTicket); 
+            statement.executeUpdate(myDrug); 
+            statement.executeUpdate(myPrescription); 
+            statement.executeUpdate(myRecipe);
+            statement.executeUpdate(myExam);
             statement.close();
        
     }
     
     static public void drop(Connection conn) throws SQLException{
        Statement stmt = conn.createStatement();
-       String query = "DROP TABLE" + " Pazienti";           
+       String query = "DROP SCHEME PUBLIC CASCADE";           
        stmt.executeUpdate(query);
        stmt.close();
     }
