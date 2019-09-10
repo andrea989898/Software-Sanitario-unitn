@@ -16,9 +16,9 @@ import java.util.ArrayList;
  * @author Francesco
  */
 public class Querys {
-
+    
     public ArrayList <String> GetGeneralDoctors(Connection conn) throws SQLException{
-        ArrayList generalDoctors = new ArrayList();
+        ArrayList<String> generalDoctors = new ArrayList<String>();
         PreparedStatement statement;
         String myGet = "SELECT SSD FROM GeneralDoctors";
         statement = conn.prepareStatement(myGet);
@@ -27,6 +27,8 @@ public class Querys {
         while(rs.next()){
             String columnValue = rs.getString(1);
             generalDoctors.add(columnValue);
+            String gigio = generalDoctors.get(0);
+            System.out.println(gigio);
         }
         statement.close();
         return generalDoctors;

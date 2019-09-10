@@ -64,8 +64,10 @@ public class DatabaseConnection{
             String myAllDoctors = "CREATE TABLE AllDoctors( \n" +
             "Name CHAR(40) NOT NULL,\n"+
             "Surname CHAR(40) NOT NULL,\n" +
+            "Age INT NOT NULL, \n" +        
             "BirthDate DATE NOT NULL,\n"+
             "BirthPlace CHAR(40) NOT NULL, \n"+
+            "Address CHAR(40) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
             "FOREIGN KEY(SSD) REFERENCES Users(SSD), \n" +
             "Email CHAR(80) NOT NULL);";
@@ -77,6 +79,7 @@ public class DatabaseConnection{
             String myPatient = "CREATE TABLE Patients(\n" +
             "Name CHAR(40) NOT NULL,\n"+
             "Surname CHAR(40) NOT NULL,\n"+
+            "Age INT NOT NULL, \n" +
             "BirthDate DATE NOT NULL, \n"+
             "BirthPlace CHAR(40) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
