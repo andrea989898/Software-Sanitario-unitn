@@ -1,0 +1,12 @@
+com\mycompany\softwaresanitario\commons\persistence\dao\jdbc\JDBCUserDAO.class
+com\mycompany\softwaresanitario\commons\persistence\dao\factories\jdbc\JDBCDAOFactory.class
+com\mycompany\softwaresanitario\commons\persistence\entities\User.class
+com\mycompany\softwaresanitario\commons\persistence\dao\exceptions\DAOFactoryException.class
+com\mycompany\softwaresanitario\commons\persistence\dao\exceptions\DAOException.class
+com\mycompany\softwaresanitario\filters\AuthenticationFilter.class
+com\mycompany\softwaresanitario\commons\persistence\dao\jdbc\JDBCDAO.class
+com\mycompany\softwaresanitario\servlet\LoginServlet.class
+com\mycompany\softwaresanitario\commons\persistence\dao\factories\DAOFactory.class
+com\mycompany\softwaresanitario\listener\WebAppContextListener.class
+com\mycompany\softwaresanitario\commons\persistence\dao\DAO.class
+com\mycompany\softwaresanitario\commons\persistence\dao\UserDAO.class

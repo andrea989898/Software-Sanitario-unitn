@@ -1,0 +1,12 @@
+C:\Users\franc\Desktop\Software-Sanitario-unitn\SoftwareSanitario\src\main\java\com\mycompany\softwaresanitario\filters\AuthenticationFilter.java
+C:\Users\franc\Desktop\Software-Sanitario-unitn\SoftwareSanitario\src\main\java\com\mycompany\softwaresanitario\commons\persistence\dao\DAO.java
+C:\Users\franc\Desktop\Software-Sanitario-unitn\SoftwareSanitario\src\main\java\com\mycompany\softwaresanitario\commons\persistence\dao\jdbc\JDBCUserDAO.java
+C:\Users\franc\Desktop\Software-Sanitario-unitn\SoftwareSanitario\src\main\java\com\mycompany\softwaresanitario\listener\WebAppContextListener.java
+C:\Users\franc\Desktop\Software-Sanitario-unitn\SoftwareSanitario\src\main\java\com\mycompany\softwaresanitario\servlet\LoginServlet.java
+C:\Users\franc\Desktop\Software-Sanitario-unitn\SoftwareSanitario\src\main\java\com\mycompany\softwaresanitario\commons\persistence\dao\UserDAO.java
+C:\Users\franc\Desktop\Software-Sanitario-unitn\SoftwareSanitario\src\main\java\com\mycompany\softwaresanitario\commons\persistence\dao\exceptions\DAOFactoryException.java
+C:\Users\franc\Desktop\Software-Sanitario-unitn\SoftwareSanitario\src\main\java\com\mycompany\softwaresanitario\commons\persistence\dao\jdbc\JDBCDAO.java
+C:\Users\franc\Desktop\Software-Sanitario-unitn\SoftwareSanitario\src\main\java\com\mycompany\softwaresanitario\commons\persistence\dao\factories\DAOFactory.java
+C:\Users\franc\Desktop\Software-Sanitario-unitn\SoftwareSanitario\src\main\java\com\mycompany\softwaresanitario\commons\persistence\entities\User.java
+C:\Users\franc\Desktop\Software-Sanitario-unitn\SoftwareSanitario\src\main\java\com\mycompany\softwaresanitario\commons\persistence\dao\exceptions\DAOException.java
+C:\Users\franc\Desktop\Software-Sanitario-unitn\SoftwareSanitario\src\main\java\com\mycompany\softwaresanitario\commons\persistence\dao\factories\jdbc\JDBCDAOFactory.java
