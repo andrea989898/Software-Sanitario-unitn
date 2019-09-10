@@ -11,7 +11,7 @@ public class DatabaseConnection{
  
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
-    private final String password = "0000";
+    private final String password = "61223180";
  
     /**
      * Connect to the PostgreSQL database
@@ -56,7 +56,12 @@ public class DatabaseConnection{
     
     static public void create(Connection conn) throws SQLException{
        Statement statement;
-                        
+            
+            String myAllUsers = "CREATE TABLE Users ( \n" +
+            "Email CHAR(80) NOT NULL PRIMARY KEY, \n" +
+            "Password CHAR(80) NOT NULL, \n" +
+            "Tipo CHAR(10) NOT NULL);";
+       
             String myAllDoctors = "CREATE TABLE AllDoctors( \n" +
             "Name CHAR(40) NOT NULL,\n"+
             "Surname CHAR(40) NOT NULL,\n" +
@@ -132,6 +137,7 @@ public class DatabaseConnection{
             "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));" ;
             
             statement = conn.createStatement();
+            statement.executeUpdate(myAllUsers);
             statement.executeUpdate(myAllDoctors);
             statement.executeUpdate(myDoctor);
             statement.executeUpdate(myPatient);               
@@ -158,6 +164,7 @@ public class DatabaseConnection{
        String myPatient = "DROP TABLE Patients"; 
        String myDoctor = "DROP TABLE GeneralDoctors"; 
        String myAllDoctors = "DROP TABLE AllDoctors"; 
+       String myAllUsers = "DROP TABLE Users"; 
        
        statement.executeUpdate(myExam);
        statement.executeUpdate(myRecipe);
@@ -168,7 +175,8 @@ public class DatabaseConnection{
        statement.executeUpdate(mySpecialist);
        statement.executeUpdate(myPatient);
        statement.executeUpdate(myDoctor);
-       statement.executeUpdate(myAllDoctors);                   
+       statement.executeUpdate(myAllDoctors); 
+       statement.executeUpdate(myAllUsers); 
              
        statement.close();
     }
