@@ -11,7 +11,7 @@ public class DatabaseConnection{
  
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
-    private final String password = "61223180";
+    private final String password = "0000";
  
     /**
      * Connect to the PostgreSQL database
@@ -194,17 +194,17 @@ public class DatabaseConnection{
     static public void copy(Connection conn) throws SQLException{
         Statement statement= conn.createStatement();
         
-        String copy_users = "COPY PUBLIC.USERS FROM 'C:\\Users\\Public\\Documents\\users.csv' DELIMITER ';' CSV;";
-        String copy_allDoctors = " COPY PUBLIC.alldoctors FROM 'C:\\Users\\Public\\Documents\\allDoctors_data.csv' DELIMITER ';' CSV;";
-        String copy_generalDoctors = "COPY PUBLIC.generaldoctors FROM 'C:\\Users\\Public\\Documents\\generalDoctors_data.csv' DELIMITER ';' CSV;";
-        String copy_specialists = "COPY PUBLIC.specialists FROM 'C:\\Users\\Public\\Documents\\specialists_data.csv' DELIMITER ';' CSV;";
-        String copy_patients = "COPY PUBLIC.patients FROM 'C:\\Users\\Public\\Documents\\patient_data.csv' DELIMITER ';' CSV;";
-        String copy_examinations = "COPY PUBLIC.examinations FROM 'C:\\Users\\Public\\Documents\\examinations_data.csv' DELIMITER ';' CSV;";
-        String copy_tickets = "COPY PUBLIC.tickets FROM 'C:\\Users\\Public\\Documents\\tickets_data.csv' DELIMITER ';' CSV;";
-        String copy_drugs = "COPY PUBLIC.drugs FROM 'C:\\Users\\Public\\Documents\\drugs_data.csv' DELIMITER ';' CSV;";
-        String copy_prescriptions = "COPY PUBLIC.prescriptions FROM 'C:\\Users\\Public\\Documents\\prescriptions_data.csv' DELIMITER ';' CSV;";
-        String copy_recipes = "COPY PUBLIC.recipes FROM 'C:\\Users\\Public\\Documents\\recipes_data.csv' DELIMITER ';' CSV;";
-        String copy_exams = "COPY PUBLIC.exams FROM 'C:\\Users\\Public\\Documents\\exams_data.csv' DELIMITER ';' CSV;";
+        String copy_users = "COPY PUBLIC.USERS FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\users.csv' DELIMITER ';' CSV;";
+        String copy_allDoctors = " COPY PUBLIC.alldoctors FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\allDoctors_data.csv' DELIMITER ';' CSV;";
+        String copy_generalDoctors = "COPY PUBLIC.generaldoctors FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\generalDoctors_data.csv' DELIMITER ';' CSV;";
+        String copy_specialists = "COPY PUBLIC.specialists FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\specialists_data.csv' DELIMITER ';' CSV;";
+        String copy_patients = "COPY PUBLIC.patients FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\patient_data.csv' DELIMITER ';' CSV;";
+        String copy_examinations = "COPY PUBLIC.examinations FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\examinations_data.csv' DELIMITER ';' CSV;";
+        String copy_tickets = "COPY PUBLIC.tickets FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\tickets_data.csv' DELIMITER ';' CSV;";
+        String copy_drugs = "COPY PUBLIC.drugs FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\drugs_data.csv' DELIMITER ';' CSV;";
+        String copy_prescriptions = "COPY PUBLIC.prescriptions FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\prescriptions_data.csv' DELIMITER ';' CSV;";
+        String copy_recipes = "COPY PUBLIC.recipes FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\recipes_data.csv' DELIMITER ';' CSV;";
+        String copy_exams = "COPY PUBLIC.exams FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\exams_data.csv' DELIMITER ';' CSV;";
         
         
         statement.executeUpdate(copy_users);
