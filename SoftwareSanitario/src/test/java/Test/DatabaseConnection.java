@@ -67,7 +67,7 @@ public class DatabaseConnection{
             "Age INT NOT NULL, \n" +        
             "BirthDate DATE NOT NULL,\n"+
             "BirthPlace CHAR(40) NOT NULL, \n"+
-            "Address CHAR(40) NOT NULL, \n" +
+            "Address CHAR(80) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
             "FOREIGN KEY(SSD) REFERENCES Users(SSD), \n" +
             "Email CHAR(80) NOT NULL);";
