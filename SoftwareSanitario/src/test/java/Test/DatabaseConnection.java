@@ -45,10 +45,15 @@ public class DatabaseConnection{
                 System.out.println("Errore drop tabelle");
             }
             try{
-                create(conn); //creo tabella person                
+                create(conn); //creo tabella person
             }
             catch(SQLException e){
                 System.out.println("Errore create tabelle");
+            }
+            try{
+                copy(conn);
+            }catch(SQLException e){
+                System.out.println("errore copia");
             }
             
             
@@ -59,7 +64,7 @@ public class DatabaseConnection{
              
             String myUser = "CREATE TABLE Users(\n"+
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
-            "Type CHAR(10) NOT NULL);";
+            "User_type CHAR(20) NOT NULL);";
                     
             String myAllDoctors = "CREATE TABLE AllDoctors( \n" +
             "Name CHAR(40) NOT NULL,\n"+
@@ -87,8 +92,9 @@ public class DatabaseConnection{
             "Photos INT NOT NULL,\n" +
             "GeneralDoctor CHAR(16),\n" +
             "Email CHAR(80) NOT NULL,\n "+
-            "FOREIGN KEY(SSD) REFERENCES Users(SSD),\n" +
-            "FOREIGN KEY(GeneralDoctor) REFERENCES GeneralDoctors(SSD));";
+            "FOREIGN KEY(SSD) REFERENCES Users(SSD));";
+            //"FOREIGN KEY(GeneralDoctor) REFERENCES GeneralDoctors(SSD))
+                    
 
             String mySpecialist = "CREATE TABLE Specialists( \n" +
             "Specialization CHAR(70), \n" +
@@ -100,7 +106,6 @@ public class DatabaseConnection{
             "IDPatient CHAR(16) NOT NULL,\n" +
             "IDDoctor CHAR(16)NOT NULL,\n" +
             "Time TIME,\n" +
-            "Place CHAR(20),\n" +
             "IsDone BOOLEAN NOT NULL,\n"+
             "IsSpecial BOOLEAN NOT NULL,\n" +
             "ExaminationDate DATE,\n"+
@@ -120,9 +125,10 @@ public class DatabaseConnection{
             "Name char(100))";
             
             String myPrescription = "CREATE TABLE Prescriptions( \n" +
-            "Code INT PRIMARY KEY NOT NULL,\n" +
-            "IDDrug INT, \n" +
-            "FOREIGN KEY (IDDrug) REFERENCES Drugs(Code));";
+            "Code INT PRIMARY KEY NOT NULL,\n"+
+            "Exam_type CHAR(20) NOT NULL,\n"+
+            "IDPatient CHAR(16) NOT NULL,\n"+
+            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD));";
 
             String myRecipe = "CREATE TABLE Recipes( \n"+
             "Code INT PRIMARY KEY NOT NULL,\n"+
@@ -183,5 +189,35 @@ public class DatabaseConnection{
        statement.executeUpdate(myUser);
              
        statement.close();
+    }
+    
+    static public void copy(Connection conn) throws SQLException{
+        Statement statement= conn.createStatement();
+        
+        String copy_users = "COPY PUBLIC.USERS FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\users.csv' DELIMITER ';' CSV;";
+        String copy_allDoctors = " COPY PUBLIC.alldoctors FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\allDoctors_data.csv' DELIMITER ';' CSV;";
+        String copy_generalDoctors = "COPY PUBLIC.generaldoctors FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\generalDoctors_data.csv' DELIMITER ';' CSV;";
+        String copy_specialists = "COPY PUBLIC.specialists FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\specialists_data.csv' DELIMITER ';' CSV;";
+        String copy_patients = "COPY PUBLIC.patients FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\patient_data.csv' DELIMITER ';' CSV;";
+        String copy_examinations = "COPY PUBLIC.examinations FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\examinations_data.csv' DELIMITER ';' CSV;";
+        String copy_tickets = "COPY PUBLIC.tickets FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\tickets_data.csv' DELIMITER ';' CSV;";
+        String copy_drugs = "COPY PUBLIC.drugs FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\drugs_data.csv' DELIMITER ';' CSV;";
+        String copy_prescriptions = "COPY PUBLIC.prescriptions FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\prescriptions_data.csv' DELIMITER ';' CSV;";
+        String copy_recipes = "COPY PUBLIC.recipes FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\recipes_data.csv' DELIMITER ';' CSV;";
+        String copy_exams = "COPY PUBLIC.exams FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\exams_data.csv' DELIMITER ';' CSV;";
+        
+        
+        statement.executeUpdate(copy_users);
+        statement.executeUpdate(copy_allDoctors);
+        statement.executeUpdate(copy_generalDoctors);
+        statement.executeUpdate(copy_specialists);
+        statement.executeUpdate(copy_patients);
+        statement.executeUpdate(copy_examinations);
+        statement.executeUpdate(copy_tickets);
+        statement.executeUpdate(copy_drugs);
+        statement.executeUpdate(copy_prescriptions);
+        statement.executeUpdate(copy_recipes);
+        statement.executeUpdate(copy_exams);
+        statement.close();
     }
 }
