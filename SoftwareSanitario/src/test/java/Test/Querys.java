@@ -21,15 +21,15 @@ public class Querys {
     
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
-    private final String password = "0000";
+    private final String password = "61223180";
     
     public static ArrayList <GeneralDoctor> getGeneralDoctors(Connection conn) throws SQLException{
-                String myGet = "SELECT al.name, al.surname, al.ssd\n" +
+                String myGet = "SELECT al.name, al.surname, al.ssd, al.age\n" +
                        "FROM allDoctors al\n" +
                        "INNER JOIN generalDoctors d\n" +
                        "ON d.ssd = al.ssd";
         PreparedStatement stm = conn.prepareStatement(myGet);
-        stm.addBatch();
+        //stm.addBatch();
         ResultSet rst = stm.executeQuery();
         ArrayList<GeneralDoctor> generalDoctors = new ArrayList<GeneralDoctor>();
         while (rst.next()) {
@@ -37,13 +37,14 @@ public class Querys {
                     rst.getString("ssd"),
                     rst.getString("Name"), 
                     rst.getString("Surname"), 
-                    rst.getInt("Age"));
+                    rst.getInt("age"));
             /*GeneralDoctor generalDoctor = new GeneralDoctor();
             generalDoctor.setSSD(rst.getString("ssd"));
             generalDoctor.setName(rst.getString("Name"));
             generalDoctor.setSurname(rst.getString("Surname"));
             generalDoctor.setAge(rst.getString("Age"));
             generalDoctors.add(generalDoctor);*/
+            generalDoctors.add(generalDoctor); 
             System.out.println(generalDoctor.SSD);
         }
     stm.close();
