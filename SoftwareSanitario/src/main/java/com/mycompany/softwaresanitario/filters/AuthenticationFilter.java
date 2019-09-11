@@ -49,7 +49,7 @@ public class AuthenticationFilter implements Filter {
         // such as the parameters.
         if (request instanceof HttpServletRequest) {
             ServletContext servletContext = ((HttpServletRequest) request).getServletContext();
-            HttpSession session = ((HttpServletRequest) request).getSession(false);
+            HttpSession session = ((HttpServletRequest) request).getSession(true);
             User user = null;
             if (session != null) {
                 user = (User) session.getAttribute("user");
@@ -59,7 +59,7 @@ public class AuthenticationFilter implements Filter {
                 if (!contextPath.endsWith("/")) {
                     contextPath += "/";
                 }
-                ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "login.html"));
+                ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "index.html"));
             }
         }
     }    

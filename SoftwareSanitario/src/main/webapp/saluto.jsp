@@ -1,9 +1,11 @@
+<%-- 
+    Document   : saluto
+    Created on : 11 set 2019, 15:59:11
+    Author     : franc
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>Software sanitario: Private Area</title>
@@ -14,12 +16,13 @@ and open the template in the editor.
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
     </head>
     <body>
+        <jsp:scriptlet>
+             response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+        </jsp:scriptlet>
         <div class="w3-container w3-blue">
             <h2>Welcome authenticated user!</h2>
         </div>
         <br>
-        <form class="w3-container " action="index.html">
-            <button class="w3-button w3-round-large w3-blue" type="submit">Esci</button>
-        </form> 
+        <a href="logout.handler" class="w3-container"><button class="w3-button w3-round-large w3-blue">Esci</button></a>
     </body>
 </html>

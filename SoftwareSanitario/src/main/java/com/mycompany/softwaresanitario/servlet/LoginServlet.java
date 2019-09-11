@@ -107,7 +107,7 @@ public class LoginServlet extends HttpServlet {
                 
                 
                 
-                response.sendRedirect(response.encodeRedirectURL(contextPath + "saluto.html"));
+                response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/saluto.html"));
 
             }
         } catch (DAOException ex) {
