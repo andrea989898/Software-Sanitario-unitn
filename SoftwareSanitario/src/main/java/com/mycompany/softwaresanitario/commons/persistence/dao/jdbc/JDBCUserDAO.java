@@ -8,6 +8,7 @@ package com.mycompany.softwaresanitario.commons.persistence.dao.jdbc;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -79,17 +80,22 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
     }
 
     @Override
-    public User insertUser(String email, String password, String type) throws DAOException {
+    public User insertUser(String email, String password, String code) throws DAOException, UnsupportedEncodingException {
         User user = new User();
-        try (PreparedStatement stm = CON.prepareStatement("INSERT INTO public.users (email, password, tipo) VALUES (?, ?, ?)")) {
+   
+        try (PreparedStatement stm = CON.prepareStatement("UPDATE public.users\n" +
+                                                          "   SET email=?, password=?\n" +
+                                                          " WHERE code = ?;")) {
             stm.setString(1, email);
             stm.setString(2, password);
-            stm.setString(3, type);
+            stm.setString(3, code);
+            //System.out.println(code);
+            
             
             if(stm.executeUpdate()==1){
+                user.setCode(code);
                 user.setEmail(email);
                 user.setPassword(password);
-                user.setTipo(type);
                 return user;
             }else{
                 return null;
@@ -101,5 +107,31 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
         }
         
     }
+
+    @Override
+    public User getByCode(String code) throws DAOException {
+        User user = new User();
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users WHERE code = ?")) {
+            stm.setString(1, code);
+            try (ResultSet rs = stm.executeQuery()) {
+               // System.out.println(rs.next());
+                int count = 0;
+                while (rs.next()) {
+                    count++;
+                    if (count > 1) {
+                        throw new DAOException("Unique constraint violated! There are more than one user with the same code! WHY???");
+                    }
+                    
+                    user.setCode(rs.getString("code"));
+                    return user;
+                }
+
+                return null;
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to find the user", ex);
+        }
+    }
+    
 
 }

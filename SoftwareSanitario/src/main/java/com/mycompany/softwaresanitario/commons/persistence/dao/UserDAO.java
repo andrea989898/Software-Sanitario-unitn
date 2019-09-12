@@ -7,6 +7,7 @@ package com.mycompany.softwaresanitario.commons.persistence.dao;
 
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 /**
  *
@@ -14,8 +15,9 @@ import java.util.List;
  */
 public interface UserDAO extends DAO<User, String>{
     
-    public User insertUser(String email, String password, String type) throws DAOException;
+    public User insertUser(String email, String password, String code) throws DAOException, UnsupportedEncodingException;
     
+    public User getByCode(String code) throws DAOException;
     
     public User getByEmailAndPassword(String email, String password) throws DAOException;
 }

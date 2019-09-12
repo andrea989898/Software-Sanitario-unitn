@@ -11,7 +11,7 @@ public class DatabaseConnection{
  
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
-    private final String password = "61223180";
+    private final String password = "chiaravise";
  
     /**
      * Connect to the PostgreSQL database
@@ -58,7 +58,8 @@ public class DatabaseConnection{
        Statement statement;
             
             String myAllUsers = "CREATE TABLE Users ( \n" +
-            "Email CHAR(80) NOT NULL PRIMARY KEY, \n" +
+            "Code CHAR(15) NOT NULL PRIMARY KEY, \n" +
+            "Email CHAR(30) NOT NULL UNIQUE, \n" +
             "Password CHAR(80) NOT NULL, \n" +
             "Tipo CHAR(10) NOT NULL);";
        

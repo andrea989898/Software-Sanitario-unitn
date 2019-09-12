@@ -13,7 +13,12 @@ public class User {
     private String email;
     private String password;
     private String tipo;
+    private String code;
+    public User lastUser;
 
+    public String getCode() {
+        return code;
+    }
     public String getEmail() {
         return email;
     }
@@ -36,6 +41,9 @@ public class User {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+    public void setCode(String code) {
+        this.code = code;
     }
     
     

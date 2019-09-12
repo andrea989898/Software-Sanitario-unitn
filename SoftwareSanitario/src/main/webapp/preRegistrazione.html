@@ -18,16 +18,12 @@ and open the template in the editor.
             <h2>Registration form</h2>
         </div>
         <br>
-        <form class="w3-container " method="POST" action="registrationFirst.handler">
+        <form class="w3-container " method="POST" action="preRegistration.handler">
+            <input class="w3-input w3-border w3-light-grey" type="password" name="code" id="password"  placeholder="XXXXXXXXXXXXXXX">
             <br>
-            <label class="w3-text-teal"><b>Email:</b></label>
-            <input class="w3-input w3-border w3-light-grey" type="email" id="username" name="username" placeholder="mariorossi@email.it">
-            
-            <label class="w3-text-teal"><b>Password:</b></label>
-            <input class="w3-input w3-border w3-light-grey" type="password" name="password" id="password" placeholder="password">
-            <br>
-            <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
             <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+            <br>
+            <button class="w3-button w3-round-large w3-blue" type="submit">Controlla codice</button>
         </form> 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
