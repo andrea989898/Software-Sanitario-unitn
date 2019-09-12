@@ -119,7 +119,107 @@ public class Querys {
     return examinations;
     }
     
+    public static ArrayList <Recipe> getRecipes(Connection conn, String patient) throws SQLException{
+                String myGet = "select r.code, d.name, r.iddrug, pat.ssd\n" +
+                                "from recipes r\n" +
+                                "inner join drugs d\n" +
+                                "on d.code = r.iddrug\n" +
+                                "inner join patients pat\n" +
+                                "on r.idpatient=pat.ssd\n" +
+                                "where pat.ssd =" + patient ;
+        PreparedStatement stm = conn.prepareStatement(myGet);
+        ResultSet rst = stm.executeQuery();
+        ArrayList<Recipe> recipes = new ArrayList<Recipe>();
+        while (rst.next()) {
+            Recipe recipe = new Recipe(
+                    rst.getInt("code"),
+                    rst.getString("name"),
+                    rst.getInt("iddrug"),
+                    rst.getString("ssd")
+            );
+            recipes.add(recipe); 
+            System.out.println(recipe.code + recipe.drugName + recipe.idDrug +" "+ recipe.idPatient);
+        }
+    stm.close();
+    return recipes;
+    }
    
+    public static ArrayList <Prescription> getPrescriptions(Connection conn, String patient) throws SQLException{
+                String myGet = "select pr.code, pr.exam_type, pat.ssd\n" +
+                                "from prescriptions pr\n" +
+                                "inner join patients pat\n" +
+                                "on pr.idpatient=pat.ssd\n" +
+                                "where pat.ssd =" + patient ;
+        PreparedStatement stm = conn.prepareStatement(myGet);
+        ResultSet rst = stm.executeQuery();
+        ArrayList<Prescription> prescriptions = new ArrayList<Prescription>();
+        while (rst.next()) {
+            Prescription prescription = new Prescription(
+                    rst.getInt("code"),
+                    rst.getString("exam_type"),
+                    rst.getString("ssd")
+            );
+            prescriptions.add(prescription); 
+            System.out.println(prescription.code + " " + prescription.examType + prescription.idPatient);
+        }
+    stm.close();
+    return prescriptions;
+    }
+    
+    public static ArrayList <Exam> getExams(Connection conn, String patient) throws SQLException{
+                String myGet = "select e.code, e.idprescription, e.idrecipe, e.result, e.isdone, pat.ssd\n" +
+                                "from exams e\n" +
+                                "inner join patients pat\n" +
+                                "on pat.ssd = e.idpatient\n" +
+                                "where pat.ssd =" + patient ;
+        PreparedStatement stm = conn.prepareStatement(myGet);
+        ResultSet rst = stm.executeQuery();
+        ArrayList<Exam> exams = new ArrayList<Exam>();
+        while (rst.next()) {
+            Exam exam = new Exam(
+                    rst.getInt("code"),
+                    rst.getInt("idprescription"),
+                    rst.getInt("idrecipe"),
+                    rst.getString("result"),
+                    rst.getBoolean("isdone"),
+                    rst.getString("ssd")
+            );
+            if(exam.isDone==false){
+                exam.result = "not done yet";
+            }
+            exams.add(exam); 
+            System.out.println(exam.code + " " + exam.isDone +" s"+ exam.result);
+        }
+    stm.close();
+    return exams;
+    }
+    
+    public static ArrayList <Ticket> getTickets(Connection conn, String patient) throws SQLException{
+                String myGet = "select tt.code, tt.cost, tt.date, tt.expirationdate, e.argument, tt.idexamination, pat.ssd, tt.ispaid\n" +
+                                "from tickets tt inner join examinations e\n" +
+                                "on tt.idexamination = e.idexamination\n" +
+                                "inner join patients pat\n" +
+                                "on pat.ssd = tt.idpatient\n" +
+                                "where pat.ssd = " + patient ;
+        PreparedStatement stm = conn.prepareStatement(myGet);
+        ResultSet rst = stm.executeQuery();
+        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+        while (rst.next()) {
+            Ticket ticket = new Ticket(
+                    rst.getInt("code"),
+                    rst.getInt("cost"),
+                    rst.getDate("date"),
+                    rst.getDate("expirationdate"),
+                    rst.getInt("idexamination"),
+                    rst.getString("ssd"),
+                    rst.getBoolean("ispaid")
+            );
+            tickets.add(ticket); 
+            System.out.println(ticket.code + " " + ticket.isPaid +" "+ ticket.expirationDate);
+        }
+    stm.close();
+    return tickets;
+    }
     
     public static void main(String[] args) throws SQLException  {
         DatabaseConnection app = new DatabaseConnection();
@@ -128,6 +228,10 @@ public class Querys {
         ArrayList<Examination> examinations = getExaminations(conn, "'1'");
         ArrayList<Specialist> specialists = getSpecialists(conn);
         ArrayList<Patient> patients = getPatients(conn, "'12345'");
+        ArrayList<Recipe> recipes = getRecipes(conn, "'87'");
+        ArrayList<Prescription> prescriptions = getPrescriptions(conn, "'30'");
+        ArrayList<Exam> exams = getExams(conn, "'25'");
+        ArrayList<Ticket> tickets = getTickets(conn, "'10'");
     }
     
 }

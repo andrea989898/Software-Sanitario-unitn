@@ -116,7 +116,13 @@ public class DatabaseConnection{
 
             String myTicket = "CREATE TABLE Tickets( \n"+
             "Code INT PRIMARY KEY NOT NULL,\n" +
+            "Cost INT NOT NULL, \n" +
+            "Date DATE NOT NULL, \n" +
+            "ExpirationDate DATE NOT NULL, \n" +
             "IDExamination INT,\n" +
+            "IDPatient CHAR(16) NOT NULL, \n" +
+            "IsPaid BOOLEAN NOT NULL, \n" +
+            "FOREIGN KEY (IDPatient) REFERENCES Patients(ssd), \n" +
             "FOREIGN KEY (IDExamination) REFERENCES Examinations(IDExamination));";
             
             String myDrug = "CREATE TABLE Drugs( \n"+
@@ -133,16 +139,20 @@ public class DatabaseConnection{
             String myRecipe = "CREATE TABLE Recipes( \n"+
             "Code INT PRIMARY KEY NOT NULL,\n"+
             "IDDrug INT,\n"+
+            "IDPatient CHAR(16) NOT NULL,\n" +
+            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD),\n"+
             "FOREIGN KEY (IDDrug) REFERENCES Drugs(Code));";
             
             String myExam = "CREATE TABLE Exams( \n"+
             "Code INT PRIMARY KEY NOT NULL, \n" +
             "IDPrescription INT,\n" +
             "IDRecipe INT, \n" +
-            "IDExamination INT,\n" +
+            //"IDExamination INT,\n" +
             "Result char(100),\n" +
             "IsDone BOOLEAN NOT NULL,\n" +
-            "FOREIGN KEY (IDExamination) REFERENCES Examinations(IDExamination),\n"+
+            "IDPatient CHAR(16) NOT NULL, \n" +
+            //"FOREIGN KEY (IDExamination) REFERENCES Examinations(IDExamination),\n"+
+            "FOREIGN KEY (IDPatient) REFERENCES Patients(ssd),\n" +
             "FOREIGN KEY (IDPrescription) REFERENCES Prescriptions(Code),\n" +
             "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));" ;
             
