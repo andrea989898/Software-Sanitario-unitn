@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author Francesco
  */
 
-public class Querys {
+public class SelectQuerys {
     
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";

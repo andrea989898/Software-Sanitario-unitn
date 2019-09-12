@@ -117,8 +117,8 @@ public class DatabaseConnection{
             String myTicket = "CREATE TABLE Tickets( \n"+
             "Code INT PRIMARY KEY NOT NULL,\n" +
             "Cost INT NOT NULL, \n" +
-            "Date DATE NOT NULL, \n" +
-            "ExpirationDate DATE NOT NULL, \n" +
+            "Date CHAR(15) NOT NULL, \n" +
+            "ExpirationDate CHAR(15) NOT NULL, \n" +
             "IDExamination INT,\n" +
             "IDPatient CHAR(16) NOT NULL, \n" +
             "IsPaid BOOLEAN NOT NULL, \n" +
@@ -138,7 +138,7 @@ public class DatabaseConnection{
 
             String myRecipe = "CREATE TABLE Recipes( \n"+
             "Code INT PRIMARY KEY NOT NULL,\n"+
-            "IDDrug INT,\n"+
+            "IDDrug INT NOT NULL,\n"+
             "IDPatient CHAR(16) NOT NULL,\n" +
             "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD),\n"+
             "FOREIGN KEY (IDDrug) REFERENCES Drugs(Code));";
