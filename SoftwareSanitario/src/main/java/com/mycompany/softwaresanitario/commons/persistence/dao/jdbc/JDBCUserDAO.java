@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author franc
@@ -58,6 +60,8 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
             throw new DAOException("Impossible to find the user", ex);
         }
     }
+    
+    
 
     @Override
     public Long getCount() throws DAOException {
@@ -72,6 +76,30 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
     @Override
     public List<User> getAll() throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public User insertUser(String email, String password, String type) throws DAOException {
+        User user = new User();
+        try (PreparedStatement stm = CON.prepareStatement("INSERT INTO public.users (email, password, tipo) VALUES (?, ?, ?)")) {
+            stm.setString(1, email);
+            stm.setString(2, password);
+            stm.setString(3, type);
+            
+            if(stm.executeUpdate()==1){
+                user.setEmail(email);
+                user.setPassword(password);
+                user.setTipo(type);
+                return user;
+            }else{
+                return null;
+            }
+            
+            
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to insert the user", ex);
+        }
+        
     }
 
 }

@@ -23,6 +23,8 @@
             <h2>Welcome authenticated user!</h2>
         </div>
         <br>
-        <a href="logout.handler" class="w3-container"><button class="w3-button w3-round-large w3-blue">Esci</button></a>
+        <div class="w3-container">
+            <a href="logout.handler" class="w3-container"><button class="w3-button w3-round-large w3-blue">Esci</button></a>
+        </div>
     </body>
 </html>

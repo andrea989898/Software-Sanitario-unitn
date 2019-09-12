@@ -14,5 +14,8 @@ import java.util.List;
  */
 public interface UserDAO extends DAO<User, String>{
     
+    public User insertUser(String email, String password, String type) throws DAOException;
+    
+    
     public User getByEmailAndPassword(String email, String password) throws DAOException;
 }

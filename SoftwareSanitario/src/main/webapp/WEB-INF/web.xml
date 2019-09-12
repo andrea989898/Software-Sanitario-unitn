@@ -29,6 +29,10 @@
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>com.mycompany.softwaresanitario.servlet.LogoutServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RegistrationFirst</servlet-name>
+        <servlet-class>com.mycompany.softwaresanitario.servlet.RegistrationFirst</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login.handler</url-pattern>
@@ -41,7 +45,10 @@
         <servlet-name>SalutoPage</servlet-name>
         <url-pattern>/restricted/saluto.html</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>RegistrationFirst</servlet-name>
+        <url-pattern>/registrationFirst.handler</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
