@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.mycompany.softwaresanitario.servlet;
+
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
@@ -11,9 +12,7 @@ import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.URLEncoder;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -22,10 +21,19 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author franc
+ * @author PC Andrea
  */
-public class RegistrationFirst extends HttpServlet {
-
+public class preRegistrationServlet extends HttpServlet {
+    Cookie codice= null;
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     private UserDAO userDao;
 
     @Override
@@ -42,27 +50,18 @@ public class RegistrationFirst extends HttpServlet {
     }
     
     
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RegistrationFirst</title>");            
+            out.println("<title>Servlet preRegistrationServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RegistrationFirst at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet preRegistrationServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -94,42 +93,32 @@ public class RegistrationFirst extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        Cookie[] cookies = request.getCookies();
-        String code = URLDecoder.decode(cookies[1].getValue(), "UTF-8");
-        
-        String cp = getServletContext().getContextPath();
-        if (!cp.endsWith("/")) {
-            cp += "/";
+        String code = request.getParameter("code");
+
+        String contextPath = getServletContext().getContextPath();
+        if (!contextPath.endsWith("/")) {
+            contextPath += "/";
         }
-        
-        String email = request.getParameter("username");
-        if(email == null){
-            response.sendRedirect(cp + "registrazione.html");
-            return;
-        }
-        
-        String password = request.getParameter("password");
-        if(password == null){
-            response.sendRedirect(cp + "registrazione.html");
-            return;
-        }
-        
+
         try {
-            User user = userDao.insertUser(email, password, code);
-           
+            User user = userDao.getByCode(code);
             if (user == null) {
-                response.sendRedirect(response.encodeRedirectURL(cp + "registrazione.html"));
-            } else { 
-                response.sendRedirect(response.encodeRedirectURL(cp + "postRegistrazione.html"));
+                // response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
+                response.sendRedirect(response.encodeRedirectURL(contextPath + "preRegistrazione.html"));
+                //processRequest(request, response);
+            } else {
+                if(codice == null){
+                    codice = new Cookie("codice", URLEncoder.encode(  user.getCode(), "UTF-8" ));
+                }
+                codice.setMaxAge(120);
+                response.addCookie(codice);
+                response.sendRedirect(response.encodeRedirectURL(contextPath + "registrazione.html"));
+
             }
         } catch (DAOException ex) {
-            Logger.getLogger(RegistrationFirst.class.getName()).log(Level.SEVERE, null, ex);
+            //TODO: log exception
+            request.getServletContext().log("Impossible to retrieve the user", ex);
         }
-        
-        
-        
-        
     }
 
     /**
@@ -141,5 +130,5 @@ public class RegistrationFirst extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
 }
