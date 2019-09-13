@@ -17,7 +17,11 @@ public interface UserDAO extends DAO<User, String>{
     
     public User insertUser(String email, String password, String code) throws DAOException, UnsupportedEncodingException;
     
+    public User updatePassword(String email, String password) throws DAOException;
+            
     public User getByCode(String code) throws DAOException;
+    
+    public User getByEmail(String email) throws DAOException;
     
     public User getByEmailAndPassword(String email, String password) throws DAOException;
 }

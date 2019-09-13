@@ -99,15 +99,13 @@ public class RegistrationFirst extends HttpServlet {
         
         int indice = 0;
         String code = null;
-        
+        //System.out.println(cookies.length);
         while (indice < cookies.length) {
             // esegue il ciclo fino a quando ci sono elementi in cookie
+            System.out.println(cookies[indice].getValue());
             if (cookies[indice].getName().equals("codice"))  code = URLDecoder.decode(cookies[indice].getValue(), "UTF-8");
             indice++;
         }
-        
-
-        String code = URLDecoder.decode(cookies[0].getValue(), "UTF-8");
 
         
         String cp = getServletContext().getContextPath();

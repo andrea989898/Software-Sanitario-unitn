@@ -29,6 +29,32 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
         super(con);
     }
 
+    @Override
+    public User getByEmail(String email) throws DAOException {
+        User user = new User();
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users WHERE email = ?")) {
+            stm.setString(1, email);
+            try (ResultSet rs = stm.executeQuery()) {
+               // System.out.println(rs.next());
+                int count = 0;
+                while (rs.next()) {
+                    count++;
+                    if (count > 1) {
+                        throw new DAOException("Unique constraint violated! There are more than one user with the same code! WHY???");
+                    }
+                    
+                    user.setCode(rs.getString("code"));
+                    return user;
+                }
+
+                return null;
+            }
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to find the user", ex);
+        }
+    }
+
+    
     
     
     public User getByEmailAndPassword(String email, String password) throws DAOException {
@@ -78,6 +104,32 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
     public List<User> getAll() throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public User updatePassword(String email, String password) throws DAOException{
+         User user = new User();
+   
+        try (PreparedStatement stm = CON.prepareStatement("UPDATE public.users\n" +
+                                                          "   SET password=?\n" +
+                                                          " WHERE email = ?;")) {
+            stm.setString(1, password);
+            stm.setString(2, email);
+            //System.out.println(code);
+            
+            
+            if(stm.executeUpdate()==1){
+                user.setEmail(email);
+                user.setPassword(password);
+                return user;
+            }else{
+                return null;
+            }
+            
+            
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to insert the user", ex);
+        }
+        
+    }
 
     @Override
     public User insertUser(String email, String password, String code) throws DAOException, UnsupportedEncodingException {
@@ -123,7 +175,8 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     }
                     
                     user.setCode(rs.getString("code"));
-                    return user;
+                    if(rs.getString("email").equals("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"))    return user;
+                    else return null;
                 }
 
                 return null;
