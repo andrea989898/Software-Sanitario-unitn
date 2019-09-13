@@ -106,9 +106,6 @@ public class RegistrationFirst extends HttpServlet {
             indice++;
         }
         
-
-        String code = URLDecoder.decode(cookies[0].getValue(), "UTF-8");
-
         
         String cp = getServletContext().getContextPath();
         if (!cp.endsWith("/")) {

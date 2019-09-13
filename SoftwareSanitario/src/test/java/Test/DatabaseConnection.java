@@ -11,7 +11,7 @@ public class DatabaseConnection{
  
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
-    private final String password = "61223180";
+    private final String password = "chiaravise";
  
     /**
      * Connect to the PostgreSQL database

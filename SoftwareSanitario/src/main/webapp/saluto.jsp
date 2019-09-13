@@ -24,7 +24,7 @@
         </div>
         <br>
         <div class="w3-container">
-            <a href="logout.handler" class="w3-container"><button class="w3-button w3-round-large w3-blue">Esci</button></a>
+            <a href="logout.handler" class="w3-container"><button class="w3-button w3-round-large w3-blue">Logout</button></a>
         </div>
     </body>
 </html>
