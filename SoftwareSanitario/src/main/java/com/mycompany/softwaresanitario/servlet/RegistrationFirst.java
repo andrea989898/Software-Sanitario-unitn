@@ -96,7 +96,19 @@ public class RegistrationFirst extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         Cookie[] cookies = request.getCookies();
+        
+        int indice = 0;
+        String code = null;
+        
+        while (indice < cookies.length) {
+            // esegue il ciclo fino a quando ci sono elementi in cookie
+            if (cookies[indice].getName().equals("codice"))  code = URLDecoder.decode(cookies[indice].getValue(), "UTF-8");
+            indice++;
+        }
+        
+
         String code = URLDecoder.decode(cookies[0].getValue(), "UTF-8");
+
         
         String cp = getServletContext().getContextPath();
         if (!cp.endsWith("/")) {
@@ -104,13 +116,13 @@ public class RegistrationFirst extends HttpServlet {
         }
         
         String email = request.getParameter("username");
-        if(email == null){
+        if(email == ""){
             response.sendRedirect(cp + "registrazione.html");
             return;
         }
         
         String password = request.getParameter("password");
-        if(password == null){
+        if(password == ""){
             response.sendRedirect(cp + "registrazione.html");
             return;
         }
