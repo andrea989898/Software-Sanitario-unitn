@@ -4,18 +4,17 @@
  * and open the template in the editor.
  */
 package com.mycompany.softwaresanitario.servlet;
-import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
+import com.mycompany.softwaresanitario.mailer.Mailer;
+import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.nio.charset.Charset;
+import java.util.Random;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author franc
  */
-public class RegistrationFirst extends HttpServlet {
+public class sendEmailServlet extends HttpServlet {
 
     private UserDAO userDao;
 
@@ -40,7 +39,6 @@ public class RegistrationFirst extends HttpServlet {
             throw new ServletException("Impossible to get dao factory for user storage system", ex);
         }
     }
-    
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -59,10 +57,10 @@ public class RegistrationFirst extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RegistrationFirst</title>");            
+            out.println("<title>Servlet sendEmailServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RegistrationFirst at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet sendEmailServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -94,54 +92,21 @@ public class RegistrationFirst extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        Cookie[] cookies = request.getCookies();
-        
-        int indice = 0;
-        String code = null;
-        
-        while (indice < cookies.length) {
-            // esegue il ciclo fino a quando ci sono elementi in cookie
-            if (cookies[indice].getName().equals("codice"))  code = URLDecoder.decode(cookies[indice].getValue(), "UTF-8");
-            indice++;
+        String contextPath = getServletContext().getContextPath();
+        if (!contextPath.endsWith("/")) {
+            contextPath += "/";
         }
+        String to= request.getParameter("email");
         
-
-        String code = URLDecoder.decode(cookies[0].getValue(), "UTF-8");
-
+        byte[] array = new byte[7]; // length is bounded by 7
+        new Random().nextBytes(array);
+        String password = new String(array, Charset.forName("UTF-8"));
         
-        String cp = getServletContext().getContextPath();
-        if (!cp.endsWith("/")) {
-            cp += "/";
-        }
-        
-        String email = request.getParameter("username");
-        if(email == ""){
-            response.sendRedirect(cp + "registrazione.html");
-            return;
-        }
-        
-        String password = request.getParameter("password");
-        if(password == ""){
-            response.sendRedirect(cp + "registrazione.html");
-            return;
-        }
-        
-        try {
-            User user = userDao.insertUser(email, password, code);
-           
-            if (user == null) {
-                response.sendRedirect(response.encodeRedirectURL(cp + "registrazione.html"));
-            } else { 
-                response.sendRedirect(response.encodeRedirectURL(cp + "postRegistrazione.html"));
-            }
-        } catch (DAOException ex) {
-            Logger.getLogger(RegistrationFirst.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
-        
+        String subject= new String("Recovery password\n");
+        String msg= new String("New Password for the user: " + password);  
+          
+        Mailer.send(to, subject, msg);  
+        response.sendRedirect(contextPath + "index.html");
     }
 
     /**
