@@ -1,5 +1,9 @@
 package Test;
 
+import static Test.InsertQuerys.insertImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 import java.util.*;
@@ -34,7 +38,7 @@ public class DatabaseConnection{
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
       
         DatabaseConnection app = new DatabaseConnection();
         Connection conn = app.connect();
@@ -55,6 +59,7 @@ public class DatabaseConnection{
             }catch(SQLException e){
                 System.out.println("errore copia");
             }
+            fillImages(conn);
             
             
     }
@@ -89,13 +94,19 @@ public class DatabaseConnection{
             "BirthPlace CHAR(40) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
             "Gender CHAR(2) NOT NULL,\n" +
-            "Photos INT NOT NULL,\n" +
+            //"Photos BYTEA,\n" +
             "GeneralDoctor CHAR(16),\n" +
             "Email CHAR(80) NOT NULL,\n "+
             "FOREIGN KEY(SSD) REFERENCES Users(SSD));";
             //"FOREIGN KEY(GeneralDoctor) REFERENCES GeneralDoctors(SSD))
-                    
-
+             
+            String myImage = "CREATE TABLE Images(\n"
+                    + "data BYTEA,\n"
+                    + "IDPatient CHAR(16)NOT NULL,\n"
+                    + "Data_photo CHAR(16),\n"
+                    + "photo_num INT NOT NULL,\n"
+                    + "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD));";
+                        
             String mySpecialist = "CREATE TABLE Specialists( \n" +
             "Specialization CHAR(70), \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL,\n"+  
@@ -160,7 +171,8 @@ public class DatabaseConnection{
             statement.executeUpdate(myUser);
             statement.executeUpdate(myAllDoctors);
             statement.executeUpdate(myDoctor);
-            statement.executeUpdate(myPatient);               
+            statement.executeUpdate(myPatient); 
+            statement.executeUpdate(myImage);
             statement.executeUpdate(mySpecialist); 
             statement.executeUpdate(myExamination); 
             statement.executeUpdate(myTicket); 
@@ -181,6 +193,7 @@ public class DatabaseConnection{
        String myTicket = "DROP TABLE Tickets"; 
        String myExamination = "DROP TABLE Examinations"; 
        String mySpecialist = "DROP TABLE Specialists"; 
+       String myImage = "DROP TABLE Images";
        String myPatient = "DROP TABLE Patients"; 
        String myDoctor = "DROP TABLE GeneralDoctors"; 
        String myAllDoctors = "DROP TABLE AllDoctors"; 
@@ -193,6 +206,7 @@ public class DatabaseConnection{
        statement.executeUpdate(myTicket);
        statement.executeUpdate(myExamination);
        statement.executeUpdate(mySpecialist);
+       statement.executeUpdate(myImage);
        statement.executeUpdate(myPatient);
        statement.executeUpdate(myDoctor);
        statement.executeUpdate(myAllDoctors);
@@ -200,6 +214,44 @@ public class DatabaseConnection{
              
        statement.close();
     }
+    
+    public static void insertImage(Connection conn, String folder, String idP, String photo_date, int num) throws SQLException{
+        String query = "INSERT INTO images(data, idPatient, data_photo, photo_num) VALUES(?,'"+ idP + "','"+photo_date+"',"+num+")";
+        PreparedStatement pst = conn.prepareStatement(query);
+
+        File img = new File(folder);
+        try (FileInputStream fin = new FileInputStream(img)) {
+            pst.setBinaryStream(1, fin, (int) img.length());
+            pst.executeUpdate();
+        }catch (IOException ex){
+            System.out.println("error");
+        }
+    }
+
+    
+    public static void fillImages(Connection conn) throws SQLException{
+    Integer x = 1; int y=5;
+    Data d = new Data(2010, 10, 10);
+    d.currentData(d); 
+    String data_photo = d.toString(d);
+        while(x<=100 ){
+            while(y>=1){
+                if(y!=5) { data_photo = "201"+y+"-10-10";}
+                insertImage(conn, 
+                            "D:\\Francesco\\OneDrive - Università degli Studi di Trento\\UniTN\\2018-2019\\corsi\\Introduzione prog. Web\\progetto\\Software-Sanitario-unitn\\SoftwareSanitario\\database\\patient_image.jpg", 
+                            x.toString(),
+                            data_photo,
+                            y
+                            );
+                y--;
+                
+            }
+            data_photo = d.toString(d);
+            y=5;
+        x++;
+        }
+    }
+    
     
     static public void copy(Connection conn) throws SQLException{
         Statement statement= conn.createStatement();
@@ -229,5 +281,8 @@ public class DatabaseConnection{
         statement.executeUpdate(copy_recipes);
         statement.executeUpdate(copy_exams);
         statement.close();
+        
+        
+        
     }
 }

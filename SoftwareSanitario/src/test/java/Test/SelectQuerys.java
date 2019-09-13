@@ -5,6 +5,10 @@
  */
 package Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -221,7 +225,20 @@ public class SelectQuerys {
     return tickets;
     }
     
-    public static void main(String[] args) throws SQLException  {
+    public static void getImages(Connection conn) throws SQLException, FileNotFoundException, IOException{
+        String query = "SELECT data, LENGTH(data) FROM images WHERE idpatient = '  1'";
+        PreparedStatement pst = conn.prepareStatement(query);
+        ResultSet rs = pst.executeQuery(); 
+        rs.next();            
+        File myFile = new File("C:\\Users\\Public\\Documents\\dbIPW19\\a.jpg");
+        try (FileOutputStream fos = new FileOutputStream(myFile)) {
+            int len = rs.getInt(2);
+            byte[] buf = rs.getBytes("data");
+            fos.write(buf, 0, len);
+        }
+    }
+    
+    public static void main(String[] args) throws SQLException, IOException  {
         DatabaseConnection app = new DatabaseConnection();
         Connection conn = app.connect();
         ArrayList<GeneralDoctor> general = getGeneralDoctors(conn);
@@ -232,6 +249,7 @@ public class SelectQuerys {
         ArrayList<Prescription> prescriptions = getPrescriptions(conn, "'30'");
         ArrayList<Exam> exams = getExams(conn, "'25'");
         ArrayList<Ticket> tickets = getTickets(conn, "'10'");
+        getImages(conn);
     }
     
 }

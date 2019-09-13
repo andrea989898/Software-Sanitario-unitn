@@ -5,6 +5,9 @@
  */
 package Test;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.Date;
 import java.sql.PreparedStatement;
@@ -79,14 +82,28 @@ public class InsertQuerys{
         return code;
     }
     
+    public static void insertImage(Connection conn, String folder, String idP, String photo_date, int num) throws SQLException{
+        String query = "INSERT INTO images(data, idPatient, photo_date, photo_num) VALUES(?,'"+ idP + "','"+photo_date+"',"+num+")";
+        PreparedStatement pst = conn.prepareStatement(query);
+
+        File img = new File(folder);
+        try (FileInputStream fin = new FileInputStream(img)) {
+            pst.setBinaryStream(1, fin, (int) img.length());
+            pst.executeUpdate();
+        }catch (IOException ex){
+            System.out.println("error");
+        }
+    }
+    
     
     
     public static void main(String[] args) throws SQLException, ParseException {        
         DatabaseConnection app = new DatabaseConnection();
         Connection conn = app.connect();
-        insertPrescription(conn, "50", 900, "dsadasd");
-        insertRecipe(conn, "50", 1, 1000);
-        insertExam(conn, "50", 1, 100, 100, "dsadada");
-        insertTicket(conn, "50", 1, 50, 1000);
+        insertPrescription(conn, "50", 1, "dsadasd");
+        insertRecipe(conn, "50", 1, 1);
+        insertExam(conn, "50", 1, 1, 1, "dsadada");
+        insertTicket(conn, "50", 1, 50, 1);
+        //insertImage(conn, "D:\\Francesco\\OneDrive - Università degli Studi di Trento\\UniTN\\2018-2019\\corsi\\Introduzione prog. Web\\progetto\\Software-Sanitario-unitn\\SoftwareSanitario\\database\\patient_image.jpg", "2");
     }
 }
