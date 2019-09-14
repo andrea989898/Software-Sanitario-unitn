@@ -106,7 +106,7 @@ public class changePasswordServlet extends HttpServlet {
         if (!contextPath.endsWith("/")) {
             contextPath += "/";
         }
-        
+       
         HttpSession session = request.getSession(false);
         
         if (session != null) {

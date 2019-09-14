@@ -49,6 +49,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                         throw new DAOException("Unique constraint violated! There are more than one user with the same email! WHY???");
                     }
                     
+                    user.setCode(rs.getString("code"));
                     user.setEmail(rs.getString("email"));
                     user.setPassword(rs.getString("password"));
                     user.setTipo(rs.getString("tipo"));

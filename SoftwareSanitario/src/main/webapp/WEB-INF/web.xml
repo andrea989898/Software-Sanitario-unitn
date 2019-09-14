@@ -2,7 +2,7 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <context-param>
         <param-name>dburl</param-name>
-        <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=chiaravise</param-value>
+        <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=61223180</param-value>
     </context-param>
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
@@ -20,6 +20,10 @@
     <servlet>
         <servlet-name>SalutoPage</servlet-name>
         <jsp-file>/saluto.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>CambioPasswordPage</servlet-name>
+        <jsp-file>/cambioPassword.jsp</jsp-file>
     </servlet>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
@@ -58,7 +62,7 @@
         <url-pattern>/restricted/saluto.html</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Change</servlet-name>
+        <servlet-name>CambioPasswordPage</servlet-name>
         <url-pattern>/restricted/cambioPassword.html</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
@@ -75,7 +79,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>changePassowordServlet</servlet-name>
-        <url-pattern>/changePassoword.handler</url-pattern>
+        <url-pattern>/restricted/changePassoword.handler</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
