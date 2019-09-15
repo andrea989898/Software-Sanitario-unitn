@@ -43,7 +43,7 @@ public class RegistrationFirst extends HttpServlet {
     
     
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
      * @param request servlet request
@@ -107,7 +107,7 @@ public class RegistrationFirst extends HttpServlet {
         }
         
 
-        String code = URLDecoder.decode(cookies[0].getValue(), "UTF-8");
+        //String code = URLDecoder.decode(cookies[0].getValue(), "UTF-8");
 
         
         String cp = getServletContext().getContextPath();
