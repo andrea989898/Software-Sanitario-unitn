@@ -15,7 +15,7 @@ public class DatabaseConnection{
  
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
-    private final String password = "0000";
+    private final String password = "61223180";
  
     /**
      * Connect to the PostgreSQL database
@@ -66,11 +66,13 @@ public class DatabaseConnection{
     
     static public void create(Connection conn) throws SQLException{
        Statement statement;
-             
-            String myUser = "CREATE TABLE Users(\n"+
-            "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
-            "User_type CHAR(20) NOT NULL);";
-                    
+            
+            String myAllUsers = "CREATE TABLE Users ( \n" +
+            "Code CHAR(15) NOT NULL PRIMARY KEY, \n" +
+            "Email CHAR(30) NOT NULL UNIQUE, \n" +
+            "Password CHAR(80) NOT NULL, \n" +
+            "Tipo CHAR(10) NOT NULL);";
+       
             String myAllDoctors = "CREATE TABLE AllDoctors( \n" +
             "Name CHAR(40) NOT NULL,\n"+
             "Surname CHAR(40) NOT NULL,\n" +
@@ -79,7 +81,7 @@ public class DatabaseConnection{
             "BirthPlace CHAR(40) NOT NULL, \n"+
             "Address CHAR(80) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
-            "FOREIGN KEY(SSD) REFERENCES Users(SSD), \n" +
+            "FOREIGN KEY(SSD) REFERENCES Users(Code), \n" +
             "Email CHAR(80) NOT NULL);";
             
             String myDoctor = "CREATE TABLE GeneralDoctors( \n" +
@@ -97,7 +99,7 @@ public class DatabaseConnection{
             //"Photos BYTEA,\n" +
             "GeneralDoctor CHAR(16),\n" +
             "Email CHAR(80) NOT NULL,\n "+
-            "FOREIGN KEY(SSD) REFERENCES Users(SSD));";
+            "FOREIGN KEY(SSD) REFERENCES Users(Code));";
             //"FOREIGN KEY(GeneralDoctor) REFERENCES GeneralDoctors(SSD))
              
             String myImage = "CREATE TABLE Images(\n"
@@ -168,7 +170,9 @@ public class DatabaseConnection{
             "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));" ;
             
             statement = conn.createStatement();
-            statement.executeUpdate(myUser);
+
+            statement.executeUpdate(myAllUsers);
+
             statement.executeUpdate(myAllDoctors);
             statement.executeUpdate(myDoctor);
             statement.executeUpdate(myPatient); 
@@ -197,7 +201,8 @@ public class DatabaseConnection{
        String myPatient = "DROP TABLE Patients"; 
        String myDoctor = "DROP TABLE GeneralDoctors"; 
        String myAllDoctors = "DROP TABLE AllDoctors"; 
-       String myUser = "DROP TABLE Users";
+       String myAllUsers = "DROP TABLE Users"; 
+
        
        statement.executeUpdate(myExam);
        statement.executeUpdate(myRecipe);
@@ -209,8 +214,8 @@ public class DatabaseConnection{
        statement.executeUpdate(myImage);
        statement.executeUpdate(myPatient);
        statement.executeUpdate(myDoctor);
-       statement.executeUpdate(myAllDoctors);
-       statement.executeUpdate(myUser);
+       statement.executeUpdate(myAllDoctors); 
+       statement.executeUpdate(myAllUsers); 
              
        statement.close();
     }
