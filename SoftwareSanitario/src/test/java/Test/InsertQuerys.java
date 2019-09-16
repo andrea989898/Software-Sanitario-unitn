@@ -29,7 +29,7 @@ public class InsertQuerys{
 
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
-    private final String password = "0000";
+    private final String password = "61223180";
     
     public static void insertPrescription(Connection conn, String idP,
                                     int code, String exam_type) throws SQLException{

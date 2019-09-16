@@ -101,7 +101,7 @@ public class preRegistrationServlet extends HttpServlet {
         }
 
         try {
-            User user = userDao.getByCode(code);
+            User user = userDao.getByCodeProfileNotSet(code);
             if (user == null) {
                 // response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "preRegistrazione.html"));

@@ -3,25 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Test;
+package com.mycompany.softwaresanitario.commons.persistence.entities;
+
+import java.sql.Date;
 
 /**
  *
  * @author Francesco
  */
-public class GeneralDoctor {
+public class Patient {
     public String SSD;
     public String name;
     public String surname;
+    public Date birthDate;
+    public String birthPlace;
     public int age;
+    public String email;
     
-    public GeneralDoctor(String id, String n, String s, int a){
-        setSSD(id);
-        setName(n);
-        setSurname(s);
-        setAge(a);
-        
-    }
     public String getSSD() {
         return SSD;
     }
@@ -38,6 +36,20 @@ public class GeneralDoctor {
         this.name = name;
     }
     
+    public Date getBirthDate() {
+        return birthDate;
+    }
+    
+    public void setBirthDate(Date bd) {
+        this.birthDate = bd;
+    }
+    public String getBirthPlace() {
+        return birthPlace;
+    }
+    
+    public void setBirthPlace(String bp) {
+        this.birthPlace = bp;
+    }
     public String getSurname() {
         return surname;
     }
@@ -54,5 +66,10 @@ public class GeneralDoctor {
         this.age = age;
     }
     
-    
+    public String getEmail(){
+        return email;
+    }
+    public void setEmail(String e){
+        this.email = e;
+    }
 }

@@ -19,7 +19,7 @@ public interface UserDAO extends DAO<User, String>{
     
     public User updatePassword(String email, String password) throws DAOException;
             
-    public User getByCode(String code) throws DAOException;
+    public User getByCodeProfileNotSet(String code) throws DAOException;
     
     public User getByEmail(String email) throws DAOException;
     

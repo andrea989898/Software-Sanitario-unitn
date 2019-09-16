@@ -9,6 +9,12 @@ import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFac
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import com.mycompany.softwaresanitario.commons.persistence.dao.PatientDAO;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Patient;
+import com.mycompany.softwaresanitario.commons.persistence.dao.GeneralDoctorDAO;
+import com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor;
+import com.mycompany.softwaresanitario.commons.persistence.dao.SpecialistDAO;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Specialist;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -23,6 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginServlet extends HttpServlet {
 
     private UserDAO userDao;
+    private PatientDAO patientDao;
+    private GeneralDoctorDAO generalDoctorDao;
+    private SpecialistDAO specialistDao;
 
     @Override
     public void init() throws ServletException {
@@ -32,6 +41,10 @@ public class LoginServlet extends HttpServlet {
         }
         try {
             userDao = daoFactory.getDAO(UserDAO.class);
+            patientDao = daoFactory.getDAO(PatientDAO.class);
+            generalDoctorDao = daoFactory.getDAO(GeneralDoctorDAO.class);
+            specialistDao = daoFactory.getDAO(SpecialistDAO.class);
+            
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get dao factory for user storage system", ex);
         }
@@ -99,12 +112,25 @@ public class LoginServlet extends HttpServlet {
 
         try {
             User user = userDao.getByEmailAndPassword(email, password);
+            
             if (user == null) {
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
                 //processRequest(request, response);
             } else {
                 request.getSession().setAttribute("user", user);
+                Patient patient = patientDao.getByCode(user.getCode());
+                request.getSession().setAttribute("patient", patient);
                 
+                GeneralDoctor generalDoctor = generalDoctorDao.getByCode(user.getCode());
+                Specialist specialist = specialistDao.getByCode(user.getCode());
+                
+                if(generalDoctor != null){
+                    request.getSession().setAttribute("generalDoctor", generalDoctor);
+                }
+                
+                if(specialist != null){
+                    request.getSession().setAttribute("specialist", specialist);
+                }
                 
                 
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/saluto.html"));

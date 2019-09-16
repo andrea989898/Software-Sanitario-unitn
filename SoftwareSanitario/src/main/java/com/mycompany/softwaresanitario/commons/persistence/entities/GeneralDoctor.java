@@ -3,27 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Test;
+package com.mycompany.softwaresanitario.commons.persistence.entities;
 
 /**
  *
  * @author Francesco
  */
-public class Specialist {
+public class GeneralDoctor {
     public String SSD;
     public String name;
     public String surname;
     public int age;
-    public String specialization;
     
-    public Specialist(String id, String n, String s, int a, String sp){
-        setSSD(id);
-        setName(n);
-        setSurname(s);
-        setAge(a);
-        setSpecialization(sp);
-        
-    }
     public String getSSD() {
         return SSD;
     }
@@ -55,12 +46,6 @@ public class Specialist {
     public void setAge(int age) {
         this.age = age;
     }
-
-    public String getSpecialization(){
-        return specialization;
-    }
-    public void setSpecialization(String sp){
-        this.specialization=sp;
-    }
-        
+    
+    
 }

@@ -161,7 +161,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
     }
 
     @Override
-    public User getByCode(String code) throws DAOException {
+    public User getByCodeProfileNotSet(String code) throws DAOException {
         User user = new User();
         try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users WHERE code = ?")) {
             stm.setString(1, code);

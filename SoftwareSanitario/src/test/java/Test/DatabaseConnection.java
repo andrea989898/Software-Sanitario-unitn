@@ -42,12 +42,12 @@ public class DatabaseConnection{
       
         DatabaseConnection app = new DatabaseConnection();
         Connection conn = app.connect();
-            try{
+            /*try{
                 drop(conn); //cancello tabella person
             }
             catch(SQLException e){
                 System.out.println("Errore drop tabelle");
-            }
+            }*/
             try{
                 create(conn); //creo tabella person
             }
@@ -197,7 +197,7 @@ public class DatabaseConnection{
        String myTicket = "DROP TABLE Tickets"; 
        String myExamination = "DROP TABLE Examinations"; 
        String mySpecialist = "DROP TABLE Specialists"; 
-       String myImage = "DROP TABLE Images";
+          //String myImage = "DROP TABLE Images";
        String myPatient = "DROP TABLE Patients"; 
        String myDoctor = "DROP TABLE GeneralDoctors"; 
        String myAllDoctors = "DROP TABLE AllDoctors"; 
@@ -211,7 +211,7 @@ public class DatabaseConnection{
        statement.executeUpdate(myTicket);
        statement.executeUpdate(myExamination);
        statement.executeUpdate(mySpecialist);
-       statement.executeUpdate(myImage);
+      // statement.executeUpdate(myImage);
        statement.executeUpdate(myPatient);
        statement.executeUpdate(myDoctor);
        statement.executeUpdate(myAllDoctors); 
@@ -243,7 +243,7 @@ public class DatabaseConnection{
             while(y>=1){
                 if(y!=5) { data_photo = "201"+y+"-10-10";}
                 insertImage(conn, 
-                            "D:\\Francesco\\OneDrive - Università degli Studi di Trento\\UniTN\\2018-2019\\corsi\\Introduzione prog. Web\\progetto\\Software-Sanitario-unitn\\SoftwareSanitario\\database\\patient_image.jpg", 
+                            "C:\\Users\\franc\\Desktop\\Software-Sanitario-unitn\\SoftwareSanitario\\database\\patient_image.jpg", 
                             x.toString(),
                             data_photo,
                             y
