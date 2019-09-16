@@ -9,11 +9,14 @@ import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -92,21 +95,54 @@ public class sendEmailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out = response.getWriter();
         String contextPath = getServletContext().getContextPath();
+        
+        
         if (!contextPath.endsWith("/")) {
             contextPath += "/";
         }
         String to= request.getParameter("email");
         
-        byte[] array = new byte[7]; // length is bounded by 7
-        new Random().nextBytes(array);
-        String password = new String(array, Charset.forName("UTF-8"));
+        try {
+            User user = userDao.getByEmail(to);
+           
+            if (user == null) {
+                response.sendRedirect(response.encodeRedirectURL(contextPath +"utenteInesistente.html"));
+                return;
+            } 
+        } catch (DAOException ex) {
+            Logger.getLogger(RegistrationFirst.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        Random rnd = new Random ();
+        char[] arr = new char[10];
+
+        for (int i=0; i<10; i++) {
+            int n = rnd.nextInt (36);
+            arr[i] = (char) (n < 10 ? '0'+n : 'a'+n-10);
+        }
+        
+        String password = new String(arr);
         
         String subject= new String("Recovery password\n");
         String msg= new String("New Password for the user: " + password);  
           
         Mailer.send(to, subject, msg);  
-        response.sendRedirect(contextPath + "index.html");
+        try {
+            /*out.println("<script type=\"text/javascript\">"+
+            //"window.alert(\"Email inviata correttamente\")"+
+            "</script>");*/
+            User user = userDao.updatePassword(to, password);
+            
+            if (user != null) {
+                response.sendRedirect(response.encodeRedirectURL(contextPath +"emailInviata.html"));
+            } 
+        } catch (DAOException ex) {
+            Logger.getLogger(sendEmailServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     /**
