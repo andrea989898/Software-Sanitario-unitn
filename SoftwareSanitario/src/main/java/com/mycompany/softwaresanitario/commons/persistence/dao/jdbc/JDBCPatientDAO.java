@@ -57,14 +57,13 @@ public class JDBCPatientDAO extends JDBCDAO<Patient, String> implements PatientD
                         throw new DAOException("Unique constraint violated! There are more than one user with the same code! WHY???");
                     }
                     
-                    patient.setSSD(rs.getString("p.ssd"));
-                    patient.setName(rs.getString("p.name"));
-                    patient.setSurname(rs.getString("p.surname"));
-                    patient.setAge(rs.getInt("p.age"));
-                    patient.setBirthDate(rs.getDate("p.birthdate"));
-                    patient.setBirthPlace(rs.getString("p.birthPlace"));
-                    patient.setEmail(rs.getString("p.email"));
-                    patient.setAvatarPath(rs.getString("i.data"));
+                    patient.setSSD(rs.getString("ssd"));
+                    patient.setName(rs.getString("name"));
+                    patient.setSurname(rs.getString("surname"));
+                    patient.setAge(rs.getInt("age"));
+                    patient.setBirthDate(rs.getDate("birthdate"));
+                    patient.setBirthPlace(rs.getString("birthPlace"));
+                    patient.setAvatarPath(rs.getString("data"));
                    
                     
                     return patient;
