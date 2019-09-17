@@ -18,7 +18,6 @@ public class Patient {
     public Date birthDate;
     public String birthPlace;
     public int age;
-    public String email;
     private String avatarPath;
     
     public void setAvatarPath(String avatarPath) {
@@ -75,10 +74,5 @@ public class Patient {
         this.age = age;
     }
     
-    public String getEmail(){
-        return email;
-    }
-    public void setEmail(String e){
-        this.email = e;
-    }
+    
 }
