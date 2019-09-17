@@ -66,7 +66,7 @@ public class GeneralDoctorFilter implements Filter {
             generalDoctorDao = daoFactory.getDAO(GeneralDoctorDAO.class);
             request.setAttribute("GeneralDoctorDao", generalDoctorDao);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for shopping list storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }
         
         String contextPath = request.getServletContext().getContextPath();
@@ -88,12 +88,13 @@ public class GeneralDoctorFilter implements Filter {
             return;
         }
         
+        //System.out.println(request.getAttribute("patient"));
         
         try {
             GeneralDoctor generalDoctor = generalDoctorDao.getByCode(user.getCode());
-            request.setAttribute("generalDoctor", generalDoctor);
+            if(generalDoctor != null)   request.setAttribute("generalDoctor", generalDoctor);
         } catch (DAOException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get user or shopping lists", ex));
+            throw new RuntimeException(new ServletException("Impossible to get user or generalDoctor", ex));
         }
         
     }    

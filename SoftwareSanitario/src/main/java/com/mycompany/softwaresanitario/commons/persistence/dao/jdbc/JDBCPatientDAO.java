@@ -46,7 +46,7 @@ public class JDBCPatientDAO extends JDBCDAO<Patient, String> implements PatientD
     public Patient getByCode(String SSD) throws DAOException {
         System.out.println("Sono nel DAO");
         Patient patient = new Patient();
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM patients WHERE ssd = ?")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM patients p, images i WHERE p.ssd = ? AND p.ssd = i.idpatient")) {
             stm.setString(1, SSD);
             try (ResultSet rs = stm.executeQuery()) {
                // System.out.println(rs.next());
@@ -57,13 +57,14 @@ public class JDBCPatientDAO extends JDBCDAO<Patient, String> implements PatientD
                         throw new DAOException("Unique constraint violated! There are more than one user with the same code! WHY???");
                     }
                     
-                    patient.setSSD(rs.getString("ssd"));
-                    patient.setName(rs.getString("name"));
-                    patient.setSurname(rs.getString("surname"));
-                    patient.setAge(rs.getInt("age"));
-                    patient.setBirthDate(rs.getDate("birthdate"));
-                    patient.setBirthPlace(rs.getString("birthPlace"));
-                    patient.setEmail(rs.getString("email"));
+                    patient.setSSD(rs.getString("p.ssd"));
+                    patient.setName(rs.getString("p.name"));
+                    patient.setSurname(rs.getString("p.surname"));
+                    patient.setAge(rs.getInt("p.age"));
+                    patient.setBirthDate(rs.getDate("p.birthdate"));
+                    patient.setBirthPlace(rs.getString("p.birthPlace"));
+                    patient.setEmail(rs.getString("p.email"));
+                    patient.setAvatarPath(rs.getString("i.data"));
                    
                     
                     return patient;

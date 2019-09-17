@@ -19,6 +19,15 @@ public class Patient {
     public String birthPlace;
     public int age;
     public String email;
+    private String avatarPath;
+    
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
     
     public String getSSD() {
         return SSD;

@@ -45,7 +45,7 @@ public class JDBCSpecialistDAO extends JDBCDAO<Specialist, String> implements Sp
     @Override
     public Specialist getByCode(String SSD) throws DAOException {
         Specialist specialDoctor = new Specialist();
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM alldoctors WHERE ssd IN (SELECT ssd FROM specialist WHERE ssd = ?")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM alldoctors WHERE ssd IN (SELECT ssd FROM specialists WHERE ssd = ?)")) {
             stm.setString(1, SSD);
             try (ResultSet rs = stm.executeQuery()) {
                // System.out.println(rs.next());

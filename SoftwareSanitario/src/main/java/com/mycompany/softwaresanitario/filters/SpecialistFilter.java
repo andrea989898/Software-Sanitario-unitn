@@ -66,7 +66,7 @@ public class SpecialistFilter implements Filter {
             specialistDao = daoFactory.getDAO(SpecialistDAO.class);
             request.setAttribute("Specialist", specialistDao);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for shopping list storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for specialistDAO storage system", ex));
         }
         
         String contextPath = request.getServletContext().getContextPath();
@@ -88,12 +88,12 @@ public class SpecialistFilter implements Filter {
             return;
         }
         
-        
+        System.out.println("SONO QUI");
         try {
             Specialist specialist = specialistDao.getByCode(user.getCode());
-            request.setAttribute("specialist", specialist);
+            if(specialist != null)      request.setAttribute("specialist", specialist);
         } catch (DAOException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get user or shopping lists", ex));
+            throw new RuntimeException(new ServletException("Impossible to get user or specialist", ex));
         }
         
     }    
