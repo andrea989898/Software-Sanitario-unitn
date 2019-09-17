@@ -15,7 +15,7 @@ public class DatabaseConnection{
  
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
-    private final String password = "chiaravise";
+    private final String password = "0000";
  
     /**
      * Connect to the PostgreSQL database
@@ -55,11 +55,11 @@ public class DatabaseConnection{
                 System.out.println("Errore create tabelle");
             }
             try{
-                copy(conn);
+                copy(conn);                
+                fillImages(conn);
             }catch(SQLException e){
                 System.out.println("errore copia");
             }
-            fillImages(conn);
             
             
     }
@@ -81,8 +81,7 @@ public class DatabaseConnection{
             "BirthPlace CHAR(40) NOT NULL, \n"+
             "Address CHAR(80) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
-            "FOREIGN KEY(SSD) REFERENCES Users(Code), \n" +
-            "Email CHAR(80) NOT NULL);";
+            "FOREIGN KEY(SSD) REFERENCES Users(Code));";
             
             String myDoctor = "CREATE TABLE GeneralDoctors( \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n" +
@@ -96,14 +95,12 @@ public class DatabaseConnection{
             "BirthPlace CHAR(40) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
             "Gender CHAR(2) NOT NULL,\n" +
-            //"Photos BYTEA,\n" +
-            "GeneralDoctor CHAR(16),\n" +
-            "Email CHAR(80) NOT NULL,\n "+
+            "GeneralDoctor CHAR(16) NOT NULL,\n" +
+            "FOREIGN KEY(GeneralDoctor) REFERENCES AllDoctors(SSD),\n"+
             "FOREIGN KEY(SSD) REFERENCES Users(Code));";
-            //"FOREIGN KEY(GeneralDoctor) REFERENCES GeneralDoctors(SSD))
              
-            String myImage = "CREATE TABLE Images(\n"
-                    + "data BYTEA,\n"
+            String myImage = "CREATE TABLE Images("
+                    + "data CHAR(30) NOT NULL,\n"
                     + "IDPatient CHAR(16)NOT NULL,\n"
                     + "Data_photo CHAR(16),\n"
                     + "photo_num INT NOT NULL,\n"
@@ -221,20 +218,14 @@ public class DatabaseConnection{
     }
     
     public static void insertImage(Connection conn, String folder, String idP, String photo_date, int num) throws SQLException{
-        String query = "INSERT INTO images(data, idPatient, data_photo, photo_num) VALUES(?,'"+ idP + "','"+photo_date+"',"+num+")";
-        PreparedStatement pst = conn.prepareStatement(query);
-
-        File img = new File(folder);
-        try (FileInputStream fin = new FileInputStream(img)) {
-            pst.setBinaryStream(1, fin, (int) img.length());
-            pst.executeUpdate();
-        }catch (IOException ex){
-            System.out.println("error");
-        }
+        Statement statement = conn.createStatement();
+        String query = "INSERT INTO Images(data, idPatient, data_photo, photo_num) VALUES('"+folder+"','"+ idP + "','"+photo_date+"',"+num+")";
+        statement.executeUpdate(query);
     }
 
     
     public static void fillImages(Connection conn) throws SQLException{
+    
     Integer x = 1; int y=5;
     Data d = new Data(2010, 10, 10);
     d.currentData(d); 
@@ -243,7 +234,7 @@ public class DatabaseConnection{
             while(y>=1){
                 if(y!=5) { data_photo = "201"+y+"-10-10";}
                 insertImage(conn, 
-                            "C:\\Users\\franc\\Desktop\\Software-Sanitario-unitn\\SoftwareSanitario\\database\\patient_image.jpg", 
+                            "patient_image.jpg", 
                             x.toString(),
                             data_photo,
                             y

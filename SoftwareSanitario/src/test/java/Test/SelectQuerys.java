@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+
 /**
  *
  * @author Francesco
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 
 public class SelectQuerys {
     
-/*    private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
+    private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
     private final String password = "0000";
     
@@ -39,11 +40,11 @@ public class SelectQuerys {
         ResultSet rst = stm.executeQuery();
         ArrayList<GeneralDoctor> generalDoctors = new ArrayList<GeneralDoctor>();
         while (rst.next()) {
-            GeneralDoctor generalDoctor = new GeneralDoctor(
-                    rst.getString("ssd"),
-                    rst.getString("Name"), 
-                    rst.getString("Surname"), 
-                    rst.getInt("age"));
+            GeneralDoctor generalDoctor = new GeneralDoctor();
+                    generalDoctor.setSSD(rst.getString("ssd"));;
+                    generalDoctor.setName(rst.getString("Name")); 
+                    generalDoctor.setSurname(rst.getString("Surname"));
+                    generalDoctor.setAge(rst.getInt("age"));
             generalDoctors.add(generalDoctor); 
             System.out.println(generalDoctor.SSD);
         }
@@ -60,12 +61,12 @@ public class SelectQuerys {
         ResultSet rst = stm.executeQuery();
         ArrayList<Specialist> specialists = new ArrayList<Specialist>();
         while (rst.next()) {
-            Specialist specialist = new Specialist(
-                    rst.getString("ssd"),
-                    rst.getString("Name"), 
-                    rst.getString("Surname"), 
-                    rst.getInt("age"),
-                    rst.getString("specialization"));
+            Specialist specialist = new Specialist();
+                    specialist.setSSD(rst.getString("ssd"));
+                    specialist.setName(rst.getString("name"));
+                    specialist.setSurname(rst.getString("surname"));
+                    specialist.setAge(rst.getInt("age"));
+                    specialist.setSpecialization(rst.getString("specialization"));
             specialists.add(specialist); 
             System.out.println(specialist.SSD);
         }
@@ -74,7 +75,7 @@ public class SelectQuerys {
     }
     
     public static ArrayList <Patient> getPatients(Connection conn, String doctor) throws SQLException{
-                String myGet = "select pa.ssd, pa.name, pa.surname, pa.birthdate, pa.birthplace, pa.age, pa.email\n" +
+                String myGet = "select pa.ssd, pa.name, pa.surname, pa.birthdate, pa.birthplace, pa.age\n" +
                                 "from patients pa\n" +
                                 "inner join alldoctors al\n" +
                                 "on pa.generaldoctor = al.ssd\n" +
@@ -83,14 +84,13 @@ public class SelectQuerys {
         ResultSet rst = stm.executeQuery();
         ArrayList<Patient> patients = new ArrayList<Patient>();
         while (rst.next()) {
-           Patient patient = new Patient(
-                    rst.getString("ssd"),
-                    rst.getString("name"), 
-                    rst.getString("surname"), 
-                    rst.getDate("birthdate"),
-                    rst.getString("birthPlace"),
-                    rst.getInt("age"),
-                    rst.getString("email"));
+           Patient patient = new Patient();
+                    patient.setSSD(rst.getString("ssd"));
+                    patient.setName(rst.getString("Name"));
+                    patient.setSurname(rst.getString("Surname"));
+                    patient.setBirthDate(rst.getDate("Birthdate"));
+                    patient.setBirthPlace(rst.getString("birthplace"));
+                    patient.setAge(rst.getInt("age"));
             patients.add(patient); 
             System.out.println(patient.name + patient.surname + patient.SSD);
         }
@@ -228,17 +228,22 @@ public class SelectQuerys {
     return tickets;
     }
     
-    public static void getImages(Connection conn) throws SQLException, FileNotFoundException, IOException{
-        String query = "SELECT data, LENGTH(data) FROM images WHERE idpatient = '  1'";
+    public static ArrayList <Image> getImages(Connection conn, String patient) throws SQLException{
+        String query = "SELECT data, idPatient, data_photo, photo_num FROM images WHERE idpatient ="+patient;
         PreparedStatement pst = conn.prepareStatement(query);
-        ResultSet rs = pst.executeQuery(); 
-        rs.next();            
-        File myFile = new File("C:\\Users\\Public\\Documents\\dbIPW19\\a.jpg");
-        try (FileOutputStream fos = new FileOutputStream(myFile)) {
-            int len = rs.getInt(2);
-            byte[] buf = rs.getBytes("data");
-            fos.write(buf, 0, len);
+        ResultSet rst = pst.executeQuery();
+        ArrayList<Image> images = new ArrayList<Image>();
+        while(rst.next()){           
+            Image image = new Image();
+                    image.setData(rst.getString("data"));
+                    image.setIdPatient(rst.getString("idPatient"));
+                    image.setPhoto_date(rst.getDate("data_photo"));
+                    image.setNum(rst.getInt("photo_num"));            
+            images.add(image); 
+            System.out.println(image.data + " " + image.idPatient);       
         }
+       rst.close();
+    return images;
     }
     
     public static void main(String[] args) throws SQLException, IOException  {
@@ -252,7 +257,7 @@ public class SelectQuerys {
         ArrayList<Prescription> prescriptions = getPrescriptions(conn, "'30'");
         ArrayList<Exam> exams = getExams(conn, "'25'");
         ArrayList<Ticket> tickets = getTickets(conn, "'10'");
-        getImages(conn);
+        ArrayList<Image> images = getImages(conn, "'1'");
     }
-    */
+    
 }
