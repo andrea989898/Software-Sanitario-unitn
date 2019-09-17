@@ -91,8 +91,7 @@ public class PatientFilter implements Filter {
         
         try {
             Patient patient = patientDao.getByCode(user.getCode());
-            request.setAttribute("patient", patient);
-            //System.out.println(patient.getName());
+            if(patient != null)     request.setAttribute("patient", patient);
         } catch (DAOException ex) {
             throw new RuntimeException(new ServletException("Impossible to get user or shopping lists", ex));
         }

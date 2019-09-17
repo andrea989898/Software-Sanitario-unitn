@@ -2,7 +2,7 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <context-param>
         <param-name>dburl</param-name>
-        <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=chiaravise</param-value>
+        <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=61223180</param-value>
     </context-param>
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
@@ -21,7 +21,12 @@
         <filter-class>com.mycompany.softwaresanitario.filters.SpecialistFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>SpecialistFilter</filter-name>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/restricted/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PatientFilter</filter-name>
         <servlet-name>HomePage</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
@@ -33,12 +38,7 @@
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>AuthenticationFilter</filter-name>
-        <url-pattern>/restricted/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>PatientFilter</filter-name>
+        <filter-name>SpecialistFilter</filter-name>
         <servlet-name>HomePage</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
