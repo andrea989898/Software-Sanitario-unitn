@@ -17,6 +17,8 @@ import com.mycompany.softwaresanitario.commons.persistence.dao.SpecialistDAO;
 import com.mycompany.softwaresanitario.commons.persistence.entities.Specialist;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,10 +43,21 @@ public class LoginServlet extends HttpServlet {
         }
         try {
             userDao = daoFactory.getDAO(UserDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get dao factory for user storage system", ex);
+        }
+        try {
             patientDao = daoFactory.getDAO(PatientDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get dao factory for user storage system", ex);
+        }
+        try {
             generalDoctorDao = daoFactory.getDAO(GeneralDoctorDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get dao factory for user storage system", ex);
+        }
+        try {
             specialistDao = daoFactory.getDAO(SpecialistDAO.class);
-            
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get dao factory for user storage system", ex);
         }
@@ -118,7 +131,7 @@ public class LoginServlet extends HttpServlet {
                 //processRequest(request, response);
             } else {
                 request.getSession().setAttribute("user", user);
-                Patient patient = patientDao.getByCode(user.getCode());
+                /*Patient patient = patientDao.getByCode(user.getCode());
                 request.getSession().setAttribute("patient", patient);
                 
                 GeneralDoctor generalDoctor = generalDoctorDao.getByCode(user.getCode());
@@ -132,8 +145,8 @@ public class LoginServlet extends HttpServlet {
                     request.getSession().setAttribute("specialist", specialist);
                 }
                 
-                
-                response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/saluto.html"));
+                */
+                response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
 
             }
         } catch (DAOException ex) {

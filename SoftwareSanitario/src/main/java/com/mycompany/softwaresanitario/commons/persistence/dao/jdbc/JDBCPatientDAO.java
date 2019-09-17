@@ -44,6 +44,7 @@ public class JDBCPatientDAO extends JDBCDAO<Patient, String> implements PatientD
 
     @Override
     public Patient getByCode(String SSD) throws DAOException {
+        System.out.println("Sono nel DAO");
         Patient patient = new Patient();
         try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM patients WHERE ssd = ?")) {
             stm.setString(1, SSD);
@@ -63,7 +64,7 @@ public class JDBCPatientDAO extends JDBCDAO<Patient, String> implements PatientD
                     patient.setBirthDate(rs.getDate("birthdate"));
                     patient.setBirthPlace(rs.getString("birthPlace"));
                     patient.setEmail(rs.getString("email"));
-                    
+                   
                     
                     return patient;
                     

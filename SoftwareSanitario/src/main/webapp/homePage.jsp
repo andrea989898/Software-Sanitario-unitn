@@ -1,9 +1,17 @@
-<%-- 
+<%--
     Document   : saluto
     Created on : 11 set 2019, 15:59:11
     Author     : franc
 --%>
-
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException"%>
+<%@page import="java.util.List"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.User"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.PatientDAO"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Patient"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -20,7 +28,7 @@
              response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
         </jsp:scriptlet>
         <div class="w3-container w3-blue">
-            <h2>Welcome authenticated user!</h2>
+            <h2>Welcome authenticated ${patient.getName()}!</h2>
         </div>
         <br>
         <div class="w3-container">

@@ -42,12 +42,12 @@ public class DatabaseConnection{
       
         DatabaseConnection app = new DatabaseConnection();
         Connection conn = app.connect();
-            /*try{
+            try{
                 drop(conn); //cancello tabella person
             }
             catch(SQLException e){
                 System.out.println("Errore drop tabelle");
-            }*/
+            }
             try{
                 create(conn); //creo tabella person
             }
@@ -69,7 +69,7 @@ public class DatabaseConnection{
             
             String myAllUsers = "CREATE TABLE Users ( \n" +
             "Code CHAR(15) NOT NULL PRIMARY KEY, \n" +
-            "Email CHAR(30) NOT NULL UNIQUE, \n" +
+            "Email CHAR(30) NOT NULL, \n" +
             "Password CHAR(80) NOT NULL, \n" +
             "Tipo CHAR(10) NOT NULL);";
        
@@ -190,18 +190,18 @@ public class DatabaseConnection{
     
     static public void drop(Connection conn) throws SQLException{
        Statement statement = conn.createStatement();
-       String myExam = "DROP TABLE Exams";      
-       String myRecipe = "DROP TABLE Recipes"; 
-       String myPrescription = "DROP TABLE Prescriptions"; 
-       String myDrug = "DROP TABLE Drugs"; 
-       String myTicket = "DROP TABLE Tickets"; 
-       String myExamination = "DROP TABLE Examinations"; 
-       String mySpecialist = "DROP TABLE Specialists"; 
-          //String myImage = "DROP TABLE Images";
-       String myPatient = "DROP TABLE Patients"; 
-       String myDoctor = "DROP TABLE GeneralDoctors"; 
-       String myAllDoctors = "DROP TABLE AllDoctors"; 
-       String myAllUsers = "DROP TABLE Users"; 
+       String myExam = "DROP TABLE Exams CASCADE";      
+       String myRecipe = "DROP TABLE Recipes CASCADE"; 
+       String myPrescription = "DROP TABLE Prescriptions CASCADE"; 
+       String myDrug = "DROP TABLE Drugs CASCADE"; 
+       String myTicket = "DROP TABLE Tickets CASCADE"; 
+       String myExamination = "DROP TABLE Examinations CASCADE"; 
+       String mySpecialist = "DROP TABLE Specialists CASCADE"; 
+       String myImage = "DROP TABLE Images CASCADE";
+       String myPatient = "DROP TABLE Patients CASCADE"; 
+       String myDoctor = "DROP TABLE GeneralDoctors CASCADE"; 
+       String myAllDoctors = "DROP TABLE AllDoctors CASCADE"; 
+       String myAllUsers = "DROP TABLE Users CASCADE"; 
 
        
        statement.executeUpdate(myExam);
@@ -211,7 +211,7 @@ public class DatabaseConnection{
        statement.executeUpdate(myTicket);
        statement.executeUpdate(myExamination);
        statement.executeUpdate(mySpecialist);
-      // statement.executeUpdate(myImage);
+       statement.executeUpdate(myImage);
        statement.executeUpdate(myPatient);
        statement.executeUpdate(myDoctor);
        statement.executeUpdate(myAllDoctors); 

@@ -8,6 +8,10 @@
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>com.mycompany.softwaresanitario.filters.AuthenticationFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>PatientFilter</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.PatientFilter</filter-class>
+    </filter>
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/restricted/*</url-pattern>
@@ -18,9 +22,15 @@
         <listener-class>com.mycompany.softwaresanitario.listener.WebAppContextListener</listener-class>
     </listener>
     <servlet>
-        <servlet-name>SalutoPage</servlet-name>
-        <jsp-file>/saluto.jsp</jsp-file>
+        <servlet-name>HomePage</servlet-name>
+        <jsp-file>/homePage.jsp</jsp-file>
     </servlet>
+     <filter-mapping>
+        <filter-name>PatientFilter</filter-name>
+        <servlet-name>HomePage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.mycompany.softwaresanitario.servlet.LoginServlet</servlet-class>
@@ -50,8 +60,8 @@
         <url-pattern>/restricted/logout.handler</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>SalutoPage</servlet-name>
-        <url-pattern>/restricted/saluto.html</url-pattern>
+        <servlet-name>HomePage</servlet-name>
+        <url-pattern>/restricted/homePage.html</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>RegistrationFirst</servlet-name>
