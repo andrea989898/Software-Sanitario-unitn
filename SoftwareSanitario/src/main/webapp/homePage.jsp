@@ -28,7 +28,7 @@
              response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
         </jsp:scriptlet>
         <div class="w3-container w3-blue">
-            <h2>Welcome authenticated ${patient.getName()}!</h2>
+            <h2>Welcome authenticated ${patient.getName()}}</h2>
         </div>
         <br>
         <div class="w3-container">
