@@ -93,7 +93,7 @@ public class PatientFilter implements Filter {
             Patient patient = patientDao.getByCode(user.getCode());
             if(patient != null){
                 request.setAttribute("patient", patient);
-                String avatarPath = "../images/avatars/" + patient.getAvatarPath();
+                String avatarPath = "../images/avatar/" + patient.getAvatarPath();
                 request.setAttribute("avatarPath", avatarPath);
             }
         } catch (DAOException ex) {
