@@ -40,7 +40,7 @@
                 <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
                   <i class="fa fa-remove"></i>
                 </a>
-                <img src="/w3images/avatar_g2.jpg" style="width:45%;" class="w3-round"><br><br>
+                <img src="${avatarPath}" style="width:45%;" class="w3-round"><br><br>
                 <h4><b>${patient.getName()} ${patient.getSurname()}</b></h4>
                 <p class="w3-text-grey">Template by W3.CSS</p>
             </div>
