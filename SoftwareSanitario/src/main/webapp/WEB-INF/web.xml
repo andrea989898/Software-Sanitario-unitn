@@ -2,7 +2,7 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <context-param>
         <param-name>dburl</param-name>
-        <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=61223180</param-value>
+        <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=chiaravise</param-value>
     </context-param>
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
@@ -22,6 +22,10 @@
         <listener-class>com.mycompany.softwaresanitario.listener.WebAppContextListener</listener-class>
     </listener>
     <servlet>
+        <servlet-name>CambioPasswordPage</servlet-name>
+        <jsp-file>/cambioPassword.jsp</jsp-file>
+    </servlet>
+    <servlet>
         <servlet-name>HomePage</servlet-name>
         <jsp-file>/homePage.jsp</jsp-file>
     </servlet>
@@ -36,6 +40,10 @@
         <servlet-class>com.mycompany.softwaresanitario.servlet.LoginServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>changePassowordServlet</servlet-name>
+        <servlet-class>com.mycompany.softwaresanitario.servlet.changePasswordServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>LogoutServlet</servlet-name>
         <servlet-class>com.mycompany.softwaresanitario.servlet.LogoutServlet</servlet-class>
     </servlet>
@@ -43,6 +51,10 @@
         <servlet-name>RegistrationFirst</servlet-name>
         <servlet-class>com.mycompany.softwaresanitario.servlet.RegistrationFirst</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>CambioPasswordPage</servlet-name>
+        <url-pattern>/restricted/cambioPassword.html</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>preRegistrationServlet</servlet-name>
         <servlet-class>com.mycompany.softwaresanitario.servlet.preRegistrationServlet</servlet-class>
@@ -62,6 +74,10 @@
     <servlet-mapping>
         <servlet-name>HomePage</servlet-name>
         <url-pattern>/restricted/homePage.html</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>changePassowordServlet</servlet-name>
+        <url-pattern>/restricted/changePassoword.handler</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>RegistrationFirst</servlet-name>

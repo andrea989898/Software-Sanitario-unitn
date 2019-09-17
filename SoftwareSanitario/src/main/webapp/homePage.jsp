@@ -32,6 +32,11 @@
         </div>
         <br>
         <div class="w3-container">
+            <h4>Iscriviti se non hai ancora un account.</h4>
+            <a href="cambioPassword.html"><button class="w3-button w3-round-large w3-blue">Cambia password</button></a>
+        </div>
+        <br>
+        <div class="w3-container">
             <a href="logout.handler" class="w3-container"><button class="w3-button w3-round-large w3-blue">Esci</button></a>
         </div>
     </body>
