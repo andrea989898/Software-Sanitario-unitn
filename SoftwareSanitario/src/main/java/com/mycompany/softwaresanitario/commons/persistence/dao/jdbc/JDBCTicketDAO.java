@@ -41,30 +41,35 @@ public class JDBCTicketDAO extends JDBCDAO<Ticket, String> implements TicketDAO{
     }
     
     @Override
-    public ArrayList <Ticket> getTickets(Connection conn, String patient) throws SQLException{
-                String myGet = "select tt.code, tt.cost, tt.date, tt.expirationdate, e.argument, tt.idexamination, pat.ssd, tt.ispaid\n" +
+    public ArrayList <Ticket> getTickets(String patient) throws DAOException{
+        String myGet = "select tt.code, tt.cost, tt.date, tt.expirationdate, e.argument, tt.idexamination, pat.ssd, tt.ispaid\n" +
                                 "from tickets tt inner join examinations e\n" +
                                 "on tt.idexamination = e.idexamination\n" +
                                 "inner join patients pat\n" +
                                 "on pat.ssd = tt.idpatient\n" +
                                 "where pat.ssd = " + patient ;
-        PreparedStatement stm = CON.prepareStatement(myGet);
-        ResultSet rst = stm.executeQuery();
-        ArrayList<Ticket> tickets = new ArrayList<Ticket>();
-        while (rst.next()) {
-            Ticket ticket = new Ticket();
-            ticket.setCode(rst.getInt("code"));
-            ticket.setCost(rst.getInt("cost"));
-            ticket.setDate(rst.getDate("date"));
-            ticket.setExpirationDate(rst.getDate("expirationdate"));
-            ticket.setIdExamination(rst.getInt("idexamination"));
-            ticket.setIdPatient(rst.getString("ssd"));
-            ticket.setIsPaid(rst.getBoolean("ispaid"));
-            tickets.add(ticket); 
-            //System.out.println(ticket.code + " " + ticket.isPaid +" "+ ticket.expirationDate);
+        try(PreparedStatement stm = CON.prepareStatement(myGet)){
+            try(ResultSet rst = stm.executeQuery()){
+                ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+                while (rst.next()) {
+                    Ticket ticket = new Ticket();
+                    ticket.setCode(rst.getInt("code"));
+                    ticket.setCost(rst.getInt("cost"));
+                    ticket.setDate(rst.getDate("date"));
+                    ticket.setExpirationDate(rst.getDate("expirationdate"));
+                    ticket.setIdExamination(rst.getInt("idexamination"));
+                    ticket.setIdPatient(rst.getString("ssd"));
+                    ticket.setIsPaid(rst.getBoolean("ispaid"));
+                    tickets.add(ticket); 
+                    //System.out.println(ticket.code + " " + ticket.isPaid +" "+ ticket.expirationDate);
+                }
+                
+                
+                return tickets;
+            }
+        }catch (SQLException ex) {
+            throw new DAOException("Impossible to find the user", ex);
         }
-        stm.close();
-        return tickets;
     }
     
 }

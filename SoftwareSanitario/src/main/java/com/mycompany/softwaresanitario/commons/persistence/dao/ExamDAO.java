@@ -19,5 +19,5 @@ import java.util.List;
 public interface ExamDAO extends DAO<Exam, String>{
     
     public Exam getByCode(String SSD) throws DAOException;
-    public ArrayList <Exam> getExams(Connection conn, String patient) throws SQLException;
+    public ArrayList <Exam> getExams(String patient) throws DAOException;
 }

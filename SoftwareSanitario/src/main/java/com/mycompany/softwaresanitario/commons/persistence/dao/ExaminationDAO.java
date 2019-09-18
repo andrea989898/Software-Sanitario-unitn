@@ -17,5 +17,5 @@ import java.util.ArrayList;
  */
 public interface ExaminationDAO extends DAO<Examination, String>{
     public Examination getByCode(int code) throws DAOException;
-    public ArrayList <Examination> getExaminations(Connection conn, String patient) throws SQLException;
+    public ArrayList <Examination> getExaminations(String patient) throws DAOException;
 }
