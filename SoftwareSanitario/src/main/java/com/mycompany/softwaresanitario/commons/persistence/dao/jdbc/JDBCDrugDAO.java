@@ -14,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -41,23 +43,25 @@ public class JDBCDrugDAO extends JDBCDAO<Drug, String> implements DrugDAO{
     }
     
     @Override
-    public ArrayList<Drug> getAllDrugs() throws DAOException, SQLException{
+    public ArrayList<Drug> getAllDrugs() throws DAOException{
         String myGet = "select *\n" +
                                 "from drugs pr\n" ;
-        PreparedStatement stm = CON.prepareStatement(myGet);
-        ResultSet rst = stm.executeQuery();
-        ArrayList<Drug> drugs = new ArrayList<Drug>();
-        while (rst.next()) {
-            Drug drug = new Drug();
-            drug.setCode(rst.getInt("code"));
-            drug.setIsforprescription(rst.getBoolean("isforprescription"));
-            drug.setName(rst.getString("name"));
-            drugs.add(drug); 
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            try(ResultSet rst = stm.executeQuery()){
+                ArrayList<Drug> drugs = new ArrayList<Drug>();
+                while (rst.next()) {
+                    Drug drug = new Drug();
+                    drug.setCode(rst.getInt("code"));
+                    drug.setIsforprescription(rst.getBoolean("isforprescription"));
+                    drug.setName(rst.getString("name"));
+                    drugs.add(drug); 
+                }
+                stm.close();
+                return drugs;
+            }
+        } catch (SQLException ex) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
-        stm.close();
-        return drugs;
-    }
-            
-    
+    }  
 }
 

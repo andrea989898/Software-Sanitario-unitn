@@ -15,5 +15,5 @@ import java.util.ArrayList;
  * @author PC Andrea
  */
 public interface PrescriptionDAO extends DAO<Prescription, String>{
-    public ArrayList <Prescription> getPrescriptions(Connection conn, String patient) throws SQLException;
+    public ArrayList <Prescription> getPrescriptions(String patient) throws SQLException;
 }

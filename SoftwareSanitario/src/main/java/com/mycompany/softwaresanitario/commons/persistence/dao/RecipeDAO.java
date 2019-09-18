@@ -18,7 +18,7 @@ import java.util.List;
  */
 public interface RecipeDAO extends DAO<Recipe, String>{
     
-    public List<Recipe> getAllBySSDPatient(String SSD) throws DAOException, SQLException;
+    public List<Recipe> getAllBySSDPatient(String SSD) throws DAOException;
     
     public Recipe getByCode(String SSD) throws DAOException;
     
