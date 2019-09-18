@@ -42,12 +42,20 @@
                 </a>
                 <img src="${avatarPath}" style="width:45%;" class="w3-round"><br><br>
                 <h4><b>${patient.getName()} ${patient.getSurname()}</b></h4>
-                <p class="w3-text-grey">Template by W3.CSS</p>
+                <h5>
+                    Email: ${user.getEmail()}<br>
+                    Birthday: ${patient.getBirthDate()}<br>
+                </h5>
             </div>
             <div class="w3-bar-block">
-                <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>PORTFOLIO</a> 
-                <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw w3-margin-right"></i>ABOUT</a> 
-                <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope fa-fw w3-margin-right"></i>CONTACT</a>
+                <c:choose>
+                    <c:when test="${!empty generalDoctor}">
+                        <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard doctor</a> 
+                    </c:when>
+                    <c:when test="${!empty specialist}">
+                        <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard specialist</a> 
+                    </c:when>   
+                </c:choose>
             </div>
             <div class="w3-panel w3-large">
                 <i class="fa fa-facebook-official w3-hover-opacity"></i>
@@ -65,7 +73,7 @@
         
         <!-- Header -->
         <header id="portfolio">
-            <a href="#"><img src="/w3images/avatar_g2.jpg" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
+            <a href="#"><img src="${avatarPath}" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
             <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
             <div class="w3-container">
                 <h1><b>${patient.getName()} ${patient.getSurname()}</b></h1>
