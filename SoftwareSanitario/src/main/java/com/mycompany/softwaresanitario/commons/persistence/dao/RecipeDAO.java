@@ -5,10 +5,22 @@
  */
 package com.mycompany.softwaresanitario.commons.persistence.dao;
 
+import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Recipe;
+import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author franc
  */
-public interface RecipeDAO {
+public interface RecipeDAO extends DAO<Recipe, String>{
+    
+    public List<Recipe> getAllBySSDPatient(String SSD) throws DAOException, SQLException;
+    
+    public Recipe getByCode(String SSD) throws DAOException;
+    
     
 }

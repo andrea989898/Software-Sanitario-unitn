@@ -20,6 +20,16 @@
         <filter-name>SpecialistFilter</filter-name>
         <filter-class>com.mycompany.softwaresanitario.filters.SpecialistFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>ExamsFilter</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.ExamsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ExamsFilter</filter-name>
+        <servlet-name>HomePage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/restricted/*</url-pattern>
