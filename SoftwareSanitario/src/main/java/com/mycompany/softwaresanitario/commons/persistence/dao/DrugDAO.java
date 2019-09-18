@@ -15,5 +15,5 @@ import java.util.ArrayList;
  * @author PC Andrea
  */
 public interface DrugDAO extends DAO<Drug, String>{
-    public ArrayList<Drug> getAllDrugs() throws DAOException, SQLException;
+    public ArrayList<Drug> getAllDrugs() throws DAOException;
 }

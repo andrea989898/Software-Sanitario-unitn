@@ -24,6 +24,36 @@
         <filter-name>ExamsFilter</filter-name>
         <filter-class>com.mycompany.softwaresanitario.filters.ExamsFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>DrugFilter</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.DrugFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>PrescriptionFilter</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.PrescriptionFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>RecipeFilter</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.RecipeFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RecipeFilter</filter-name>
+        <servlet-name>HomePage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PrescriptionFilter</filter-name>
+        <servlet-name>HomePage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>DrugFilter</filter-name>
+        <servlet-name>HomePage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>ExamsFilter</filter-name>
         <servlet-name>HomePage</servlet-name>

@@ -39,7 +39,7 @@ public class JDBCRecipeDAO extends JDBCDAO<Recipe, String> implements RecipeDAO{
     }
 
     @Override
-    public List<Recipe> getAllBySSDPatient(String SSD) throws DAOException, SQLException {
+    public List<Recipe> getAllBySSDPatient(String SSD) throws DAOException {
         String myGet = "select r.code, d.name, r.iddrug, pat.ssd\n" +
                                 "from recipes r\n" +
                                 "inner join drugs d\n" +
@@ -47,21 +47,25 @@ public class JDBCRecipeDAO extends JDBCDAO<Recipe, String> implements RecipeDAO{
                                 "inner join patients pat\n" +
                                 "on r.idpatient=pat.ssd\n" +
                                 "where pat.ssd = ?";
-        PreparedStatement stm = CON.prepareStatement(myGet);
-        stm.setString(1, SSD);
-        ResultSet rst = stm.executeQuery();
-        ArrayList<Recipe> recipes = new ArrayList<Recipe>();
-        while (rst.next()) {
-            Recipe recipe = new Recipe();
-            recipe.setCode(rst.getInt("code"));
-            recipe.setDrugName(rst.getString("name"));
-            recipe.setIdDrug(rst.getInt("iddrug"));
-            recipe.setIdPatient(rst.getString("ssd"));
-            recipes.add(recipe); 
-            //System.out.println(recipe.code + recipe.drugName + recipe.idDrug +" "+ recipe.idPatient);
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, SSD);
+            try(ResultSet rst = stm.executeQuery()){
+                ArrayList<Recipe> recipes = new ArrayList<Recipe>();
+                while (rst.next()) {
+                    Recipe recipe = new Recipe();
+                    recipe.setCode(rst.getInt("code"));
+                    recipe.setDrugName(rst.getString("name"));
+                    recipe.setIdDrug(rst.getInt("iddrug"));
+                    recipe.setIdPatient(rst.getString("ssd"));
+                    recipes.add(recipe); 
+                    //System.out.println(recipe.code + recipe.drugName + recipe.idDrug +" "+ recipe.idPatient);
+                }
+                stm.close();
+                return recipes;
+             }
+        } catch (SQLException ex) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
-        stm.close();
-        return recipes;
     }
 
     @Override
