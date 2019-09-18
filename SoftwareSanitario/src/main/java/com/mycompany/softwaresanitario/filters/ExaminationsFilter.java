@@ -5,18 +5,17 @@
  */
 package com.mycompany.softwaresanitario.filters;
 
-import com.mycompany.softwaresanitario.commons.persistence.dao.ExamDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.ExaminationDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Exam;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Examination;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -32,7 +31,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author franc
  */
-public class ExamsFilter implements Filter {
+public class ExaminationsFilter implements Filter {
     
     private static final boolean debug = true;
 
@@ -41,13 +40,13 @@ public class ExamsFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public ExamsFilter() {
+    public ExaminationsFilter() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException{
+            throws IOException, ServletException {
         if (debug) {
-            log("ExamsFilter:DoBeforeProcessing");
+            log("ExaminationsFilter:DoBeforeProcessing");
         }
         
         DAOFactory daoFactory = (DAOFactory) request.getServletContext().getAttribute("daoFactory");
@@ -62,10 +61,10 @@ public class ExamsFilter implements Filter {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
         }
         
-        ExamDAO examDao = null;
+        ExaminationDAO examinationDao = null;
         try {
-            examDao = daoFactory.getDAO(ExamDAO.class);
-            request.setAttribute("GeneralDoctorDao", examDao);
+            examinationDao = daoFactory.getDAO(ExaminationDAO.class);
+            request.setAttribute("GeneralDoctorDao", examinationDao);
         } catch (DAOFactoryException ex) {
             throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }
@@ -92,21 +91,18 @@ public class ExamsFilter implements Filter {
         //System.out.println(request.getAttribute("patient"));
         
         try {
-            List<Exam> exams = examDao.getExams(user.getCode());
-            if(exams.size()>0)   request.setAttribute("exams", exams);
+            List<Examination> examinations = examinationDao.getExaminations(user.getCode());
+            if(examinations.size()>0)   request.setAttribute("examinations", examinations);
         } catch (DAOException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get exams", ex));
+            throw new RuntimeException(new ServletException("Impossible to get examinations", ex));
         }
-        
-        
-        
         
     }    
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("ExamsFilter:DoAfterProcessing");
+            log("ExaminationsFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -142,7 +138,7 @@ public class ExamsFilter implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("ExamsFilter:doFilter()");
+            log("ExaminationsFilter:doFilter()");
         }
         
         doBeforeProcessing(request, response);
@@ -202,7 +198,7 @@ public class ExamsFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("ExamsFilter:Initializing filter");
+                log("ExaminationsFilter:Initializing filter");
             }
         }
     }
@@ -213,9 +209,9 @@ public class ExamsFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("ExamsFilter()");
+            return ("ExaminationsFilter()");
         }
-        StringBuffer sb = new StringBuffer("ExamsFilter(");
+        StringBuffer sb = new StringBuffer("ExaminationsFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

@@ -75,30 +75,35 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
         }
     }
     @Override
-    public ArrayList <Examination> getExaminations(Connection conn, String patient) throws SQLException{
-                String myGet = "select e.idexamination, al.surname, e.time, e.examinationdate, e.isdone, e.isSpecial, e.argument\n" +
+    public ArrayList <Examination> getExaminations(String patient) throws DAOException{
+        String myGet = "select e.idexamination, al.surname, e.time, e.examinationdate, e.isdone, e.isSpecial, e.argument\n" +
                                 "from examinations e\n" +
                                 "inner join alldoctors al  \n" +
                                 "on al.ssd=e.iddoctor \n" +
                                 "inner join patients pat\n" +
                                 "on pat.ssd = e.idpatient\n" +
                                 "where pat.ssd=" + patient ;
-        PreparedStatement stm = CON.prepareStatement(myGet);
-        ResultSet rst = stm.executeQuery();
-        ArrayList<Examination> examinations = new ArrayList<Examination>();
-        while (rst.next()) {
-            Examination examination = new Examination();
-            examination.setSSD(rst.getInt("idexamination"));
-            examination.setDoctor(rst.getString("surname"));
-            examination.setTime(rst.getString("time"));
-            examination.setExaminationDate(rst.getDate("examinationdate"));
-            examination.setIsDone(rst.getBoolean("isdone"));
-            examination.setIsSpecial(rst.getBoolean("isspecial"));
-            examination.setArgument(rst.getString("argument"));
-            examinations.add(examination); 
-            //System.out.println(examination.SSD + examination.doctor + examination.time + examination.examinationDate);
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            try(ResultSet rst = stm.executeQuery()){
+                ArrayList<Examination> examinations = new ArrayList<Examination>();
+                while (rst.next()) {
+                    Examination examination = new Examination();
+                    examination.setSSD(rst.getInt("idexamination"));
+                    examination.setDoctor(rst.getString("surname"));
+                    examination.setTime(rst.getString("time"));
+                    examination.setExaminationDate(rst.getDate("examinationdate"));
+                    examination.setIsDone(rst.getBoolean("isdone"));
+                    examination.setIsSpecial(rst.getBoolean("isspecial"));
+                    examination.setArgument(rst.getString("argument"));
+                    examinations.add(examination); 
+                    //System.out.println(examination.SSD + examination.doctor + examination.time + examination.examinationDate);
+                }
+                
+                
+                return examinations;
+            }
+        }catch (SQLException ex) {
+            throw new DAOException("Impossible to find the user", ex);
         }
-    stm.close();
-    return examinations;
     }
 }

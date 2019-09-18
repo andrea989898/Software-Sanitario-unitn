@@ -78,30 +78,34 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
     }
     
     @Override
-    public ArrayList <Exam> getExams(Connection conn, String patient) throws SQLException{
-                String myGet = "select e.code, e.idprescription, e.idrecipe, e.result, e.isdone, pat.ssd\n" +
+    public ArrayList <Exam> getExams(String patient) throws DAOException{
+        String myGet = "select e.code, e.idprescription, e.idrecipe, e.result, e.isdone, pat.ssd\n" +
                                 "from exams e\n" +
                                 "inner join patients pat\n" +
                                 "on pat.ssd = e.idpatient\n" +
                                 "where pat.ssd =" + patient ;
-        PreparedStatement stm = CON.prepareStatement(myGet);
-        ResultSet rst = stm.executeQuery();
-        ArrayList<Exam> exams = new ArrayList<Exam>();
-        while (rst.next()) {
-            Exam exam = new Exam();
-            exam.setCode(rst.getInt("code"));
-            exam.setIDPrescription(rst.getInt("idprescription"));
-            exam.setIDRecipe(rst.getInt("idrecipe"));
-            exam.setResult(rst.getString("result"));
-            exam.setIsDone(rst.getBoolean("isdone"));
-            exam.setIDPatient(rst.getString("ssd"));
-            if(exam.IsDone==false){
-                exam.Result = "not done yet";
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            try (ResultSet rst = stm.executeQuery()){
+                ArrayList<Exam> exams = new ArrayList<Exam>();
+                while (rst.next()) {
+                    Exam exam = new Exam();
+                    exam.setCode(rst.getInt("code"));
+                    exam.setIDPrescription(rst.getInt("idprescription"));
+                    exam.setIDRecipe(rst.getInt("idrecipe"));
+                    exam.setResult(rst.getString("result"));
+                    exam.setIsDone(rst.getBoolean("isdone"));
+                    exam.setIDPatient(rst.getString("ssd"));
+                    if(exam.IsDone==false){
+                        exam.Result = "not done yet";
+                    }
+                    exams.add(exam); 
+                    //System.out.println(exam.code + " " + exam.IsDone +" s"+ exam.Result);
+                }
+                
+                return exams;
             }
-            exams.add(exam); 
-            //System.out.println(exam.code + " " + exam.IsDone +" s"+ exam.Result);
+        }catch (SQLException ex) {
+            throw new DAOException("Impossible to find the user", ex);
         }
-        stm.close();
-        return exams;
     }
 }
