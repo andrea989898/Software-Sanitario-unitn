@@ -36,6 +36,14 @@
         <filter-name>RecipeFilter</filter-name>
         <filter-class>com.mycompany.softwaresanitario.filters.RecipeFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>ExaminationsFilter</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.ExaminationsFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>TicketsFilter</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.TicketsFilter</filter-class>
+    </filter>
     <filter-mapping>
         <filter-name>RecipeFilter</filter-name>
         <servlet-name>HomePage</servlet-name>
@@ -44,14 +52,10 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>PrescriptionFilter</filter-name>
-
-        <filter-name>ExaminationsFilter</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.ExaminationsFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>TicketsFilter</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.TicketsFilter</filter-class>
-    </filter>
+        <servlet-name>Home Page</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>TicketsFilter</filter-name>
         <servlet-name>HomePage</servlet-name>

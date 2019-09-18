@@ -47,10 +47,12 @@ public class JDBCTicketDAO extends JDBCDAO<Ticket, String> implements TicketDAO{
                                 "on tt.idexamination = e.idexamination\n" +
                                 "inner join patients pat\n" +
                                 "on pat.ssd = tt.idpatient\n" +
-                                "where pat.ssd = " + patient ;
+                                "where pat.ssd = ?";
         try(PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, patient);
             try(ResultSet rst = stm.executeQuery()){
                 ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+                System.out.println("Sono qui");
                 while (rst.next()) {
                     Ticket ticket = new Ticket();
                     ticket.setCode(rst.getInt("code"));
@@ -60,6 +62,8 @@ public class JDBCTicketDAO extends JDBCDAO<Ticket, String> implements TicketDAO{
                     ticket.setIdExamination(rst.getInt("idexamination"));
                     ticket.setIdPatient(rst.getString("ssd"));
                     ticket.setIsPaid(rst.getBoolean("ispaid"));
+                    
+                    
                     tickets.add(ticket); 
                     //System.out.println(ticket.code + " " + ticket.isPaid +" "+ ticket.expirationDate);
                 }

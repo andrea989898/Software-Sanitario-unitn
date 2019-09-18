@@ -83,8 +83,9 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                                 "from exams e\n" +
                                 "inner join patients pat\n" +
                                 "on pat.ssd = e.idpatient\n" +
-                                "where pat.ssd =" + patient ;
+                                "where pat.ssd = ?";
         try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, patient);
             try (ResultSet rst = stm.executeQuery()){
                 ArrayList<Exam> exams = new ArrayList<Exam>();
                 while (rst.next()) {
