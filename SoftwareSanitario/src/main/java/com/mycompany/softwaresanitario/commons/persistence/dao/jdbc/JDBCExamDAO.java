@@ -77,13 +77,14 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
     
     }
     
+    @Override
     public ArrayList <Exam> getExams(Connection conn, String patient) throws SQLException{
                 String myGet = "select e.code, e.idprescription, e.idrecipe, e.result, e.isdone, pat.ssd\n" +
                                 "from exams e\n" +
                                 "inner join patients pat\n" +
                                 "on pat.ssd = e.idpatient\n" +
                                 "where pat.ssd =" + patient ;
-        PreparedStatement stm = conn.prepareStatement(myGet);
+        PreparedStatement stm = CON.prepareStatement(myGet);
         ResultSet rst = stm.executeQuery();
         ArrayList<Exam> exams = new ArrayList<Exam>();
         while (rst.next()) {
@@ -98,7 +99,7 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                 exam.Result = "not done yet";
             }
             exams.add(exam); 
-            System.out.println(exam.code + " " + exam.IsDone +" s"+ exam.Result);
+            //System.out.println(exam.code + " " + exam.IsDone +" s"+ exam.Result);
         }
         stm.close();
         return exams;

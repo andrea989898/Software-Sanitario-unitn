@@ -74,6 +74,7 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
             throw new DAOException("Impossible to find the exam", ex);
         }
     }
+    @Override
     public ArrayList <Examination> getExaminations(Connection conn, String patient) throws SQLException{
                 String myGet = "select e.idexamination, al.surname, e.time, e.examinationdate, e.isdone, e.isSpecial, e.argument\n" +
                                 "from examinations e\n" +
@@ -82,7 +83,7 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                                 "inner join patients pat\n" +
                                 "on pat.ssd = e.idpatient\n" +
                                 "where pat.ssd=" + patient ;
-        PreparedStatement stm = conn.prepareStatement(myGet);
+        PreparedStatement stm = CON.prepareStatement(myGet);
         ResultSet rst = stm.executeQuery();
         ArrayList<Examination> examinations = new ArrayList<Examination>();
         while (rst.next()) {
@@ -95,7 +96,7 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
             examination.setIsSpecial(rst.getBoolean("isspecial"));
             examination.setArgument(rst.getString("argument"));
             examinations.add(examination); 
-            System.out.println(examination.SSD + examination.doctor + examination.time + examination.examinationDate);
+            //System.out.println(examination.SSD + examination.doctor + examination.time + examination.examinationDate);
         }
     stm.close();
     return examinations;
