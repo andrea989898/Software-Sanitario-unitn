@@ -1,38 +1,355 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Software sanitario: Authentication Area</title>
 
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
-    </head>
-    <body>
-         <div class="w3-container w3-blue">
-            <h2>Authentication form</h2>
-        </div>
+        <title>W3.CSS</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;
+      }
 
-        <form class="w3-container " method="POST" action="login.handler">
-            <label class="w3-text-teal"><b>Email:</b></label>
-            <input class="w3-input w3-border w3-light-grey" type="email" id="username" name="username" placeholder="mariorossi@email.it">
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
 
-            <label class="w3-text-teal"><b>Password:</b></label>
-            <input class="w3-input w3-border w3-light-grey" type="password" name="password" id="password" placeholder="password">
+input[type=text], input[type=email] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+/* Set a style for all buttons */
+.container button {
+  background-color: #005f8298;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.container_recupera {
+  height: auto;
+  border-radius: 10px 10 px 10px 10px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.showcase button{
+  background-color: #005f8286;
+  color: white;
+  padding: 24px 60px;
+  margin: 50px 30px 0px 30px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size:20px;
+  font-weight:700;
+  text-transform: uppercase;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+  color: white;
+  border-radius: 10px;
+}
+
+/* Center the image and position the close button */
+.iconcontainer {
+  padding: 40px 0;
+  font-size : 60px;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+  padding: 16px;
+  border-radius: 0px 0px 25px 25px;
+}
+
+.container_recupera {
+  padding: 16px;
+  border-radius: 0px 0px 25px 25px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  border-radius: 25px;
+  background-color: #ffffff;
+  margin: 2% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 3px solid #005f8271;
+  width: 50%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button (x) */
+.close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+.border-radius {
+  border-radius: 10px;
+  -webkit-border-radius: 10px; /* safari, chrome */
+}
+
+/*showcase*/
+.showcase{
+  background:url('images/img_index.jpg') no-repeat;
+  background-position:center;
+  height: 100%;
+  width: 100%;
+  padding:140px 100px;
+  color:#fff;
+}
+
+.showcase testo{
+  width:auto, 600px;
+  color:#006e96;
+}
+
+.showcase h1{
+  font-size:40px;
+  font-weight:700;
+  text-transform: uppercase;
+}
+
+.showcase hr{
+  width:600px;
+  margin:auto;
+  border-width:3px;
+  border-color:#005f8271;
+}
+
+.showcase h2{
+  font-size:16px;
+  padding-bottom:20px;
+  padding-top:20px;
+}
+
+.container3{
+  background-color: #005f8286;
+  border-top: 10px;
+  border-radius: 10px;
+}
+
+
+.section{
+  padding:40px 0;
+  display: block;
+}
+
+.section h2{
+  padding:0;
+  margin:0;
+}
+
+.section .fa{
+  font-size:50px;
+}
+
+.section img{
+  width:100%;
+}
+.ciccio{
+  color:#006e96; 
+  height:auto; 
+  top:20px;
+}
+
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 00px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+
+@media only screen and (max-width:600px){
+  body{
+    margin-top:190px;
+  }
+
+</style>
+</head>
+
+<body>   
+
+  <section class="showcase"> 
+    <div class="w3-container w3-center">
+      <h1 class="w3-text-shadow w3-animate-opacity">Al tuo servizio,<br> per la tua salute!</h1>
+      <hr>
+      <h2 class="container3 w3-animate-opacity">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</h2>
+      <button onclick="document.getElementById('login').style.display='block'">Login</button>
+      <button onclick="document.getElementById('registration').style.display='block'">Registrazione</button>       
+      <button onclick="document.getElementById('contact_us').style.display='block'">Contattaci</button>      
+    </div>
+  </section>
+
+  <div class="ciccio w3-padding-xlarge w3-center w3-light-white">
+      <b>FBF SoftwareSanitario &copy; 2019</b>
+      <b>copyright</b>
+      <b>privacy</b>
+</div>
+
+  <div id="login" class="modal">
+    <form class="modal-content animated-bottom" method="POST" action="login.handler" >
+      <div class="container" >
+        <br>
+        <label class="w3-text-black"><b>Email:</b></label>
+        <input class="w3-input w3-border w3-light-grey" type="email" id="username" name="username" placeholder="mariorossi@email.it">
+        <br>
+        <label class="w3-text-black"><b>Password:</b></label>
+        <input class="w3-input w3-border w3-light-grey" type="password" name="password" id="password" placeholder="password">
+        <br>    
+        <button type="submit" method="POST" action="login.handler">Login</button>       
+        <label><input type="checkbox" checked="checked" name="remember"> Remember me</label>
+      </div>
+        <div class="w3-container w3-border-left">            
+      </div>
+
+      <div class="container_recupera" style="background-color:#cccccc" >
+        <button type="button" onclick="document.getElementById('login').style.display='none'" class="cancelbtn">Cancel</button>
+        <span class="psw" onclick="forgotPsw()"><u>Forgot password?</u></span>
+      </div>
+  </form>
+</div>
+
+<div id="registration" class="modal">
+    <form class="modal-content animated-bottom" method="POST" action="preRegistration.handler" > 
+      <div class="container">
+        <input class="w3-input w3-border w3-light-grey" id="code" type="password" name="code" id="password"  placeholder="Codice">
             <br>
-            <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
-            <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
-        </form> 
-        <div class="w3-container">
-            <h4>Iscriviti se non hai ancora un account.</h4>
-            <a href="preRegistrazione.html"><button class="w3-button w3-round-large w3-blue">Registrati</button></a>
-        </div>
-        <div class="w3-container">
-            <h4>Recupera la tua password:</h4>
-            <a href="recuperaPassword.html"><button class="w3-button w3-round-large w3-blue">Recupera password</button></a> 
-        </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    </body>
+            <button onclick="document.getElementById('code').placehoder = 'Codice'" class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+            <br>
+            <button class="w3-button w3-round-large w3-blue" type="submit"  method="POST" action="preRegistration.handler">Controlla codice</button>            
+      </div>
+      <div class="container_recupera" style="background-color:#cccccc" >
+              <button type="button" onclick="document.getElementById('registration').style.display='none'" class="cancelbtn">Cancel</button>
+      </div>
+  </form>
+</div>
+
+
+
+<div id="contact_us" class="modal">
+    <form class="modal-content animated-bottom"> 
+      <div class="container" >
+        <input class="w3-input w3-border w3-light-grey" type="name" name="code" id="name"  placeholder="Name">
+        <input class="w3-input w3-border w3-light-grey" type="email" name="code" id="email"  placeholder="E-mail">
+        <textarea class="w3-input w3-border" style="resize:none"></textarea>
+            <br>
+            <br>
+            <button class="w3-button w3-round-large w3-blue" type="submit">Invia</button>
+      </div>
+      <div class="container_recupera" style="background-color:#cccccc" >
+        <button type="button" onclick="document.getElementById('contact_us').style.display='none'" class="cancelbtn">Cancel</button>       
+      </div>
+  </form>
+</div>  
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+// Get the modal
+var login = document.getElementById('login');
+var registration = document.getElementById('registration');
+var contact_us = document.getElementById('contact_us');
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == login) {
+        login.style.display = "none";
+    }
+}
+window.onclick = function(event) {
+    if (event.target == registration) {
+        registration.style.display = "none";
+    }
+}
+
+window.onclick = function(event) {
+    if (event.target == contact_us) {
+        contact_us.style.display = "none";
+    }
+}
+</script>
+
+<script>
+function forgotPsw() {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("registration").style.display ="block";
+}
+</script>
+</body>
 </html>

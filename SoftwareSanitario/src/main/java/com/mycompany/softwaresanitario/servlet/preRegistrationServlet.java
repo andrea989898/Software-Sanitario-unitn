@@ -112,7 +112,7 @@ public class preRegistrationServlet extends HttpServlet {
                 }
                 codice.setMaxAge(120);
                 response.addCookie(codice);
-                response.sendRedirect(response.encodeRedirectURL(contextPath + "registrazione.html"));
+                //response.sendRedirect(response.encodeRedirectURL(contextPath + "registrazione.html"));
 
             }
         } catch (DAOException ex) {
