@@ -64,7 +64,7 @@ public class TicketsFilter implements Filter {
         TicketDAO ticketDao = null;
         try {
             ticketDao = daoFactory.getDAO(TicketDAO.class);
-            request.setAttribute("GeneralDoctorDao", ticketDao);
+            request.setAttribute("TicketDao", ticketDao);
         } catch (DAOFactoryException ex) {
             throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }

@@ -42,12 +42,11 @@ public class JDBCTicketDAO extends JDBCDAO<Ticket, String> implements TicketDAO{
     
     @Override
     public ArrayList <Ticket> getTickets(String patient) throws DAOException{
-        String myGet = "select tt.code, tt.cost, tt.date, tt.expirationdate, e.argument, tt.idexamination, pat.ssd, tt.ispaid\n" +
-                                "from tickets tt inner join examinations e\n" +
-                                "on tt.idexamination = e.idexamination\n" +
+        String myGet = "select *\n" +
+                                "from tickets tt, examinations ex, exams e "+
                                 "inner join patients pat\n" +
                                 "on pat.ssd = tt.idpatient\n" +
-                                "where pat.ssd = ?";
+                                "where pat.ssd = ? AND (tt.idexamination = ex.idexamination OR tt.idexam = e.code)";
         try(PreparedStatement stm = CON.prepareStatement(myGet)){
             stm.setString(1, patient);
             try(ResultSet rst = stm.executeQuery()){
@@ -60,6 +59,7 @@ public class JDBCTicketDAO extends JDBCDAO<Ticket, String> implements TicketDAO{
                     ticket.setDate(rst.getDate("date"));
                     ticket.setExpirationDate(rst.getDate("expirationdate"));
                     ticket.setIdExamination(rst.getInt("idexamination"));
+                    ticket.setIDExam(rst.getInt("idexam"));
                     ticket.setIdPatient(rst.getString("ssd"));
                     ticket.setIsPaid(rst.getBoolean("ispaid"));
                     

@@ -14,6 +14,16 @@ public class GeneralDoctor {
     public String name;
     public String surname;
     public int age;
+    public String studioAddress;
+
+    public void setStudioAddress(String studioAddress) {
+        this.studioAddress = studioAddress;
+    }
+
+    public String getStudioAddress() {
+        return studioAddress;
+    }
+    
     
     public String getSSD() {
         return SSD;

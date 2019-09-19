@@ -76,14 +76,13 @@ public class DatabaseConnection{
             "BirthDate DATE NOT NULL,\n"+
             "BirthPlace CHAR(40) NOT NULL, \n"+
             "Gender CHAR(2) NOT NULL,\n" +
-            "SSN CHAR(16) NOT NULL UNIQUE" +
-            "Code CHAR(15) NOT NULL PRIMARY KEY, \n" +
+            "Address CHAR(80) NOT NULL, \n" +
+            "Code CHAR(16) NOT NULL PRIMARY KEY, \n" +
             "Email CHAR(30) NOT NULL, \n" +
-            "Password CHAR(80) NOT NULL, \n" +
-            "Tipo CHAR(10) NOT NULL);";
+            "Password CHAR(80) NOT NULL, \n";
        
             String myAllDoctors = "CREATE TABLE AllDoctors( \n" + 
-            "Address CHAR(80) NOT NULL, \n" +
+            "studio_Address CHAR(80) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
             "FOREIGN KEY(SSD) REFERENCES Users(Code));";
             
@@ -131,9 +130,11 @@ public class DatabaseConnection{
             "Date CHAR(15) NOT NULL, \n" +
             "ExpirationDate CHAR(15) NOT NULL, \n" +
             "IDExamination INT,\n" +
+            "IDExam INT, \n" +
             "IDPatient CHAR(16) NOT NULL, \n" +
             "IsPaid BOOLEAN NOT NULL, \n" +
             "FOREIGN KEY (IDPatient) REFERENCES Patients(ssd), \n" +
+            "FOREIGN KEY (IDExam) REFERENCES Exam(Code), \n" +
             "FOREIGN KEY (IDExamination) REFERENCES Examinations(IDExamination));";
             
             String myDrug = "CREATE TABLE Drugs( \n"+
