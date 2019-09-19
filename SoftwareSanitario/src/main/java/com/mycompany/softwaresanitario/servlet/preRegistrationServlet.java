@@ -93,6 +93,7 @@ public class preRegistrationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //Boolean registrazione = true;
         String code = request.getParameter("code");
 
         String contextPath = getServletContext().getContextPath();
@@ -104,7 +105,7 @@ public class preRegistrationServlet extends HttpServlet {
             User user = userDao.getByCodeProfileNotSet(code);
             if (user == null) {
                 // response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
-                response.sendRedirect(response.encodeRedirectURL(contextPath + "preRegistrazione.html"));
+                response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
                 //processRequest(request, response);
             } else {
                 if(codice == null){
@@ -113,7 +114,9 @@ public class preRegistrationServlet extends HttpServlet {
                 codice.setMaxAge(120);
                 response.addCookie(codice);
                 //response.sendRedirect(response.encodeRedirectURL(contextPath + "registrazione.html"));
-
+                
+                request.setAttribute("user", user);
+                request.getRequestDispatcher("/index.html").forward(request, response);
             }
         } catch (DAOException ex) {
             //TODO: log exception

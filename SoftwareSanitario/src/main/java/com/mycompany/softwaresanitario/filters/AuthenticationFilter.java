@@ -65,7 +65,7 @@ public class AuthenticationFilter implements Filter {
                 if (!contextPath.endsWith("/")) {
                     contextPath += "/";
                 }
-                ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "index.html"));
+                ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "index.jsp"));
             }
         }
     }    

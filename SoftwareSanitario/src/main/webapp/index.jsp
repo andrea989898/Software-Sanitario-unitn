@@ -1,5 +1,17 @@
-<!DOCTYPE html>
 
+
+
+
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException"%>
+<%@page import="java.util.List"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.User"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
         <title>W3.CSS</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -247,12 +259,21 @@ span.psw {
 
   <section class="showcase"> 
     <div class="w3-container w3-center">
-      <h1 class="w3-text-shadow w3-animate-opacity">Al tuo servizio,<br> per la tua salute!</h1>
+      <h1 class="w3-text-shadow w3-animate-opacity">Al tuo servizio,<br> per la tua salute ${user.getCode()}!</h1>
       <hr>
       <h2 class="container3 w3-animate-opacity">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo</h2>
       <button onclick="document.getElementById('login').style.display='block'">Login</button>
       <button onclick="document.getElementById('registration').style.display='block'">Registrazione</button>       
-      <button onclick="document.getElementById('contact_us').style.display='block'">Contattaci</button>      
+      <button onclick="document.getElementById('contact_us').style.display='block'">Contattaci</button>  
+      <c:choose>
+        <c:when test="${!empty user}">
+            <script type = "text/javascript" >
+                $(document).ready(function(){
+                    document.getElementById('regForm').style.display='block';
+                });
+            </script>
+        </c:when>
+      </c:choose>              
     </div>
   </section>
 
@@ -284,6 +305,31 @@ span.psw {
       </div>
   </form>
 </div>
+   
+
+<div id="regForm" class="modal">
+    <form class="modal-content animated-bottom" method="POST" action="registrationFirst.handler">
+        <div class="container" >
+            <br>
+            <label class="w3-text-black"><b>Email:</b></label>
+            <input class="w3-input w3-border w3-light-grey" type="email" id="username" name="username" placeholder="mariorossi@email.it"
+            <br>
+            <label class="w3-text-black"><b>Password:</b></label>
+            <input class="w3-input w3-border w3-light-grey" type="password" name="password" id="password" placeholder="password">
+            <br>    
+            <button type="submit">Registrati</button>       
+            <label><input type="checkbox" checked="checked" name="remember"> Remember me</label>
+        </div>
+        <div class="w3-container w3-border-left">            
+        </div>
+
+        <div class="container_recupera" style="background-color:#cccccc" >
+            <button type="button" onclick="document.getElementById('regForm').style.display='none'" class="cancelbtn">Cancel</button>
+        </div>
+    </form>
+</div> 
+    
+    
 
 <div id="registration" class="modal">
     <form class="modal-content animated-bottom" method="POST" action="preRegistration.handler" > 
@@ -292,7 +338,7 @@ span.psw {
             <br>
             <button onclick="document.getElementById('code').placehoder = 'Codice'" class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
             <br>
-            <button class="w3-button w3-round-large w3-blue" type="submit"  method="POST" action="preRegistration.handler">Controlla codice</button>            
+            <button class="w3-button w3-round-large w3-blue" type="submit" >Controlla codice</button>           
       </div>
       <div class="container_recupera" style="background-color:#cccccc" >
               <button type="button" onclick="document.getElementById('registration').style.display='none'" class="cancelbtn">Cancel</button>
@@ -326,6 +372,7 @@ span.psw {
 var login = document.getElementById('login');
 var registration = document.getElementById('registration');
 var contact_us = document.getElementById('contact_us');
+var regForm = document.getElementById('regForm');
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
     if (event.target == login) {
@@ -341,6 +388,12 @@ window.onclick = function(event) {
 window.onclick = function(event) {
     if (event.target == contact_us) {
         contact_us.style.display = "none";
+    }
+}
+
+window.onclick = function(event) {
+    if (event.target == regForm) {
+        regForm.style.display = "none";
     }
 }
 </script>

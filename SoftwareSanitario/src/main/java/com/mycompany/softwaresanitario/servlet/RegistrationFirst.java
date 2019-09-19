@@ -95,6 +95,8 @@ public class RegistrationFirst extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
+        Boolean registrazione = (Boolean) request.getAttribute("registrazione");
+        registrazione = false;
         Cookie[] cookies = request.getCookies();
         
         int indice = 0;
