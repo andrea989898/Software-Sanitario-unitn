@@ -70,17 +70,19 @@ public class DatabaseConnection{
        Statement statement;
             
             String myAllUsers = "CREATE TABLE Users ( \n" +
-            "Code CHAR(15) NOT NULL PRIMARY KEY, \n" +
-            "Email CHAR(30) NOT NULL, \n" +
-            "Password CHAR(80) NOT NULL, \n" +
-            "Tipo CHAR(10) NOT NULL);";
-       
-            String myAllDoctors = "CREATE TABLE AllDoctors( \n" +
             "Name CHAR(40) NOT NULL,\n"+
             "Surname CHAR(40) NOT NULL,\n" +
             "Age INT NOT NULL, \n" +        
             "BirthDate DATE NOT NULL,\n"+
             "BirthPlace CHAR(40) NOT NULL, \n"+
+            "Gender CHAR(2) NOT NULL,\n" +
+            "SSN CHAR(16) NOT NULL UNIQUE" +
+            "Code CHAR(15) NOT NULL PRIMARY KEY, \n" +
+            "Email CHAR(30) NOT NULL, \n" +
+            "Password CHAR(80) NOT NULL, \n" +
+            "Tipo CHAR(10) NOT NULL);";
+       
+            String myAllDoctors = "CREATE TABLE AllDoctors( \n" + 
             "Address CHAR(80) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
             "FOREIGN KEY(SSD) REFERENCES Users(Code));";
@@ -90,15 +92,9 @@ public class DatabaseConnection{
             "FOREIGN KEY(SSD) REFERENCES AllDoctors(SSD));";
             
             String myPatient = "CREATE TABLE Patients(\n" +
-            "Name CHAR(40) NOT NULL,\n"+
-            "Surname CHAR(40) NOT NULL,\n"+
-            "Age INT NOT NULL, \n" +
-            "BirthDate DATE NOT NULL, \n"+
-            "BirthPlace CHAR(40) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
-            "Gender CHAR(2) NOT NULL,\n" +
             "GeneralDoctor CHAR(16) NOT NULL,\n" +
-            "FOREIGN KEY(GeneralDoctor) REFERENCES AllDoctors(SSD),\n"+
+            "FOREIGN KEY(GeneralDoctor) REFERENCES GeneralDoctors(SSD),\n"+
             "FOREIGN KEY(SSD) REFERENCES Users(Code));";
              
             String myImage = "CREATE TABLE Images("
@@ -117,13 +113,16 @@ public class DatabaseConnection{
             "IDExamination INT PRIMARY KEY NOT NULL,\n" +
             "IDPatient CHAR(16) NOT NULL,\n" +
             "IDDoctor CHAR(16)NOT NULL,\n" +
+            "IDPrescription INT,\n" +
+            "IDRecipe INT, \n" +
             "Time TIME,\n" +
             "IsDone BOOLEAN NOT NULL,\n"+
-            "IsSpecial BOOLEAN NOT NULL,\n" +
             "ExaminationDate DATE,\n"+
             "Argument CHAR(100),\n" +
             "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD)," +
-            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD));";
+            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD));"+
+            "FOREIGN KEY (IDPrescription) REFERENCES Prescriptions(Code),\n" +
+            "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));";
 
 
             String myTicket = "CREATE TABLE Tickets( \n"+
@@ -157,13 +156,15 @@ public class DatabaseConnection{
             
             String myExam = "CREATE TABLE Exams( \n"+
             "Code INT PRIMARY KEY NOT NULL, \n" +
+            "IDDoctor CHAR(16)NOT NULL,\n" +
             "IDPrescription INT,\n" +
             "IDRecipe INT, \n" +
-            //"IDExamination INT,\n" +
             "Result char(100),\n" +
-            "IsDone BOOLEAN NOT NULL,\n" +
+            "Time TIME,\n" +
+            "IsDone BOOLEAN NOT NULL,\n"+
+            "ExaminationDate DATE,\n"+
             "IDPatient CHAR(16) NOT NULL, \n" +
-            //"FOREIGN KEY (IDExamination) REFERENCES Examinations(IDExamination),\n"+
+            "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD)," +
             "FOREIGN KEY (IDPatient) REFERENCES Patients(ssd),\n" +
             "FOREIGN KEY (IDPrescription) REFERENCES Prescriptions(Code),\n" +
             "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));" ;
