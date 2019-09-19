@@ -83,7 +83,8 @@ public class DatabaseConnection{
             "Address CHAR(80) NOT NULL, \n" +
             "Code CHAR(16) NOT NULL PRIMARY KEY, \n" +
             "Email CHAR(30) NOT NULL, \n" +
-            "Password CHAR(80) NOT NULL;";
+            "Password CHAR(80) NOT NULL);";
+
        
             String myAllDoctors = "CREATE TABLE AllDoctors( \n" + 
             "studio_Address CHAR(80) NOT NULL, \n" +

@@ -15,6 +15,15 @@ public class Specialist {
     public String surname;
     public int age;
     public String specialization;
+    public String studioAddress;
+
+    public void setStudioAddress(String studioAddress) {
+        this.studioAddress = studioAddress;
+    }
+
+    public String getStudioAddress() {
+        return studioAddress;
+    }
     
     public String getSSD() {
         return SSD;

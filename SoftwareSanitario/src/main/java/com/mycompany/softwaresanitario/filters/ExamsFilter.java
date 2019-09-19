@@ -65,7 +65,7 @@ public class ExamsFilter implements Filter {
         ExamDAO examDao = null;
         try {
             examDao = daoFactory.getDAO(ExamDAO.class);
-            request.setAttribute("GeneralDoctorDao", examDao);
+            request.setAttribute("ExamDao", examDao);
         } catch (DAOFactoryException ex) {
             throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }

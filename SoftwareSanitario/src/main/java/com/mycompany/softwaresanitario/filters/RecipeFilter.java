@@ -67,7 +67,7 @@ public class RecipeFilter implements Filter {
         RecipeDAO recipeDao = null;
         try {
             recipeDao = daoFactory.getDAO(RecipeDAO.class);
-            request.setAttribute("PrescriptionDao", recipeDao);
+            request.setAttribute("RecipeDao", recipeDao);
         } catch (DAOFactoryException ex) {
             throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }
