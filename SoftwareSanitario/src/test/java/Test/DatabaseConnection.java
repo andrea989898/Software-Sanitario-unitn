@@ -16,7 +16,7 @@ public class DatabaseConnection{
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
 
-    private final String password = "61223180";
+    private final String password = "0000";
 
  
     /**
@@ -69,6 +69,10 @@ public class DatabaseConnection{
     static public void create(Connection conn) throws SQLException{
        Statement statement;
             
+            String mySSR = "CREATE TABLE SSR(\n" +
+            "Code CHAR(16) NOT NULL,\n"+
+            "email CHAR(30) NUTL NULL);";
+                    
             String myAllUsers = "CREATE TABLE Users ( \n" +
             "Name CHAR(40) NOT NULL,\n"+
             "Surname CHAR(40) NOT NULL,\n" +
@@ -76,14 +80,13 @@ public class DatabaseConnection{
             "BirthDate DATE NOT NULL,\n"+
             "BirthPlace CHAR(40) NOT NULL, \n"+
             "Gender CHAR(2) NOT NULL,\n" +
-            "SSN CHAR(16) NOT NULL UNIQUE" +
-            "Code CHAR(15) NOT NULL PRIMARY KEY, \n" +
+            "Address CHAR(80) NOT NULL, \n" +
+            "Code CHAR(16) NOT NULL PRIMARY KEY, \n" +
             "Email CHAR(30) NOT NULL, \n" +
-            "Password CHAR(80) NOT NULL, \n" +
-            "Tipo CHAR(10) NOT NULL);";
+            "Password CHAR(80) NOT NULL;";
        
             String myAllDoctors = "CREATE TABLE AllDoctors( \n" + 
-            "Address CHAR(80) NOT NULL, \n" +
+            "studio_Address CHAR(80) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
             "FOREIGN KEY(SSD) REFERENCES Users(Code));";
             
@@ -131,9 +134,11 @@ public class DatabaseConnection{
             "Date CHAR(15) NOT NULL, \n" +
             "ExpirationDate CHAR(15) NOT NULL, \n" +
             "IDExamination INT,\n" +
+            "IDExam INT, \n" +
             "IDPatient CHAR(16) NOT NULL, \n" +
             "IsPaid BOOLEAN NOT NULL, \n" +
             "FOREIGN KEY (IDPatient) REFERENCES Patients(ssd), \n" +
+            "FOREIGN KEY (IDExam) REFERENCES Exam(Code), \n" +
             "FOREIGN KEY (IDExamination) REFERENCES Examinations(IDExamination));";
             
             String myDrug = "CREATE TABLE Drugs( \n"+
@@ -164,10 +169,11 @@ public class DatabaseConnection{
             "IsDone BOOLEAN NOT NULL,\n"+
             "ExaminationDate DATE,\n"+
             "IDPatient CHAR(16) NOT NULL, \n" +
+            "IsRecall BOOLEAN, \n" +
             "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD)," +
             "FOREIGN KEY (IDPatient) REFERENCES Patients(ssd),\n" +
             "FOREIGN KEY (IDPrescription) REFERENCES Prescriptions(Code),\n" +
-            "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));" ;
+            "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));" ;        
             
             statement = conn.createStatement();
 
@@ -184,6 +190,7 @@ public class DatabaseConnection{
             statement.executeUpdate(myPrescription); 
             statement.executeUpdate(myRecipe);
             statement.executeUpdate(myExam);
+            statement.executeUpdate(mySSR);
             statement.close();
        
     }
