@@ -61,8 +61,10 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     examination.setDoctor(rs.getString("iddoctor"));
                     examination.setExaminationDate(rs.getDate("examinationdate"));
                     examination.setIsDone(rs.getBoolean("isdone"));
-                    examination.setIsSpecial(rs.getBoolean("isspecial"));
                     examination.setTime(rs.getString("time"));
+                    examination.setIDPatient(rs.getString("IDPatient"));
+                    examination.setIDPrescription(rs.getInt("IDPrescription"));
+                    examination.setIDRecipe(rs.getInt("IDRecipe"));
                    
                     return examination;
                     
@@ -76,10 +78,8 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
     }
     @Override
     public ArrayList <Examination> getExaminations(String patient) throws DAOException{
-        String myGet = "select e.idexamination, al.surname, e.time, e.examinationdate, e.isdone, e.isSpecial, e.argument\n" +
+        String myGet = "select *\n" +
                                 "from examinations e\n" +
-                                "inner join alldoctors al  \n" +
-                                "on al.ssd=e.iddoctor \n" +
                                 "inner join patients pat\n" +
                                 "on pat.ssd = e.idpatient\n" +
                                 "where pat.ssd=?\n" +
@@ -90,13 +90,15 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                 ArrayList<Examination> examinations = new ArrayList<Examination>();
                 while (rst.next()) {
                     Examination examination = new Examination();
-                    examination.setSSD(rst.getInt("idexamination"));
-                    examination.setDoctor(rst.getString("surname"));
-                    examination.setTime(rst.getString("time"));
+                    examination.setSSD(rst.getInt("IDExamination"));
+                    examination.setArgument(rst.getString("Argument"));
+                    examination.setDoctor(rst.getString("iddoctor"));
                     examination.setExaminationDate(rst.getDate("examinationdate"));
                     examination.setIsDone(rst.getBoolean("isdone"));
-                    examination.setIsSpecial(rst.getBoolean("isspecial"));
-                    examination.setArgument(rst.getString("argument"));
+                    examination.setTime(rst.getString("time"));
+                    examination.setIDPatient(rst.getString("IDPatient"));
+                    examination.setIDPrescription(rst.getInt("IDPrescription"));
+                    examination.setIDRecipe(rst.getInt("IDRecipe"));
                     examinations.add(examination); 
                     //System.out.println(examination.SSD + examination.doctor + examination.time + examination.examinationDate);
                 }

@@ -58,11 +58,14 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     
                     exam.setCode(rs.getInt("code"));
                     exam.setIDPrescription(rs.getInt("IDPrescription"));
+                    exam.setIDDoctor(rs.getString("IDDoctor"));
+                    exam.setExaminationDate(rs.getDate("ExaminationDate"));
                     exam.setIDRecipe(rs.getInt("IDRecipe"));
                     exam.setIDExamination(rs.getInt("IDExamination"));
                     exam.setIsDone(rs.getBoolean("IsDone"));
                     exam.setResult(rs.getString("Result"));
                     exam.setIDPatient(rs.getString("IDPatient"));
+                    exam.setIsRecall(rs.getBoolean("IsRecall"));
      
                    
                     return exam;
@@ -79,7 +82,7 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
     
     @Override
     public ArrayList <Exam> getExams(String patient) throws DAOException{
-        String myGet = "select e.code, e.idprescription, e.idrecipe, e.result, e.isdone, pat.ssd\n" +
+        String myGet = "select *\n" +
                                 "from exams e\n" +
                                 "inner join patients pat\n" +
                                 "on pat.ssd = e.idpatient\n" +
@@ -91,11 +94,15 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                 while (rst.next()) {
                     Exam exam = new Exam();
                     exam.setCode(rst.getInt("code"));
-                    exam.setIDPrescription(rst.getInt("idprescription"));
-                    exam.setIDRecipe(rst.getInt("idrecipe"));
-                    exam.setResult(rst.getString("result"));
-                    exam.setIsDone(rst.getBoolean("isdone"));
-                    exam.setIDPatient(rst.getString("ssd"));
+                    exam.setIDPrescription(rst.getInt("IDPrescription"));
+                    exam.setIDDoctor(rst.getString("IDDoctor"));
+                    exam.setExaminationDate(rst.getDate("ExaminationDate"));
+                    exam.setIDRecipe(rst.getInt("IDRecipe"));
+                    exam.setIDExamination(rst.getInt("IDExamination"));
+                    exam.setIsDone(rst.getBoolean("IsDone"));
+                    exam.setResult(rst.getString("Result"));
+                    exam.setIDPatient(rst.getString("IDPatient"));
+                    exam.setIsRecall(rst.getBoolean("IsRecall"));
                     if(exam.IsDone==false){
                         exam.Result = "not done yet";
                     }

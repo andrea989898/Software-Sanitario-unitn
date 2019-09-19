@@ -19,6 +19,20 @@ public class Ticket {
     public int idExamination;
     public String idPatient;
     public boolean isPaid;
+    public int IDExam;
+
+    public void setIDExam(int IDExam) {
+        this.IDExam = IDExam;
+    }
+
+    public boolean isIsPaid() {
+        return isPaid;
+    }
+
+    public int getIDExam() {
+        return IDExam;
+    }
+    
     
     public int getCode(){
         return code;

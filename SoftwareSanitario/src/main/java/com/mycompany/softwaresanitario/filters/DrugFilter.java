@@ -68,7 +68,7 @@ public class DrugFilter implements Filter {
         DrugDAO drugDao = null;
         try {
             drugDao = daoFactory.getDAO(DrugDAO.class);
-            request.setAttribute("GeneralDoctorDao", drugDao);
+            request.setAttribute("drugDao", drugDao);
         } catch (DAOFactoryException ex) {
             throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }

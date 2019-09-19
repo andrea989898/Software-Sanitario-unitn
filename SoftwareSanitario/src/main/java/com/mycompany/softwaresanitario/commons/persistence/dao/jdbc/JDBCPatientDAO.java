@@ -46,7 +46,7 @@ public class JDBCPatientDAO extends JDBCDAO<Patient, String> implements PatientD
     public Patient getByCode(String SSD) throws DAOException {
         System.out.println("Sono nel DAO");
         Patient patient = new Patient();
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM patients p, images i WHERE p.ssd = ? AND p.ssd = i.idpatient")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM users u, patients p, images i WHERE p.ssd = ? AND p.ssd = i.idpatient AND p.ssd=u.code")) {
             stm.setString(1, SSD);
             try (ResultSet rs = stm.executeQuery()) {
                // System.out.println(rs.next());
