@@ -10,9 +10,9 @@ package com.mycompany.softwaresanitario.commons.persistence.entities;
  * @author PC Andrea
  */
 public class Prescription {
-    public int code;
-    public String examType;
-    public String idPatient;
+    private int code;
+    private String examType;
+    private String idPatient;
     
     public int getCode(){
         return code;

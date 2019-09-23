@@ -10,10 +10,10 @@ package com.mycompany.softwaresanitario.commons.persistence.entities;
  * @author Francesco
  */
 public class Recipe {
-    public int code;
-    public int idDrug;
-    public String idPatient;
-    public String drugName;
+    private int code;
+    private int idDrug;
+    private String idPatient;
+    private String drugName;
     
     public int getCode(){
         return code;

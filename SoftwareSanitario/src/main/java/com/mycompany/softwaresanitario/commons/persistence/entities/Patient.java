@@ -12,66 +12,23 @@ import java.sql.Date;
  * @author Francesco
  */
 public class Patient {
-    public String SSD;
-    public String name;
-    public String surname;
-    public Date birthDate;
-    public String birthPlace;
-    public int age;
-    private String avatarPath;
+    private String cf;
+    private String generalDoctorCf;
     
-    public void setAvatarPath(String avatarPath) {
-        this.avatarPath = avatarPath;
+    public String getCf() {
+        return cf;
     }
 
-    public String getAvatarPath() {
-        return avatarPath;
+    public String getGeneralDoctorCf() {
+        return generalDoctorCf;
     }
-    
-    public String getSSD() {
-        return SSD;
+
+    public void setCf(String cf) {
+        this.cf = cf;
     }
-    
-    public void setSSD(String SSD) {
-        this.SSD = SSD;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public Date getBirthDate() {
-        return birthDate;
-    }
-    
-    public void setBirthDate(Date bd) {
-        this.birthDate = bd;
-    }
-    public String getBirthPlace() {
-        return birthPlace;
-    }
-    
-    public void setBirthPlace(String bp) {
-        this.birthPlace = bp;
-    }
-    public String getSurname() {
-        return surname;
-    }
-    
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-    
-    public int getAge() {
-        return age;
-    }
-    
-    public void setAge(int age) {
-        this.age = age;
+
+    public void setGeneralDoctorCf(String generalDoctorCf) {
+        this.generalDoctorCf = generalDoctorCf;
     }
     
     

@@ -10,9 +10,9 @@ package com.mycompany.softwaresanitario.commons.persistence.entities;
  * @author PC Andrea
  */
 public class Drug {
-    public int code;
-    public boolean isforprescription;
-    public String name;
+    private int code;
+    private boolean isforprescription;
+    private String name;
 
     public int getCode() {
         return code;

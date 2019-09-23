@@ -12,11 +12,13 @@ import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFac
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.commons.persistence.entities.Exam;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import com.mycompany.softwaresanitario.manipulate.ManipulateExam;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -92,8 +94,13 @@ public class ExamsFilter implements Filter {
         //System.out.println(request.getAttribute("patient"));
         
         try {
-            List<Exam> exams = examDao.getExams(user.getCode());
-            if(exams.size()>0)   request.setAttribute("exams", exams);
+            List<Exam> screamExams = new ArrayList<Exam>();
+            List<Exam> exams = examDao.getExams(user.getCf());
+            if(exams.size()>0) {
+                screamExams = ManipulateExam.ScreamExamByDate(exams);
+                request.setAttribute("exams", exams);
+                if(screamExams.size()>0)    request.setAttribute("screamExams", screamExams);
+            }
         } catch (DAOException ex) {
             throw new RuntimeException(new ServletException("Impossible to get exams", ex));
         }

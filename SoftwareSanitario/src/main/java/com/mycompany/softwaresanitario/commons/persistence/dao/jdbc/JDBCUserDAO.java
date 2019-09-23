@@ -32,7 +32,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
     @Override
     public User getByEmail(String email) throws DAOException {
         User user = new User();
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users WHERE email = ?")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users u, Images i WHERE u.email = ? AND i.idpatient=u.code")) {
             stm.setString(1, email);
             try (ResultSet rs = stm.executeQuery()) {
                // System.out.println(rs.next());
@@ -43,10 +43,20 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                         throw new DAOException("Unique constraint violated! There are more than one user with the same code! WHY???");
                     }
                     
-                    user.setCode(rs.getString("code"));
+                    user.setCf(rs.getString("code"));
                     user.setEmail(rs.getString("email"));
                     user.setPassword(rs.getString("password"));
-                    user.setTipo(rs.getString("tipo"));
+                    user.setName(rs.getString("name"));
+                    user.setSurname(rs.getString("surname"));
+                    user.setAge(rs.getInt("age"));
+                    user.setBirthdate(rs.getDate("birthdate"));
+                    user.setBirthplace(rs.getString("birthplace"));
+                    user.setGender(rs.getString("gender"));
+                    user.setAddress(rs.getString("address"));
+                    user.setAvatarPath(rs.getString("data"));
+                    
+                    System.out.println(user.getAvatarPath());
+                    
                     return user;
                 }
 
@@ -66,7 +76,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
             throw new DAOException("Email and password are mandatory fields", new NullPointerException("email or password are null"));
         }
 
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users WHERE email = ? AND password = ?")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users u, Images i WHERE u.email = ? AND u.password = ? AND i.idpatient=u.code")) {
             stm.setString(1, email);
             stm.setString(2, password);
             try (ResultSet rs = stm.executeQuery()) {
@@ -78,10 +88,20 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                         throw new DAOException("Unique constraint violated! There are more than one user with the same email! WHY???");
                     }
                     
-                    user.setCode(rs.getString("code"));
+                    user.setCf(rs.getString("code"));
                     user.setEmail(rs.getString("email"));
                     user.setPassword(rs.getString("password"));
-                    user.setTipo(rs.getString("tipo"));
+                    user.setName(rs.getString("name"));
+                    user.setSurname(rs.getString("surname"));
+                    user.setAge(rs.getInt("age"));
+                    user.setBirthdate(rs.getDate("birthdate"));
+                    user.setBirthplace(rs.getString("birthplace"));
+                    user.setGender(rs.getString("gender"));
+                    user.setAddress(rs.getString("address"));
+                    user.setAvatarPath(rs.getString("data"));
+                    
+                    System.out.println(user.getAvatarPath());
+                    
                     return user;
                 }
 
@@ -135,60 +155,5 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
         
     }
 
-    @Override
-    public User insertUser(String email, String password, String code) throws DAOException, UnsupportedEncodingException {
-        User user = new User();
-   
-        try (PreparedStatement stm = CON.prepareStatement("UPDATE public.users\n" +
-                                                          "   SET email=?, password=?\n" +
-                                                          " WHERE code = ?;")) {
-            stm.setString(1, email);
-            stm.setString(2, password);
-            stm.setString(3, code);
-            //System.out.println(code);
-            
-            
-            if(stm.executeUpdate()==1){
-                user.setCode(code);
-                user.setEmail(email);
-                user.setPassword(password);
-                return user;
-            }else{
-                return null;
-            }
-            
-            
-        } catch (SQLException ex) {
-            throw new DAOException("Impossible to insert the user", ex);
-        }
-        
-    }
-
-    @Override
-    public User getByCodeProfileNotSet(String code) throws DAOException {
-        User user = new User();
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users WHERE code = ?")) {
-            stm.setString(1, code);
-            try (ResultSet rs = stm.executeQuery()) {
-               // System.out.println(rs.next());
-                int count = 0;
-                while (rs.next()) {
-                    count++;
-                    if (count > 1) {
-                        throw new DAOException("Unique constraint violated! There are more than one user with the same code! WHY???");
-                    }
-                    
-                    user.setCode(rs.getString("code"));
-                    if(rs.getString("email").equals("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"))    return user;
-                    else return null;
-                }
-
-                return null;
-            }
-        } catch (SQLException ex) {
-            throw new DAOException("Impossible to find the user", ex);
-        }
-    }
-    
 
 }

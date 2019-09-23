@@ -15,6 +15,6 @@ import java.util.ArrayList;
  *
  * @author PC Andrea
  */
-public interface TicketDAO extends DAO<Ticket, String>{
+public interface TicketDAO extends DAO<Ticket, Integer>{
     public ArrayList <Ticket> getTickets(String patient) throws DAOException;
 }

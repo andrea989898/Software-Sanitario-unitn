@@ -121,7 +121,7 @@ public class changePasswordServlet extends HttpServlet {
         }
         
         try {
-            User user_ = userDao.insertUser(user.getEmail(), password, user.getCode());
+            User user_ = userDao.updatePassword(user.getEmail(), password);
            
             if (user_ == null) {
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "cambioPassword.html"));
@@ -129,7 +129,7 @@ public class changePasswordServlet extends HttpServlet {
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
             }
         } catch (DAOException ex) {
-            Logger.getLogger(RegistrationFirst.class.getName()).log(Level.SEVERE, null, ex);
+            request.getServletContext().log("Impossible to retrieve the user", ex);
         }
     }
 

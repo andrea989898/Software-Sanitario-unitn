@@ -121,13 +121,14 @@ public class AuthenticationFilter implements Filter {
         Throwable problem = null;
         try {
             chain.doFilter(request, response);
-        } catch (Throwable t) {
+        } catch (IOException | ServletException | RuntimeException ex) {
             // If an exception is thrown somewhere down the filter chain,
             // we still want to execute our after processing, and then
             // rethrow the problem after that.
-            problem = t;
-            t.printStackTrace();
+            problem = ex;
+            request.getServletContext().log("Impossible to propagate to the next filter", ex);
         }
+
         
         doAfterProcessing(request, response);
 

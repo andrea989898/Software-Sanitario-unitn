@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 public class SelectQuerys {
     
-    private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
+ /*   private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
     private final String password = "0000";
     
@@ -259,5 +259,5 @@ public class SelectQuerys {
         ArrayList<Ticket> tickets = getTickets(conn, "'10'");
         ArrayList<Image> images = getImages(conn, "'1'");
     }
-    
+    */
 }

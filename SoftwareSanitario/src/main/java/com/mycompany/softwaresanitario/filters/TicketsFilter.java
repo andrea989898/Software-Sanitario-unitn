@@ -12,10 +12,12 @@ import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFac
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.commons.persistence.entities.Ticket;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import com.mycompany.softwaresanitario.manipulate.ManipulateTickets;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -91,8 +93,14 @@ public class TicketsFilter implements Filter {
         //System.out.println(request.getAttribute("patient"));
         
         try {
-            List<Ticket> tickets = ticketDao.getTickets(user.getCode());
-            if(tickets.size()>0)   request.setAttribute("tickets", tickets);
+            List<Ticket> screamTickets = new ArrayList<Ticket>();
+            List<Ticket> tickets = ticketDao.getTickets(user.getCf());
+            System.out.println(tickets.size());
+            if(tickets.size()>0){ 
+                request.setAttribute("tickets", tickets);
+                screamTickets = ManipulateTickets.ScreamTicketByPaid(tickets);
+                if(screamTickets.size()>0)  request.setAttribute("screamTickets", screamTickets);
+            }
         } catch (DAOException ex) {
             throw new RuntimeException(new ServletException("Impossible to get tickets", ex));
         }
@@ -262,6 +270,10 @@ public class TicketsFilter implements Filter {
     
     public void log(String msg) {
         filterConfig.getServletContext().log(msg);        
+    }
+
+    private List<Ticket> ManipulateTickets(List<Ticket> tickets) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

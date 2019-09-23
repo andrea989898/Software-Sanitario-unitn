@@ -45,7 +45,7 @@ public class JDBCGeneralDoctorDAO extends JDBCDAO<GeneralDoctor, String> impleme
     @Override
     public GeneralDoctor getByCode(String SSD) throws DAOException { 
         GeneralDoctor generalDoctor = new GeneralDoctor();
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM users u, alldoctors all WHERE u.code = all.ssd AND all.ssd IN (SELECT ssd FROM generaldoctors WHERE ssd = ?)")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM users u, alldoctors al WHERE u.code = al.ssd AND al.ssd IN (SELECT ssd FROM generaldoctors WHERE ssd = ?)")) {
             stm.setString(1, SSD);
             try (ResultSet rs = stm.executeQuery()) {
                // System.out.println(rs.next());
@@ -56,11 +56,8 @@ public class JDBCGeneralDoctorDAO extends JDBCDAO<GeneralDoctor, String> impleme
                         throw new DAOException("Unique constraint violated! There are more than one user with the same code! WHY???");
                     }
                     
-                    generalDoctor.setSSD(rs.getString("ssd"));
-                    generalDoctor.setName(rs.getString("name"));
-                    generalDoctor.setSurname(rs.getString("surname"));
-                    generalDoctor.setAge(rs.getInt("age"));
-                    generalDoctor.setStudioAddress(rs.getString("studio_address"));
+                    generalDoctor.setStudio_address(rs.getString("studio_address"));
+                    generalDoctor.setCf(rs.getString("ssd"));
                     
                     
                     return generalDoctor;

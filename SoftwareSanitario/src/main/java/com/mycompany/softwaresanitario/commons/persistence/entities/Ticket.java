@@ -12,21 +12,17 @@ import java.sql.Date;
  * @author Francesco
  */
 public class Ticket {
-    public int code;
-    public int cost;
-    public Date date;
-    public Date expirationDate;
-    public int idExamination;
-    public String idPatient;
-    public boolean isPaid;
-    public int IDExam;
+    private int code;
+    private int cost;
+    private Date date;
+    private Date expirationDate;
+    private int idExamination;
+    private String idPatient;
+    private boolean isPaid;
+    private int IDExam;
 
     public void setIDExam(int IDExam) {
         this.IDExam = IDExam;
-    }
-
-    public boolean isIsPaid() {
-        return isPaid;
     }
 
     public int getIDExam() {

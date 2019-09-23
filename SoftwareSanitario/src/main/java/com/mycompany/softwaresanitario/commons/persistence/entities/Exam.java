@@ -12,22 +12,21 @@ import java.sql.Date;
  * @author PC Andrea
  */
 public class Exam {
-    public int code;
-    public int IDPrescription;
-    public String IDDoctor;
-    public Date ExaminationDate;
-    public int IDRecipe;
-    public int IDExamination;
-    public String Result;
-    public boolean IsDone;
-    public String IDPatient;
-    public boolean IsRecall;
+    private int code;
+    private int IDPrescription;
+    private String IDDoctor;
+    private Date ExaminationDate;
+    private int IDRecipe;
+    private String Result;
+    private boolean IsDone;
+    private String IDPatient;
+    private boolean IsRecall;
 
     public void setIsRecall(boolean IsRecall) {
         this.IsRecall = IsRecall;
     }
 
-    public boolean isIsRecall() {
+    public boolean getIsRecall() {
         return IsRecall;
     }
 
@@ -59,15 +58,13 @@ public class Exam {
         return IDRecipe;
     }
 
-    public int getIDExamination() {
-        return IDExamination;
-    }
+   
 
     public String getResult() {
         return Result;
     }
 
-    public boolean isIsDone() {
+    public boolean getIsDone() {
         return IsDone;
     }
 
@@ -87,9 +84,7 @@ public class Exam {
         this.IDRecipe = IDRecipe;
     }
 
-    public void setIDExamination(int IDExamination) {
-        this.IDExamination = IDExamination;
-    }
+    
 
     public void setResult(String Result) {
         this.Result = Result;

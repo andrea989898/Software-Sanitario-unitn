@@ -93,7 +93,7 @@ public class PrescriptionFilter implements Filter {
         //System.out.println(request.getAttribute("patient"));
         ArrayList<Prescription> prescriptions = new ArrayList();
         try {
-            prescriptions = prescriptionDao.getPrescriptions(user.getCode());
+            prescriptions = prescriptionDao.getPrescriptions(user.getCf());
             if(prescriptions.size() > 0)   request.setAttribute("prescriptions", prescriptions);
         } catch (SQLException ex) {
             throw new RuntimeException(new ServletException("Impossible to get user or prescription", ex));

@@ -94,7 +94,7 @@ public class RecipeFilter implements Filter {
         //System.out.println(request.getAttribute("patient"));
         List<Recipe> recipes;
         try {
-            recipes = recipeDao.getAllBySSDPatient(user.getCode());
+            recipes = recipeDao.getAllBySSDPatient(user.getCf());
             if(recipes.size() > 0)   request.setAttribute("recipes", recipes);
         } catch (DAOException ex) {
             throw new RuntimeException(new ServletException("Impossible to get user or prescription", ex));

@@ -113,7 +113,7 @@ public class sendEmailServlet extends HttpServlet {
                 return;
             } 
         } catch (DAOException ex) {
-            Logger.getLogger(RegistrationFirst.class.getName()).log(Level.SEVERE, null, ex);
+            request.getServletContext().log("Impossible to retrieve the user", ex);
         }
         
         Random rnd = new Random ();

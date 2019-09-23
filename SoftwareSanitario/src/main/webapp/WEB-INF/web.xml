@@ -4,6 +4,11 @@
         <param-name>dburl</param-name>
         <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=61223180</param-value>
     </context-param>
+    <context-param>
+        <description>The folder where are stored the exported pdfs</description>
+        <param-name>pdfFolder</param-name>
+        <param-value>../pdfs</param-value>
+    </context-param>
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>com.mycompany.softwaresanitario.filters.AuthenticationFilter</filter-class>
@@ -128,17 +133,13 @@
         <servlet-class>com.mycompany.softwaresanitario.servlet.LogoutServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>RegistrationFirst</servlet-name>
-        <servlet-class>com.mycompany.softwaresanitario.servlet.RegistrationFirst</servlet-class>
+        <servlet-name>PDFservlet</servlet-name>
+        <servlet-class>com.mycompany.softwaresanitario.servlet.PDFservlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CambioPasswordPage</servlet-name>
         <url-pattern>/restricted/cambioPassword.html</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>preRegistrationServlet</servlet-name>
-        <servlet-class>com.mycompany.softwaresanitario.servlet.preRegistrationServlet</servlet-class>
-    </servlet>
     <servlet>
         <servlet-name>sendEmailServlet</servlet-name>
         <servlet-class>com.mycompany.softwaresanitario.servlet.sendEmailServlet</servlet-class>
@@ -160,16 +161,12 @@
         <url-pattern>/restricted/changePassoword.handler</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>RegistrationFirst</servlet-name>
-        <url-pattern>/registrationFirst.handler</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>preRegistrationServlet</servlet-name>
-        <url-pattern>/preRegistration.handler</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>sendEmailServlet</servlet-name>
         <url-pattern>/sendEmail.handler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PDFservlet</servlet-name>
+        <url-pattern>/restricted/exportToPDF.handler</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

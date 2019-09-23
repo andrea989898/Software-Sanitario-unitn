@@ -61,7 +61,6 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     exam.setIDDoctor(rs.getString("IDDoctor"));
                     exam.setExaminationDate(rs.getDate("ExaminationDate"));
                     exam.setIDRecipe(rs.getInt("IDRecipe"));
-                    exam.setIDExamination(rs.getInt("IDExamination"));
                     exam.setIsDone(rs.getBoolean("IsDone"));
                     exam.setResult(rs.getString("Result"));
                     exam.setIDPatient(rs.getString("IDPatient"));
@@ -98,13 +97,14 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     exam.setIDDoctor(rst.getString("IDDoctor"));
                     exam.setExaminationDate(rst.getDate("ExaminationDate"));
                     exam.setIDRecipe(rst.getInt("IDRecipe"));
-                    exam.setIDExamination(rst.getInt("IDExamination"));
                     exam.setIsDone(rst.getBoolean("IsDone"));
-                    exam.setResult(rst.getString("Result"));
+                    
                     exam.setIDPatient(rst.getString("IDPatient"));
                     exam.setIsRecall(rst.getBoolean("IsRecall"));
-                    if(exam.IsDone==false){
-                        exam.Result = "not done yet";
+                    if(exam.getIsDone()==false){
+                        exam.setResult("not done yet"); 
+                    }else{
+                        exam.setResult(rst.getString("Result"));
                     }
                     exams.add(exam); 
                     //System.out.println(exam.code + " " + exam.IsDone +" s"+ exam.Result);

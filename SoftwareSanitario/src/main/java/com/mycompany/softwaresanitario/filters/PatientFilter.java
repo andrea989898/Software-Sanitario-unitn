@@ -90,10 +90,10 @@ public class PatientFilter implements Filter {
         
         
         try {
-            Patient patient = patientDao.getByCode(user.getCode());
+            Patient patient = patientDao.getByCode(user.getCf());
             if(patient != null){
                 request.setAttribute("patient", patient);
-                String avatarPath = "../images/avatar/" + patient.getAvatarPath();
+                String avatarPath = "../images/avatar/" + user.getAvatarPath();
                 request.setAttribute("avatarPath", avatarPath);
             }
         } catch (DAOException ex) {

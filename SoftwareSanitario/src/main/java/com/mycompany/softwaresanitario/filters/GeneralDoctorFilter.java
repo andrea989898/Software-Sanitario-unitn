@@ -91,7 +91,7 @@ public class GeneralDoctorFilter implements Filter {
         //System.out.println(request.getAttribute("patient"));
         
         try {
-            GeneralDoctor generalDoctor = generalDoctorDao.getByCode(user.getCode());
+            GeneralDoctor generalDoctor = generalDoctorDao.getByCode(user.getCf());
             if(generalDoctor != null)   request.setAttribute("generalDoctor", generalDoctor);
         } catch (DAOException ex) {
             throw new RuntimeException(new ServletException("Impossible to get user or generalDoctor", ex));

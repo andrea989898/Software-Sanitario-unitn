@@ -58,7 +58,7 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     
                     examination.setSSD(rs.getInt("IDExamination"));
                     examination.setArgument(rs.getString("Argument"));
-                    examination.setDoctor(rs.getString("iddoctor"));
+                    examination.setIDdoctor(rs.getString("iddoctor"));
                     examination.setExaminationDate(rs.getDate("examinationdate"));
                     examination.setIsDone(rs.getBoolean("isdone"));
                     examination.setTime(rs.getString("time"));
@@ -92,7 +92,7 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     Examination examination = new Examination();
                     examination.setSSD(rst.getInt("IDExamination"));
                     examination.setArgument(rst.getString("Argument"));
-                    examination.setDoctor(rst.getString("iddoctor"));
+                    examination.setIDdoctor(rst.getString("iddoctor"));
                     examination.setExaminationDate(rst.getDate("examinationdate"));
                     examination.setIsDone(rst.getBoolean("isdone"));
                     examination.setTime(rst.getString("time"));

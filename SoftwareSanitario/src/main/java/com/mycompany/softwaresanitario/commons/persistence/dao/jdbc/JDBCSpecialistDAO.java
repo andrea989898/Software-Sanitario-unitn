@@ -45,7 +45,7 @@ public class JDBCSpecialistDAO extends JDBCDAO<Specialist, String> implements Sp
     @Override
     public Specialist getByCode(String SSD) throws DAOException {
         Specialist specialDoctor = new Specialist();
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM alldoctors a, users u WHERE a.ssd=u.code AND a.ssd IN (SELECT ssd FROM specialists WHERE ssd = ?)")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM alldoctors a, users u, specialists s WHERE a.ssd=u.code AND a.ssd IN (SELECT ssd FROM specialists WHERE ssd = ?)")) {
             stm.setString(1, SSD);
             try (ResultSet rs = stm.executeQuery()) {
                // System.out.println(rs.next());
@@ -56,12 +56,9 @@ public class JDBCSpecialistDAO extends JDBCDAO<Specialist, String> implements Sp
                         throw new DAOException("Unique constraint violated! There are more than one user with the same code! WHY???");
                     }
                     
-                    specialDoctor.setSSD(rs.getString("ssd"));
-                    specialDoctor.setName(rs.getString("name"));
-                    specialDoctor.setSurname(rs.getString("surname"));
-                    specialDoctor.setAge(rs.getInt("age"));
+                    specialDoctor.setCf(rs.getString("ssd"));
                     specialDoctor.setSpecialization(rs.getString("specialization"));
-                    specialDoctor.setStudioAddress(rs.getString("studio_Address"));
+                    specialDoctor.setStudio_address(rs.getString("studio_Address"));
                     
                     return specialDoctor;
                     

@@ -90,7 +90,7 @@ public class SpecialistFilter implements Filter {
         
         System.out.println("SONO QUI");
         try {
-            Specialist specialist = specialistDao.getByCode(user.getCode());
+            Specialist specialist = specialistDao.getByCode(user.getCf());
             if(specialist != null)      request.setAttribute("specialist", specialist);
         } catch (DAOException ex) {
             throw new RuntimeException(new ServletException("Impossible to get user or specialist", ex));
