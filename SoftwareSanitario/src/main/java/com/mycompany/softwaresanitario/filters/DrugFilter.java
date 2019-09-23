@@ -5,19 +5,24 @@
  */
 package com.mycompany.softwaresanitario.filters;
 
+import com.mycompany.softwaresanitario.commons.persistence.dao.DrugDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
+import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Drug;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -27,53 +32,81 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author franc
+ * @author PC Andrea
  */
-public class AuthenticationFilter implements Filter {
+public class DrugFilter implements Filter {
     
     private static final boolean debug = true;
+
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public AuthenticationFilter() {
+    public DrugFilter() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException, DAOException {
+            throws IOException, ServletException, DAOFactoryException, SQLException {
         if (debug) {
-            log("AuthenticationFilter:DoBeforeProcessing");
+            log("DrugFilter:DoBeforeProcessing");
         }
+        
         
         DAOFactory daoFactory = (DAOFactory) request.getServletContext().getAttribute("daoFactory");
-        
-        
-        // Write code here to process the request and/or response before
-        // the rest of the filter chain is invoked.
-        // For example, a logging filter might log items on the request object,
-        // such as the parameters.
-        if (request instanceof HttpServletRequest) {
-            ServletContext servletContext = ((HttpServletRequest) request).getServletContext();
-            HttpSession session = ((HttpServletRequest) request).getSession(true);
-            User user = null;
-            if (session != null) {
-                user = (User) session.getAttribute("user");
-            }
-            if (user == null) {
-                String contextPath = servletContext.getContextPath();
-                if (!contextPath.endsWith("/")) {
-                    contextPath += "/";
-                }
-                ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "index.html"));
-            }
+        if (daoFactory == null) {
+            throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system"));
         }
+        UserDAO userDao = null;
+        try {
+            userDao = daoFactory.getDAO(UserDAO.class);
+            request.setAttribute("userDao", userDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
+        }
+        
+        DrugDAO drugDao = null;
+        try {
+            drugDao = daoFactory.getDAO(DrugDAO.class);
+            request.setAttribute("drugDao", drugDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
+        }
+        
+        String contextPath = request.getServletContext().getContextPath();
+        if (contextPath.endsWith("/")) {
+            contextPath = contextPath.substring(0, contextPath.length() - 1);
+        }
+        request.setAttribute("contextPath", contextPath);
+        
+        User user = null;
+        
+        
+        HttpSession session = ((HttpServletRequest) request).getSession(false);
+        if (session != null) {
+            user = (User) session.getAttribute("user");
+        }
+        
+        if (user == null) {
+            ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "index.html"));
+            return;
+        }
+        
+        //System.out.println(request.getAttribute("patient"));
+        ArrayList<Drug> drugs = new ArrayList();
+        try {
+            drugs = drugDao.getAllDrugs();
+            if(drugs.size() > 0)   request.setAttribute("drugs", drugs);
+        } catch (DAOException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get user or generalDoctor", ex));
+        }
+        
     }    
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("AuthenticationFilter:DoAfterProcessing");
+            log("DrugFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -109,26 +142,27 @@ public class AuthenticationFilter implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("AuthenticationFilter:doFilter()");
+            log("DrugFilter:doFilter()");
         }
         
         try {
             doBeforeProcessing(request, response);
-        } catch (DAOException ex) {
-            Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DAOFactoryException ex) {
+            Logger.getLogger(DrugFilter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(DrugFilter.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         Throwable problem = null;
         try {
             chain.doFilter(request, response);
-        } catch (IOException | ServletException | RuntimeException ex) {
+        } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
             // we still want to execute our after processing, and then
             // rethrow the problem after that.
-            problem = ex;
-            request.getServletContext().log("Impossible to propagate to the next filter", ex);
+            problem = t;
+            t.printStackTrace();
         }
-
         
         doAfterProcessing(request, response);
 
@@ -174,7 +208,7 @@ public class AuthenticationFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("AuthenticationFilter:Initializing filter");
+                log("DrugFilter:Initializing filter");
             }
         }
     }
@@ -185,9 +219,9 @@ public class AuthenticationFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("AuthenticationFilter()");
+            return ("DrugFilter()");
         }
-        StringBuffer sb = new StringBuffer("AuthenticationFilter(");
+        StringBuffer sb = new StringBuffer("DrugFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

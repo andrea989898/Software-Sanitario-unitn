@@ -6,16 +6,21 @@
 package com.mycompany.softwaresanitario.commons.persistence.dao;
 
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Examination;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Recipe;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+import java.util.List;
 /**
  *
- * @author PC Andrea
+ * @author franc
  */
-public interface ExaminationDAO extends DAO<Examination, String>{
-    public Examination getByCode(int code) throws DAOException;
-    public ArrayList <Examination> getExaminations(String patient) throws DAOException;
+public interface RecipeDAO extends DAO<Recipe, String>{
+    
+    public List<Recipe> getAllBySSDPatient(String SSD) throws DAOException;
+    
+    public Recipe getByCode(String SSD) throws DAOException;
+    
+    
 }

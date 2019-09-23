@@ -46,21 +46,7 @@ public class LoginServlet extends HttpServlet {
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get dao factory for user storage system", ex);
         }
-        try {
-            patientDao = daoFactory.getDAO(PatientDAO.class);
-        } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get dao factory for user storage system", ex);
-        }
-        try {
-            generalDoctorDao = daoFactory.getDAO(GeneralDoctorDAO.class);
-        } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get dao factory for user storage system", ex);
-        }
-        try {
-            specialistDao = daoFactory.getDAO(SpecialistDAO.class);
-        } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get dao factory for user storage system", ex);
-        }
+        
     }
     
     /**

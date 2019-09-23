@@ -6,7 +6,7 @@
 package com.mycompany.softwaresanitario.commons.persistence.dao;
 
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Examination;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Ticket;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
  *
  * @author PC Andrea
  */
-public interface ExaminationDAO extends DAO<Examination, String>{
-    public Examination getByCode(int code) throws DAOException;
-    public ArrayList <Examination> getExaminations(String patient) throws DAOException;
+public interface TicketDAO extends DAO<Ticket, Integer>{
+    public ArrayList <Ticket> getTickets(String patient) throws DAOException;
 }

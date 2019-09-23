@@ -13,13 +13,43 @@ import java.sql.Date;
  * @author Francesco
  */
 public class Examination{
-    public int SSD;
-    public String doctor;
-    public String time;
-    public Date examinationDate;
-    public boolean isDone;
-    public boolean isSpecial;
-    public String argument;
+    private int SSD;
+    private String IDPatient;
+    private int IDPrescription;
+    private int IDRecipe;
+    private String IDdoctor;
+    private String time;
+    private Date examinationDate;
+    private boolean isDone;
+    private String argument;
+
+    public void setIDPatient(String IDPatient) {
+        this.IDPatient = IDPatient;
+    }
+
+    public void setIDPrescription(int IDPrescription) {
+        this.IDPrescription = IDPrescription;
+    }
+
+    public void setIDRecipe(int IDRecipe) {
+        this.IDRecipe = IDRecipe;
+    }
+
+    public String getIDPatient() {
+        return IDPatient;
+    }
+
+    public int getIDPrescription() {
+        return IDPrescription;
+    }
+
+    public int getIDRecipe() {
+        return IDRecipe;
+    }
+
+    public boolean isIsDone() {
+        return isDone;
+    }
     
     public int getSSD() {
         return SSD;
@@ -28,13 +58,13 @@ public class Examination{
     public void setSSD(int SSD) {
         this.SSD = SSD;
     }
-    
-    public String getDoctor() {
-        return doctor;
+
+    public String getIDdoctor() {
+        return IDdoctor;
     }
-    
-    public void setDoctor(String d) {
-        this.doctor = d;
+
+    public void setIDdoctor(String IDdoctor) {
+        this.IDdoctor = IDdoctor;
     }
     
     public String getTime() {
@@ -59,14 +89,6 @@ public class Examination{
     
     public void setIsDone(boolean done) {
         this.isDone = done;
-    }
-    
-    public boolean getIsSpecial() {
-        return isSpecial;
-    }
-    
-    public void setIsSpecial(boolean s) {
-        this.isSpecial = s;
     }
     
     public String getArgument() {

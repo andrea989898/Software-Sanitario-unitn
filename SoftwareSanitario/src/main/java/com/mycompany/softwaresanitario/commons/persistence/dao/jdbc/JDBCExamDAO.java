@@ -58,11 +58,13 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     
                     exam.setCode(rs.getInt("code"));
                     exam.setIDPrescription(rs.getInt("IDPrescription"));
+                    exam.setIDDoctor(rs.getString("IDDoctor"));
+                    exam.setExaminationDate(rs.getDate("ExaminationDate"));
                     exam.setIDRecipe(rs.getInt("IDRecipe"));
-                    exam.setIDExamination(rs.getInt("IDExamination"));
                     exam.setIsDone(rs.getBoolean("IsDone"));
                     exam.setResult(rs.getString("Result"));
                     exam.setIDPatient(rs.getString("IDPatient"));
+                    exam.setIsRecall(rs.getBoolean("IsRecall"));
      
                    
                     return exam;
@@ -77,30 +79,41 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
     
     }
     
-    public ArrayList <Exam> getExams(Connection conn, String patient) throws SQLException{
-                String myGet = "select e.code, e.idprescription, e.idrecipe, e.result, e.isdone, pat.ssd\n" +
+    @Override
+    public ArrayList <Exam> getExams(String patient) throws DAOException{
+        String myGet = "select *\n" +
                                 "from exams e\n" +
                                 "inner join patients pat\n" +
                                 "on pat.ssd = e.idpatient\n" +
-                                "where pat.ssd =" + patient ;
-        PreparedStatement stm = conn.prepareStatement(myGet);
-        ResultSet rst = stm.executeQuery();
-        ArrayList<Exam> exams = new ArrayList<Exam>();
-        while (rst.next()) {
-            Exam exam = new Exam();
-            exam.setCode(rst.getInt("code"));
-            exam.setIDPrescription(rst.getInt("idprescription"));
-            exam.setIDRecipe(rst.getInt("idrecipe"));
-            exam.setResult(rst.getString("result"));
-            exam.setIsDone(rst.getBoolean("isdone"));
-            exam.setIDPatient(rst.getString("ssd"));
-            if(exam.IsDone==false){
-                exam.Result = "not done yet";
+                                "where pat.ssd = ?";
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, patient);
+            try (ResultSet rst = stm.executeQuery()){
+                ArrayList<Exam> exams = new ArrayList<Exam>();
+                while (rst.next()) {
+                    Exam exam = new Exam();
+                    exam.setCode(rst.getInt("code"));
+                    exam.setIDPrescription(rst.getInt("IDPrescription"));
+                    exam.setIDDoctor(rst.getString("IDDoctor"));
+                    exam.setExaminationDate(rst.getDate("ExaminationDate"));
+                    exam.setIDRecipe(rst.getInt("IDRecipe"));
+                    exam.setIsDone(rst.getBoolean("IsDone"));
+                    
+                    exam.setIDPatient(rst.getString("IDPatient"));
+                    exam.setIsRecall(rst.getBoolean("IsRecall"));
+                    if(exam.getIsDone()==false){
+                        exam.setResult("not done yet"); 
+                    }else{
+                        exam.setResult(rst.getString("Result"));
+                    }
+                    exams.add(exam); 
+                    //System.out.println(exam.code + " " + exam.IsDone +" s"+ exam.Result);
+                }
+                
+                return exams;
             }
-            exams.add(exam); 
-            System.out.println(exam.code + " " + exam.IsDone +" s"+ exam.Result);
+        }catch (SQLException ex) {
+            throw new DAOException("Impossible to find the user", ex);
         }
-        stm.close();
-        return exams;
     }
 }

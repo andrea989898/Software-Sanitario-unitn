@@ -10,42 +10,25 @@ package com.mycompany.softwaresanitario.commons.persistence.entities;
  * @author Francesco
  */
 public class GeneralDoctor {
-    public String SSD;
-    public String name;
-    public String surname;
-    public int age;
-    
-    public String getSSD() {
-        return SSD;
+    private String cf;
+    private String studio_address;
+
+    public String getCf() {
+        return cf;
+    }
+
+    public String getStudio_address() {
+        return studio_address;
+    }
+
+    public void setStudio_address(String studio_address) {
+        this.studio_address = studio_address;
+    }
+
+    public void setCf(String cf) {
+        this.cf = cf;
     }
     
-    public void setSSD(String SSD) {
-        this.SSD = SSD;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public String getSurname() {
-        return surname;
-    }
-    
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-    
-    public int getAge() {
-        return age;
-    }
-    
-    public void setAge(int age) {
-        this.age = age;
-    }
     
     
 }

@@ -16,7 +16,7 @@ public class DatabaseConnection{
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
 
-    private final String password = "0000";
+    private final String password = "61223180";
 
  
     /**
@@ -48,19 +48,19 @@ public class DatabaseConnection{
                 drop(conn); //cancello tabella person
             }
             catch(SQLException e){
-                System.out.println("Errore drop tabelle");
+                System.out.println(e.getMessage());
             }
             try{
                 create(conn); //creo tabella person
             }
             catch(SQLException e){
-                System.out.println("Errore create tabelle");
+                System.out.println(e.getMessage());
             }
             try{
                 copy(conn);                
-                fillImages(conn);
+                //fillImages(conn);
             }catch(SQLException e){
-                System.out.println("errore copia");
+                System.out.println(e.getMessage());
             }
             
             
@@ -69,19 +69,25 @@ public class DatabaseConnection{
     static public void create(Connection conn) throws SQLException{
        Statement statement;
             
+            String mySSR = "CREATE TABLE SSR(\n" +
+            "Code CHAR(16) NOT NULL,\n"+
+            "email CHAR(40) NOT NULL);";
+                    
             String myAllUsers = "CREATE TABLE Users ( \n" +
-            "Code CHAR(15) NOT NULL PRIMARY KEY, \n" +
-            "Email CHAR(30) NOT NULL, \n" +
-            "Password CHAR(80) NOT NULL, \n" +
-            "Tipo CHAR(10) NOT NULL);";
-       
-            String myAllDoctors = "CREATE TABLE AllDoctors( \n" +
             "Name CHAR(40) NOT NULL,\n"+
             "Surname CHAR(40) NOT NULL,\n" +
             "Age INT NOT NULL, \n" +        
             "BirthDate DATE NOT NULL,\n"+
             "BirthPlace CHAR(40) NOT NULL, \n"+
+            "Gender CHAR(2) NOT NULL,\n" +
             "Address CHAR(80) NOT NULL, \n" +
+            "Code CHAR(16) NOT NULL PRIMARY KEY, \n" +
+            "Email CHAR(40) NOT NULL, \n" +
+            "Password CHAR(80) NOT NULL);";
+
+       
+            String myAllDoctors = "CREATE TABLE AllDoctors( \n" + 
+            "studio_Address CHAR(80) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
             "FOREIGN KEY(SSD) REFERENCES Users(Code));";
             
@@ -90,15 +96,9 @@ public class DatabaseConnection{
             "FOREIGN KEY(SSD) REFERENCES AllDoctors(SSD));";
             
             String myPatient = "CREATE TABLE Patients(\n" +
-            "Name CHAR(40) NOT NULL,\n"+
-            "Surname CHAR(40) NOT NULL,\n"+
-            "Age INT NOT NULL, \n" +
-            "BirthDate DATE NOT NULL, \n"+
-            "BirthPlace CHAR(40) NOT NULL, \n" +
             "SSD CHAR(16) PRIMARY KEY NOT NULL, \n"+
-            "Gender CHAR(2) NOT NULL,\n" +
             "GeneralDoctor CHAR(16) NOT NULL,\n" +
-            "FOREIGN KEY(GeneralDoctor) REFERENCES AllDoctors(SSD),\n"+
+            "FOREIGN KEY(GeneralDoctor) REFERENCES GeneralDoctors(SSD),\n"+
             "FOREIGN KEY(SSD) REFERENCES Users(Code));";
              
             String myImage = "CREATE TABLE Images("
@@ -117,24 +117,29 @@ public class DatabaseConnection{
             "IDExamination INT PRIMARY KEY NOT NULL,\n" +
             "IDPatient CHAR(16) NOT NULL,\n" +
             "IDDoctor CHAR(16)NOT NULL,\n" +
+            "IDPrescription INT,\n" +
+            "IDRecipe INT, \n" +
             "Time TIME,\n" +
             "IsDone BOOLEAN NOT NULL,\n"+
-            "IsSpecial BOOLEAN NOT NULL,\n" +
             "ExaminationDate DATE,\n"+
             "Argument CHAR(100),\n" +
-            "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD)," +
-            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD));";
+            "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD),\n" +
+            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD),\n" +
+            "FOREIGN KEY (IDPrescription) REFERENCES Prescriptions(Code),\n" +
+            "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));";
 
 
             String myTicket = "CREATE TABLE Tickets( \n"+
             "Code INT PRIMARY KEY NOT NULL,\n" +
             "Cost INT NOT NULL, \n" +
-            "Date CHAR(15) NOT NULL, \n" +
-            "ExpirationDate CHAR(15) NOT NULL, \n" +
+            "Date DATE NOT NULL, \n" +
+            "ExpirationDate DATE NOT NULL, \n" +
             "IDExamination INT,\n" +
+            "IDExam INT, \n" +
             "IDPatient CHAR(16) NOT NULL, \n" +
             "IsPaid BOOLEAN NOT NULL, \n" +
             "FOREIGN KEY (IDPatient) REFERENCES Patients(ssd), \n" +
+            "FOREIGN KEY (IDExam) REFERENCES Exams(Code), \n" +
             "FOREIGN KEY (IDExamination) REFERENCES Examinations(IDExamination));";
             
             String myDrug = "CREATE TABLE Drugs( \n"+
@@ -157,16 +162,19 @@ public class DatabaseConnection{
             
             String myExam = "CREATE TABLE Exams( \n"+
             "Code INT PRIMARY KEY NOT NULL, \n" +
+            "IDDoctor CHAR(16)NOT NULL,\n" +
             "IDPrescription INT,\n" +
             "IDRecipe INT, \n" +
-            //"IDExamination INT,\n" +
             "Result char(100),\n" +
-            "IsDone BOOLEAN NOT NULL,\n" +
+            "Time TIME,\n" +
+            "IsDone BOOLEAN NOT NULL,\n"+
+            "ExaminationDate DATE,\n"+
             "IDPatient CHAR(16) NOT NULL, \n" +
-            //"FOREIGN KEY (IDExamination) REFERENCES Examinations(IDExamination),\n"+
+            "IsRecall BOOLEAN, \n" +
+            "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD)," +
             "FOREIGN KEY (IDPatient) REFERENCES Patients(ssd),\n" +
             "FOREIGN KEY (IDPrescription) REFERENCES Prescriptions(Code),\n" +
-            "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));" ;
+            "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));" ;        
             
             statement = conn.createStatement();
 
@@ -177,12 +185,16 @@ public class DatabaseConnection{
             statement.executeUpdate(myPatient); 
             statement.executeUpdate(myImage);
             statement.executeUpdate(mySpecialist); 
-            statement.executeUpdate(myExamination); 
-            statement.executeUpdate(myTicket); 
+            statement.executeUpdate(myPrescription);
             statement.executeUpdate(myDrug); 
-            statement.executeUpdate(myPrescription); 
             statement.executeUpdate(myRecipe);
+            statement.executeUpdate(myExamination);
             statement.executeUpdate(myExam);
+            statement.executeUpdate(myTicket); 
+            
+            
+            
+            statement.executeUpdate(mySSR);
             statement.close();
        
     }
@@ -201,6 +213,7 @@ public class DatabaseConnection{
        String myDoctor = "DROP TABLE GeneralDoctors CASCADE"; 
        String myAllDoctors = "DROP TABLE AllDoctors CASCADE"; 
        String myAllUsers = "DROP TABLE Users CASCADE"; 
+       String mySsr = "DROP TABLE Ssr CASCADE"; 
 
        
        statement.executeUpdate(myExam);
@@ -215,6 +228,7 @@ public class DatabaseConnection{
        statement.executeUpdate(myDoctor);
        statement.executeUpdate(myAllDoctors); 
        statement.executeUpdate(myAllUsers); 
+       statement.executeUpdate(mySsr);
              
        statement.close();
     }
@@ -265,6 +279,7 @@ public class DatabaseConnection{
         String copy_prescriptions = "COPY PUBLIC.prescriptions FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\prescriptions_data.csv' DELIMITER ';' CSV;";
         String copy_recipes = "COPY PUBLIC.recipes FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\recipes_data.csv' DELIMITER ';' CSV;";
         String copy_exams = "COPY PUBLIC.exams FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\exams_data.csv' DELIMITER ';' CSV;";
+        String copy_images = "COPY PUBLIC.images FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\images_data.csv' DELIMITER ';' CSV;";
         
         
         statement.executeUpdate(copy_users);
@@ -272,12 +287,17 @@ public class DatabaseConnection{
         statement.executeUpdate(copy_generalDoctors);
         statement.executeUpdate(copy_specialists);
         statement.executeUpdate(copy_patients);
-        statement.executeUpdate(copy_examinations);
-        statement.executeUpdate(copy_tickets);
-        statement.executeUpdate(copy_drugs);
         statement.executeUpdate(copy_prescriptions);
+        statement.executeUpdate(copy_drugs);
         statement.executeUpdate(copy_recipes);
+        statement.executeUpdate(copy_examinations);
         statement.executeUpdate(copy_exams);
+        statement.executeUpdate(copy_tickets);
+        statement.executeUpdate(copy_images);
+        
+       
+        
+         
         statement.close();
         
         

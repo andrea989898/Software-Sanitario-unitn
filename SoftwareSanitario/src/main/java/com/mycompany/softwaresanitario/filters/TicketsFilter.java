@@ -5,19 +5,23 @@
  */
 package com.mycompany.softwaresanitario.filters;
 
+import com.mycompany.softwaresanitario.commons.persistence.dao.TicketDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
+import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Ticket;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import com.mycompany.softwaresanitario.manipulate.ManipulateTickets;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -29,51 +33,83 @@ import javax.servlet.http.HttpSession;
  *
  * @author franc
  */
-public class AuthenticationFilter implements Filter {
+public class TicketsFilter implements Filter {
     
     private static final boolean debug = true;
+
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public AuthenticationFilter() {
+    public TicketsFilter() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException, DAOException {
+            throws IOException, ServletException {
         if (debug) {
-            log("AuthenticationFilter:DoBeforeProcessing");
+            log("TicketsFilter:DoBeforeProcessing");
+        }
+
+        DAOFactory daoFactory = (DAOFactory) request.getServletContext().getAttribute("daoFactory");
+        if (daoFactory == null) {
+            throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system"));
+        }
+        UserDAO userDao = null;
+        try {
+            userDao = daoFactory.getDAO(UserDAO.class);
+            request.setAttribute("userDao", userDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
         }
         
-        DAOFactory daoFactory = (DAOFactory) request.getServletContext().getAttribute("daoFactory");
+        TicketDAO ticketDao = null;
+        try {
+            ticketDao = daoFactory.getDAO(TicketDAO.class);
+            request.setAttribute("TicketDao", ticketDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
+        }
+        
+        String contextPath = request.getServletContext().getContextPath();
+        if (contextPath.endsWith("/")) {
+            contextPath = contextPath.substring(0, contextPath.length() - 1);
+        }
+        request.setAttribute("contextPath", contextPath);
+        
+        User user = null;
         
         
-        // Write code here to process the request and/or response before
-        // the rest of the filter chain is invoked.
-        // For example, a logging filter might log items on the request object,
-        // such as the parameters.
-        if (request instanceof HttpServletRequest) {
-            ServletContext servletContext = ((HttpServletRequest) request).getServletContext();
-            HttpSession session = ((HttpServletRequest) request).getSession(true);
-            User user = null;
-            if (session != null) {
-                user = (User) session.getAttribute("user");
+        HttpSession session = ((HttpServletRequest) request).getSession(false);
+        if (session != null) {
+            user = (User) session.getAttribute("user");
+        }
+        
+        if (user == null) {
+            ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "index.html"));
+            return;
+        }
+        
+        //System.out.println(request.getAttribute("patient"));
+        
+        try {
+            List<Ticket> screamTickets = new ArrayList<Ticket>();
+            List<Ticket> tickets = ticketDao.getTickets(user.getCf());
+            System.out.println(tickets.size());
+            if(tickets.size()>0){ 
+                request.setAttribute("tickets", tickets);
+                screamTickets = ManipulateTickets.ScreamTicketByPaid(tickets);
+                if(screamTickets.size()>0)  request.setAttribute("screamTickets", screamTickets);
             }
-            if (user == null) {
-                String contextPath = servletContext.getContextPath();
-                if (!contextPath.endsWith("/")) {
-                    contextPath += "/";
-                }
-                ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "index.html"));
-            }
+        } catch (DAOException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get tickets", ex));
         }
     }    
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("AuthenticationFilter:DoAfterProcessing");
+            log("TicketsFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -109,26 +145,21 @@ public class AuthenticationFilter implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("AuthenticationFilter:doFilter()");
+            log("TicketsFilter:doFilter()");
         }
         
-        try {
-            doBeforeProcessing(request, response);
-        } catch (DAOException ex) {
-            Logger.getLogger(AuthenticationFilter.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        doBeforeProcessing(request, response);
         
         Throwable problem = null;
         try {
             chain.doFilter(request, response);
-        } catch (IOException | ServletException | RuntimeException ex) {
+        } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
             // we still want to execute our after processing, and then
             // rethrow the problem after that.
-            problem = ex;
-            request.getServletContext().log("Impossible to propagate to the next filter", ex);
+            problem = t;
+            t.printStackTrace();
         }
-
         
         doAfterProcessing(request, response);
 
@@ -174,7 +205,7 @@ public class AuthenticationFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("AuthenticationFilter:Initializing filter");
+                log("TicketsFilter:Initializing filter");
             }
         }
     }
@@ -185,9 +216,9 @@ public class AuthenticationFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("AuthenticationFilter()");
+            return ("TicketsFilter()");
         }
-        StringBuffer sb = new StringBuffer("AuthenticationFilter(");
+        StringBuffer sb = new StringBuffer("TicketsFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
@@ -239,6 +270,10 @@ public class AuthenticationFilter implements Filter {
     
     public void log(String msg) {
         filterConfig.getServletContext().log(msg);        
+    }
+
+    private List<Ticket> ManipulateTickets(List<Ticket> tickets) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
