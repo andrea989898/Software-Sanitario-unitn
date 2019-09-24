@@ -7,7 +7,7 @@
     <context-param>
         <description>The folder where are stored the exported pdfs</description>
         <param-name>pdfFolder</param-name>
-        <param-value>../pdfs</param-value>
+        <param-value>C:Software-Sanitario-unitn\SoftwareSanitario\src\main\webapp\pdfs</param-value>
     </context-param>
     <filter>
         <filter-name>AuthenticationFilter</filter-name>

@@ -84,7 +84,7 @@ public class PDFservlet extends HttpServlet {
         System.out.println(pdfFolder);
         String type = request.getParameter("type");
         if(type.equals("ticket")){
-            TicketPDF.generateTicketPDF(request.getParameter("id"), daoFactory, request, response, "/");
+            TicketPDF.generateTicketPDF(request.getParameter("id"), daoFactory, request, response, pdfFolder);
             
                 //doc.getDocumentCatalog();
                 //System.out.println(doc);
