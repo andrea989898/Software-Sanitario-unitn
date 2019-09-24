@@ -45,7 +45,7 @@ public class JDBCGeneralDoctorDAO extends JDBCDAO<GeneralDoctor, String> impleme
     @Override
     public GeneralDoctor getByCode(String SSD) throws DAOException { 
         GeneralDoctor generalDoctor = new GeneralDoctor();
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM users u, alldoctors al WHERE u.code = al.ssd AND al.ssd IN (SELECT ssd FROM generaldoctors WHERE ssd = ?)")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT *  FROM alldoctors a, generaldoctors g WHERE a.ssd = g.ssd and g.ssd = ?")) {
             stm.setString(1, SSD);
             try (ResultSet rs = stm.executeQuery()) {
                // System.out.println(rs.next());

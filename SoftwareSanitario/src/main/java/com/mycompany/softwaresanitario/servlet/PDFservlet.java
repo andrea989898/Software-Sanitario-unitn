@@ -5,6 +5,7 @@
  */
 package com.mycompany.softwaresanitario.servlet;
 
+import com.mycompany.softwaresanitario.PDFmanagement.ExamPDF;
 import com.mycompany.softwaresanitario.PDFmanagement.TicketPDF;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import java.io.File;
@@ -96,6 +97,10 @@ public class PDFservlet extends HttpServlet {
                 //response.setHeader("Content-disposition", "inline; filename='shopping-lists.pdf'");
                 response.setHeader("Content-disposition", "attachment; filename='ticket.pdf'");
                 doc.save(response.getOutputStream());   */  
+        }
+        
+        if(type.equals("exam")){
+            ExamPDF.generateExamPDF(request.getParameter("id"), daoFactory, request, response, pdfFolder);
         }
         
         if (!contextPath.endsWith("/")) {

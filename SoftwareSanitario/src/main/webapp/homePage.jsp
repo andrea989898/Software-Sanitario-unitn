@@ -14,6 +14,8 @@
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Patient"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.GeneralDoctorDAO"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.SpecialistDAO"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Specialist"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.ExamDAO"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Exam"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -55,18 +57,12 @@
                     <c:when test="${!empty generalDoctor}">
                         <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard doctor</a> 
                     </c:when>
+                </c:choose>
+                <c:choose>
                     <c:when test="${!empty specialist}">
                         <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard specialist</a> 
                     </c:when>   
                 </c:choose>
-            </div>
-            <div class="w3-panel w3-large">
-                <i class="fa fa-facebook-official w3-hover-opacity"></i>
-                <i class="fa fa-instagram w3-hover-opacity"></i>
-                <i class="fa fa-snapchat w3-hover-opacity"></i>
-                <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-                <i class="fa fa-twitter w3-hover-opacity"></i>
-                <i class="fa fa-linkedin w3-hover-opacity"></i>
             </div>
         </nav>
         
@@ -116,6 +112,9 @@
                                             <td>${exam.getCode()}</td>
                                             <td>${exam.getExaminationDate()}</td>
                                             <td>${exam.getIsDone()}</td>
+                                            <td>
+                                                <a href="exportToPDF.handler?id=exam.getCode()">go</a>
+                                            </td>
                                         </tr>          
                                     </c:forEach>
                                 </table>
@@ -147,6 +146,9 @@
                                             <td>${exam.getCode()}</td>
                                             <td>${exam.getExaminationDate()}</td>
                                             <td>${exam.getIsDone()}</td>
+                                            <td>
+                                                <a href="exportToPDF.handler?id=${exam.getCode()}&type=exam">go</a>
+                                            </td>
                                         </tr>          
                                     </c:forEach>
                                 </table>

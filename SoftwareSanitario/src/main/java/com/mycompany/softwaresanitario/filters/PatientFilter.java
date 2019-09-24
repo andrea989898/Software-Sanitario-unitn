@@ -94,6 +94,8 @@ public class PatientFilter implements Filter {
             if(patient != null){
                 request.setAttribute("patient", patient);
                 String avatarPath = "../images/avatar/" + user.getAvatarPath();
+                //System.out.println(avatarPath+"        boia te");
+                
                 request.setAttribute("avatarPath", avatarPath);
             }
         } catch (DAOException ex) {
