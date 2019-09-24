@@ -78,10 +78,12 @@ public class PDFservlet extends HttpServlet {
         
         String contextPath = getServletContext().getContextPath();
         
-        System.out.println(contextPath);
-        //pdfFolder = contextPath + pdfFolder;
-        //pdfFolder = getServletContext().getRealPath(pdfFolder);*/
         System.out.println(pdfFolder);
+        //pdfFolder = contextPath + pdfFolder;
+        pdfFolder = getServletContext().getRealPath(pdfFolder);
+        pdfFolder = pdfFolder.substring(0, pdfFolder.length() - 42);
+        pdfFolder =  pdfFolder +"src\\main\\webapp\\pdfs";
+        
         String type = request.getParameter("type");
         if(type.equals("ticket")){
             TicketPDF.generateTicketPDF(request.getParameter("id"), daoFactory, request, response, pdfFolder);

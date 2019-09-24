@@ -2,12 +2,12 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <context-param>
         <param-name>dburl</param-name>
-        <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=61223180</param-value>
+        <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=chiaravise</param-value>
     </context-param>
     <context-param>
         <description>The folder where are stored the exported pdfs</description>
         <param-name>pdfFolder</param-name>
-        <param-value>C:Software-Sanitario-unitn\SoftwareSanitario\src\main\webapp\pdfs</param-value>
+        <param-value>pdfs</param-value>
     </context-param>
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
