@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -91,8 +93,11 @@ public class GeneralDoctorFilter implements Filter {
         //System.out.println(request.getAttribute("patient"));
         
         try {
+            boolean isAGeneralDoctor = generalDoctorDao.isAGeneralDoctor(user.getCf());
             GeneralDoctor generalDoctor = generalDoctorDao.getByCode(user.getCf());
-            if(generalDoctor != null)   request.setAttribute("generalDoctor", generalDoctor);
+            List<User> generalDoctors = generalDoctorDao.getAllGeneralDoctors(user.getCf(), generalDoctor.getCf());
+            if(generalDoctors != null)   request.setAttribute("AllGeneralDoctor", generalDoctors);
+            if(isAGeneralDoctor)   request.setAttribute("generalDoctor", "he/she is a doctor");
         } catch (DAOException ex) {
             throw new RuntimeException(new ServletException("Impossible to get user or generalDoctor", ex));
         }

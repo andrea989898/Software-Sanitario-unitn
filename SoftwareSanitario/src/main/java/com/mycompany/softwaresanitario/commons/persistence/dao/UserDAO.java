@@ -20,4 +20,6 @@ public interface UserDAO extends DAO<User, String>{
     public User getByEmail(String email) throws DAOException;
     
     public User getByEmailAndPassword(String email, String password) throws DAOException;
+    
+    public User getByCode(String ssd) throws DAOException;
 }

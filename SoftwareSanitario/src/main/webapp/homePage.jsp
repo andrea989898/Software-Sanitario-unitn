@@ -48,8 +48,7 @@
                 <img src="${avatarPath}" style="width:45%;" class="w3-round"><br><br>
                 <h4><b>${user.getName()} ${user.getSurname()}</b></h4>
                 <h5>
-                    Email: ${user.getEmail()}<br>
-                    Birthday: ${user.getBirthdate()}<br>
+                    GeneralDoctor: ${generaldoctorpatient.getName()} ${generaldoctorpatient.getSurname()}<br>
                 </h5>
             </div>
             <div class="w3-bar-block">
@@ -64,30 +63,29 @@
                     </c:when>   
                 </c:choose>
             </div>
+            <div class="w3-container">
+                <div class="w3-section w3-padding-16">
+                    <a href="cambioPassword.html" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-refresh w3-margin-right"></i>Cambia password</button></a>
+                    <a href="logout.handler" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-close w3-margin-right"></i>Esci</button></a>
+                    <!--<button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Photos</button>
+                    <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Art</button>-->
+                </div> 
+            </div>
         </nav>
-        
+        <header id="portfolio">
+                <a href="#"><img src="${avatarPath}" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
+                <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
+        </header>
         <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
         
         <div class="w3-main" style="margin-left:300px">
         
-            <!-- Header -->
-            <header id="portfolio">
-                <a href="#"><img src="${avatarPath}" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
-                <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
-                <div class="w3-container">
-                    <h1><b>${user.getName()} ${user.getSurname()}</b></h1>
-                    <div class="w3-section w3-bottombar w3-padding-16">
-                        <a href="cambioPassword.html" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-refresh w3-margin-right"></i>Cambia password</button></a>
-                        <a href="logout.handler" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-close w3-margin-right"></i>Esci</button></a>
-                        <!--<button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Photos</button>
-                        <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Art</button>-->
-                    </div>
-                </div>
-            </header>
             <div class="w3-bar w3-white">
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExams')">Exams</button></h2>
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExaminations')">Examinations</button></h2>
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamTickets')">Tickets</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamGeneralDoctor')">Your general doctor</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamUsers')">Personal information</button></h2>
             </div>
                     
             <div id="screamExams" class="w3-container dash">
@@ -255,9 +253,9 @@
                                             <td>${ticket.getCost()}</td>
                                             <td>${ticket.getIsPaid()}</td>
                                             <td>
-                                                <button class="w3-button w3-round-large w3-blue">Go
-                                                    <a href="exportToPDF.handler?id=ticket.getCode()"></a>
-                                                </button>
+                                                <%--<button class="w3-button w3-round-large w3-blue">--%>
+                                                    <a href="exportToPDF.handler?id=${ticket.getCode()}&type=ticket">Go</a>
+                                                <%--</button>--%>
                                             </td>
                                         </tr>          
                                     </c:forEach>
@@ -311,6 +309,204 @@
                     }
                 </script>
             </div>
+            
+            <div id="screamGeneralDoctor" class="w3-container dash" style="display:none">
+                    <h3>Your general doctor</h3>
+                    <div>
+                        <table class="w3-table w3-bordered">
+                            <tr>
+                                <td>
+                                    Name : 
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getName()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Surname :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getSurname()}
+                                </td>
+                            </tr>      
+                            <tr>
+                                <td>
+                                    Age :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getAge()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Birthdate :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getBirthdate()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Birthplace :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getBirthplace()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Address :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getAddress()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Gender :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getGender()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Codice fiscale :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getCf()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Email :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getEmail()}
+                                </td>
+                            </tr>
+                        </table>                     
+                        <h3><button class="w3-bar-item w3-button w3-blue" onclick="openDashGeneralDoctor('screamNewGeneralDoctor')">New generaldoctor</button></h3>
+                        <div id="screamNewGeneralDoctor" class="w3-container dash" style="display:none">
+                            <table class="w3-table w3-bordered">
+                                <c:choose>
+                                    <c:when test="${empty AllGeneralDoctor}">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                You can't change general doctor
+                                            </div>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <table class="w3-table w3-bordered">
+                                                <tr>
+                                                     <th>Name</th>
+                                                     <th>Surname</th>
+                                                     <th>Age</th>
+                                                     <th>Studio address</th>
+                                                </tr>
+                                            <c:forEach var="doctor" items="${AllGeneralDoctor}">
+                                                <tr>
+                                                    <td>${doctor.getName()}</td>
+                                                    <td>${doctor.getSurname()}</td>
+                                                    <td>${doctor.getAge()}</td>
+                                                    <td>${doctor.getAddress()}</td>
+                                                </tr>          
+                                            </c:forEach>
+                                        </table>
+                                    </c:otherwise>
+                                </c:choose>
+                            </table>
+                        </div>
+                        <script>
+                            function openDashGeneralDoctor(dashName) {
+                                document.getElementById(dashName).style.display = "block";  
+                            }
+                        </script>    
+                    </div>
+            </div>
+            
+            <div id="screamUsers" class="w3-container dash" style="display:none">
+                <h3>Personal information</h3>
+                    <div>
+                        <table class="w3-table w3-bordered">
+                            <tr>
+                                <td>
+                                    Name : 
+                                </td>
+                                <td>
+                                    ${user.getName()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Surname :
+                                </td>
+                                <td>
+                                    ${user.getSurname()}
+                                </td>
+                            </tr>      
+                            <tr>
+                                <td>
+                                    Age :
+                                </td>
+                                <td>
+                                    ${user.getAge()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Birthdate :
+                                </td>
+                                <td>
+                                    ${user.getBirthdate()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Birthplace :
+                                </td>
+                                <td>
+                                    ${user.getBirthplace()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Address :
+                                </td>
+                                <td>
+                                    ${user.getAddress()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Gender :
+                                </td>
+                                <td>
+                                    ${user.getGender()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Codice fiscale :
+                                </td>
+                                <td>
+                                    ${user.getCf()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Email :
+                                </td>
+                                <td>
+                                    ${user.getEmail()}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+            </div>
+            
         </div>
         <br>
     <script>
