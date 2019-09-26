@@ -111,7 +111,9 @@
                                             <td>${exam.getExaminationDate()}</td>
                                             <td>${exam.getIsDone()}</td>
                                             <td>
-                                                <a href="exportToPDF.handler?id=exam.getCode()">go</a>
+                                                <a href="exportToPDF.handler?id=exam.getCode()">
+                                                    <button class="w3-button w3-round-large w3-blue">go</button>
+                                                </a>
                                             </td>
                                         </tr>          
                                     </c:forEach>
@@ -145,7 +147,9 @@
                                             <td>${exam.getExaminationDate()}</td>
                                             <td>${exam.getIsDone()}</td>
                                             <td>
-                                                <a href="exportToPDF.handler?id=${exam.getCode()}&type=exam">go</a>
+                                                <a href="exportToPDF.handler?id=${exam.getCode()}&type=exam">
+                                                    <button class="w3-button w3-round-large w3-blue">go</button>
+                                                </a>
                                             </td>
                                         </tr>          
                                     </c:forEach>
@@ -254,7 +258,9 @@
                                             <td>${ticket.getIsPaid()}</td>
                                             <td>
                                                 <%--<button class="w3-button w3-round-large w3-blue">--%>
-                                                    <a href="exportToPDF.handler?id=${ticket.getCode()}&type=ticket">Go</a>
+                                                    <a href="exportToPDF.handler?id=${ticket.getCode()}&type=ticket">
+                                                        <button class="w3-button w3-round-large w3-blue">Go</button>
+                                                    </a>
                                                 <%--</button>--%>
                                             </td>
                                         </tr>          
@@ -294,7 +300,9 @@
                                             <td>${ticket.getIsPaid()}</td>
                                             <td>
                                                 <%--<button class="w3-button w3-round-large w3-blue" data-target="exportToPDF.handler?id=${ticket.getCode()}?type=ticket">--%>
-                                                    <a href="exportToPDF.handler?id=${ticket.getCode()}&type=ticket">Go</a>
+                                                    <a href="exportToPDF.handler?id=${ticket.getCode()}&type=ticket">
+                                                        <button class="w3-button w3-round-large w3-blue">Go</button>
+                                                    </a>
                                                 <%--</button>--%>
                                             </td>
                                         </tr>          
@@ -387,7 +395,7 @@
                                 </td>
                             </tr>
                         </table>                     
-                        <h3><button class="w3-bar-item w3-button w3-blue" onclick="openDashGeneralDoctor('screamNewGeneralDoctor')">New generaldoctor</button></h3>
+                        <h3><button class="w3-bar-item w3-button w3-blue w3-round-large" onclick="openDashGeneralDoctor('screamNewGeneralDoctor')">New generaldoctor</button></h3>
                         <div id="screamNewGeneralDoctor" class="w3-container dash" style="display:none">
                             <table class="w3-table w3-bordered">
                                 <c:choose>
@@ -413,9 +421,9 @@
                                                     <td>${doctor.getAge()}</td>
                                                     <td>${doctor.getAddress()}</td>
                                                     <td>
-                                                        <button class="w3-button w3-round-large w3-blue">
-                                                            <a href="changeGeneralDoctor.handler?id=${doctor.getCf()}&ssd=${user.getCf()}">Change</a>
-                                                        </button>
+                                                        <a href="changeGeneralDoctor.handler?id=${doctor.getCf()}&ssd=${user.getCf()}">
+                                                            <button class="w3-button w3-round-large w3-blue">Change</button>
+                                                        </a>
                                                     </td>
                                                 </tr>          
                                             </c:forEach>
