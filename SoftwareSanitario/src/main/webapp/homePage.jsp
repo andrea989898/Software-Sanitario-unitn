@@ -412,6 +412,11 @@
                                                     <td>${doctor.getSurname()}</td>
                                                     <td>${doctor.getAge()}</td>
                                                     <td>${doctor.getAddress()}</td>
+                                                    <td>
+                                                        <button class="w3-button w3-round-large w3-blue">
+                                                            <a href="changeGeneralDoctor.handler?id=${doctor.getCf()}&ssd=${user.getCf()}">Change</a>
+                                                        </button>
+                                                    </td>
                                                 </tr>          
                                             </c:forEach>
                                         </table>

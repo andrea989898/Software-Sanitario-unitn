@@ -71,5 +71,23 @@ public class JDBCPatientDAO extends JDBCDAO<Patient, String> implements PatientD
             throw new DAOException("Impossible to find the user", ex);
         }
     }
+    @Override
+    public boolean setNewDoctor(String doctor, String patient) throws DAOException {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //User user = new User();
+   
+        try (PreparedStatement stm = CON.prepareStatement("UPDATE public.patients SET generaldoctor = ? WHERE ssd = ?;")) {
+            stm.setString(1, doctor);
+            stm.setString(2, patient);
+            //System.out.println(code);
+            
+            if(stm.executeUpdate()==1)  return true;
+             
+            return false;
+            } catch (SQLException ex) {
+            Logger.getLogger(JDBCPatientDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
     
 }

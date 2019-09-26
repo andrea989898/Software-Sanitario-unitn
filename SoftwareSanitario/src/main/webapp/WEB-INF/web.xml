@@ -136,6 +136,10 @@
         <servlet-name>PDFservlet</servlet-name>
         <servlet-class>com.mycompany.softwaresanitario.servlet.PDFservlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>changeGeneralDoctorServlet</servlet-name>
+        <servlet-class>com.mycompany.softwaresanitario.servlet.changeGeneralDoctorServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CambioPasswordPage</servlet-name>
         <url-pattern>/restricted/cambioPassword.html</url-pattern>
@@ -167,6 +171,10 @@
     <servlet-mapping>
         <servlet-name>PDFservlet</servlet-name>
         <url-pattern>/restricted/exportToPDF.handler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>changeGeneralDoctorServlet</servlet-name>
+        <url-pattern>/restricted/changeGeneralDoctor.handler</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

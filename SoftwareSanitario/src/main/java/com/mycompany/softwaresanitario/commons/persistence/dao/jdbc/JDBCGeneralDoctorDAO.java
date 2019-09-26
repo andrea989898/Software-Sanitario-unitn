@@ -50,8 +50,6 @@ public class JDBCGeneralDoctorDAO extends JDBCDAO<GeneralDoctor, String> impleme
                 while (rst.next()) {
                     User user = new User();
                     user.setCf(rst.getString("code"));
-                    user.setEmail(rst.getString("email"));
-                    user.setPassword(rst.getString("password"));
                     user.setName(rst.getString("name"));
                     user.setSurname(rst.getString("surname"));
                     user.setAge(rst.getInt("age"));
