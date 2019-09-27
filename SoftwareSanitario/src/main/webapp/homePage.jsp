@@ -33,6 +33,15 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
             body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+            #myInput {
+                background-position: 10px 10px;
+                background-repeat: no-repeat;
+                width: 100%;
+                font-size: 16px;
+                padding: 12px 20px 12px 40px;
+                border: 1px solid #ddd;
+                margin-bottom: 12px;
+            }
         </style>
     </head>
     <body>
@@ -134,7 +143,8 @@
                                 </div>
                             </c:when>
                             <c:otherwise>
-                                <table class="w3-table w3-bordered">
+                                <button class="w3-button w3-round-large w3-blue" onclick="sortTable('examTable')">Sort by date</button>
+                                <table class="w3-table w3-bordered" id="examTable">
                                         <tr>
                                              <th>Exam Code</th>
                                              <th>Exam Date</th>
@@ -205,7 +215,8 @@
                                 </div>
                             </c:when>
                             <c:otherwise>
-                                <table class="w3-table w3-bordered">
+                                <button class="w3-button w3-round-large w3-blue" onclick="sortTable('examinationTable')">Sort by date</button>
+                                <table class="w3-table w3-bordered" id="examinationTable">
                                         <tr>
                                              <th>Examination Code</th>
                                              <th>Examination Date</th>
@@ -297,7 +308,8 @@
                                 </div>
                             </c:when>
                             <c:otherwise>
-                                <table class="w3-table w3-bordered">
+                                <button class="w3-button w3-round-large w3-blue" onclick="sortTable('ticketTable')">Sort by ticket date</button>
+                                <table class="w3-table w3-bordered" id="ticketTable">
                                         <tr>
                                              <th>Ticket Code</th>
                                              <th>Ticket Date</th>
@@ -336,6 +348,7 @@
             <div id="screamGeneralDoctor" class="w3-container dash" style="display:none">
                     <h3>Your general doctor</h3>
                     <div>
+                        
                         <table class="w3-table w3-bordered">
                             <tr>
                                 <td>
@@ -412,6 +425,7 @@
                         </table>                     
                         <h3><button class="w3-bar-item w3-button w3-blue w3-round-large" onclick="openDashGeneralDoctor('screamNewGeneralDoctor')">Change general doctor</button></h3>
                         <div id="screamNewGeneralDoctor" class="w3-container dash" style="display:none">
+                            
                             <table class="w3-table w3-bordered">
                                 <c:choose>
                                     <c:when test="${empty AllGeneralDoctor}">
@@ -422,7 +436,8 @@
                                         </div>
                                     </c:when>
                                     <c:otherwise>
-                                        <table class="w3-table w3-bordered">
+                                        <input class="w3-bordered" type="text" id="myInput" onkeyup="search()" placeholder="Search for names..">
+                                        <table class="w3-table w3-bordered" id="myTable">
                                                 <tr>
                                                      <th>Name</th>
                                                      <th>Surname</th>
@@ -451,6 +466,8 @@
                             function openDashGeneralDoctor(dashName) {
                                 document.getElementById(dashName).style.display = "block";  
                             }
+                            
+</script>
                         </script>    
                     </div>
             </div>
@@ -557,6 +574,96 @@
         function w3_close() {
             document.getElementById("mySidebar").style.display = "none";
             document.getElementById("myOverlay").style.display = "none";
+        }
+        function search() {
+            // Declare variables 
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+              td = tr[i].getElementsByTagName("td")[0];
+              if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                  tr[i].style.display = "";
+                } else {
+                  tr[i].style.display = "none";
+                }
+              } 
+            }
+        }
+        function sortTable(myTable) {
+          var table, rows, switching, i, x, y, shouldSwitch, count;
+          count = 0;
+          table = document.getElementById(myTable);
+          switching = true;
+          /*Make a loop that will continue until
+          no switching has been done:*/
+          while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /*Loop through all table rows (except the
+            first, which contains table headers):*/
+            for (i = 1; i < (rows.length - 1); i++) {
+              //start by saying there should be no switching:
+              shouldSwitch = false;
+              /*Get the two elements you want to compare,
+              one from current row and one from the next:*/
+              x = rows[i].getElementsByTagName("TD")[1];
+              y = rows[i + 1].getElementsByTagName("TD")[1];
+              //check if the two rows should switch place:
+              if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                //if so, mark as a switch and break the loop:
+                count++;
+                shouldSwitch = true;
+                break;
+              }
+            }
+            if (shouldSwitch) {
+              /*If a switch has been marked, make the switch
+              and mark that a switch has been done:*/
+              rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+              switching = true;
+            }
+          }
+          if(count == 0){
+            switching = true;
+            /*Make a loop that will continue until
+            no switching has been done:*/
+            while (switching) {
+              //start by saying: no switching is done:
+              switching = false;
+              rows = table.rows;
+              /*Loop through all table rows (except the
+              first, which contains table headers):*/
+              for (i = 1; i < (rows.length - 1); i++) {
+                //start by saying there should be no switching:
+                shouldSwitch = false;
+                /*Get the two elements you want to compare,
+                one from current row and one from the next:*/
+                x = rows[i].getElementsByTagName("TD")[1];
+                y = rows[i + 1].getElementsByTagName("TD")[1];
+                //check if the two rows should switch place:
+                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                  //if so, mark as a switch and break the loop:
+                  //count++;
+                  shouldSwitch = true;
+                  break;
+                }
+              }
+              if (shouldSwitch) {
+                /*If a switch has been marked, make the switch
+                and mark that a switch has been done:*/
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+              }
+            }
+          }
         }
     </script>    
     
