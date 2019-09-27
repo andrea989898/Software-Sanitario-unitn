@@ -15,6 +15,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -109,6 +112,45 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
         }catch (SQLException ex) {
             throw new DAOException("Impossible to find the user", ex);
         }
+    }
+
+    @Override
+    public boolean newExamination(String date, String time, String idpatient, String iddoctor) throws DAOException {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        try (PreparedStatement stm = CON.prepareStatement("INSERT INTO public.examinations(\n" +
+                                    "            idexamination, idpatient, iddoctor, \n" +
+                                    "            \"time\", isdone, examinationdate)\n" +
+                                    "    VALUES ((SELECT MAX(idexamination) FROM examinations)+1), ?, ?, \n" +
+                                    "            ?, false, ?);")) {
+            
+            /*
+            
+            Query di prova per test
+            
+            INSERT INTO public.examinations(
+            idexamination, idpatient, iddoctor, isdone)
+             VALUES ((SELECT MAX(idexamination) FROM examinations)+1),'0ADDOVJ1SD1QR9R9', 'AEO8LWP5Q1I2KNS2', 
+             false);
+            */
+            
+            
+            
+            
+            //non va la query
+            stm.setString(1, idpatient);
+            stm.setString(2, iddoctor);
+            stm.setString(3, time);
+            stm.setString(4, date);
+            //System.out.println(code);
+            
+            if(stm.execute())  return true;
+             
+            return false;
+            } catch (SQLException ex) {
+            Logger.getLogger(JDBCPatientDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     

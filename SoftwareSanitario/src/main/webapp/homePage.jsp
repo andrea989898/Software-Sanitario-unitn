@@ -222,8 +222,23 @@
                             </c:otherwise>
                 </c:choose>
                 </div>
+                <%--
+                <div id="newExamination" class="w3-container dash" style="display:none">
+                <h4>New examinations:</h4>
+                    <form class="w3-container " method="POST" action="newExamination.handler?idPatient=${user.getCf()}&idDoctor=${generaldoctorpatient.getCf()}">
+                        <label class="w3-text-teal"><b>Giorno:</b></label>
+                        <input class="w3-input w3-border w3-light-grey" type="date" id="date" name="date">
+
+                        <label class="w3-text-teal"><b>Ora:</b></label>
+                        <input class="w3-input w3-border w3-light-grey" type="time" name="time" id="time">
+                        <br>
+                        <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
+                        <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+                    </form>
+                </div>
+                --%>
                 <script>
-                    function openExaminations(){
+                    function openExaminations(){ 
                         document.getElementById("Examinations").style.display = "block";  
                     }
                 </script>
@@ -395,7 +410,7 @@
                                 </td>
                             </tr>
                         </table>                     
-                        <h3><button class="w3-bar-item w3-button w3-blue w3-round-large" onclick="openDashGeneralDoctor('screamNewGeneralDoctor')">New generaldoctor</button></h3>
+                        <h3><button class="w3-bar-item w3-button w3-blue w3-round-large" onclick="openDashGeneralDoctor('screamNewGeneralDoctor')">Change general doctor</button></h3>
                         <div id="screamNewGeneralDoctor" class="w3-container dash" style="display:none">
                             <table class="w3-table w3-bordered">
                                 <c:choose>

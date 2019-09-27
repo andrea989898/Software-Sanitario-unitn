@@ -4,19 +4,16 @@
  * and open the template in the editor.
  */
 package com.mycompany.softwaresanitario.servlet;
+
+import com.mycompany.softwaresanitario.commons.persistence.dao.ExaminationDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
-import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Examination;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
-import com.mycompany.softwaresanitario.commons.persistence.dao.PatientDAO;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Patient;
-import com.mycompany.softwaresanitario.commons.persistence.dao.GeneralDoctorDAO;
-import com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor;
-import com.mycompany.softwaresanitario.commons.persistence.dao.SpecialistDAO;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Specialist;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Time;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -26,26 +23,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author franc
+ * @author PC Andrea
  */
-public class LoginServlet extends HttpServlet {
+public class newExaminationServlet extends HttpServlet {
 
-    private UserDAO userDao;
-    
-    @Override
-    public void init() throws ServletException {
-        DAOFactory daoFactory = (DAOFactory) super.getServletContext().getAttribute("daoFactory");
-        if (daoFactory == null) {
-            throw new ServletException("Impossible to get dao factory for user storage system");
-        }
-        try {
-            userDao = daoFactory.getDAO(UserDAO.class);
-        } catch (DAOFactoryException ex) {
-            throw new ServletException("Impossible to get dao factory for user storage system", ex);
-        }
-        
-    }
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -55,18 +36,28 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    DAOFactory daoFactory;
+    
+    
+    public void init() throws ServletException {
+        daoFactory = (DAOFactory) super.getServletContext().getAttribute("daoFactory");
+        if (daoFactory == null) {
+            throw new ServletException("Impossible to get dao factory for storage system");
+        }
+    }
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");            
+            out.println("<title>Servlet newExaminationServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet newExaminationServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -98,8 +89,17 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String email = request.getParameter("username");
-        String password = request.getParameter("password");
+        ExaminationDAO examinationDao;
+        try {
+            examinationDao = daoFactory.getDAO(ExaminationDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
+        }
+        
+        String time = request.getParameter("time");
+        String date = request.getParameter("date");
+        String idpatient = request.getParameter("idPatient");
+        String iddoctor = request.getParameter("idDoctor");
         
         String contextPath = getServletContext().getContextPath();
         if (!contextPath.endsWith("/")) {
@@ -107,30 +107,11 @@ public class LoginServlet extends HttpServlet {
         }
 
         try {
-            User user = userDao.getByEmailAndPassword(email, password);
+            boolean examination = examinationDao.newExamination(date, time, idpatient, iddoctor);
             
-            if (user == null) {
-                response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
-                //processRequest(request, response);
-            } else {
-                request.getSession().setAttribute("user", user);
-                /*Patient patient = patientDao.getByCode(user.getCode());
-                request.getSession().setAttribute("patient", patient);
-                
-                GeneralDoctor generalDoctor = generalDoctorDao.getByCode(user.getCode());
-                Specialist specialist = specialistDao.getByCode(user.getCode());
-                
-                if(generalDoctor != null){
-                    request.getSession().setAttribute("generalDoctor", generalDoctor);
-                }
-                
-                if(specialist != null){
-                    request.getSession().setAttribute("specialist", specialist);
-                }
-                
-                */
+            if (examination) {
+                //request.getSession().setAttribute("user", user);
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
-
             }
         } catch (DAOException ex) {
             //TODO: log exception
