@@ -16,7 +16,7 @@ public class DatabaseConnection{
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
 
-    private final String password = "chiaravise";
+    private final String password = "61223180";
 
  
     /**
@@ -56,12 +56,12 @@ public class DatabaseConnection{
             catch(SQLException e){
                 System.out.println(e.getMessage());
             }
-            try{
+            /*try{
                 copy(conn);                
                 //fillImages(conn);
             }catch(SQLException e){
                 System.out.println(e.getMessage());
-            }
+            }*/
             
             
     }
@@ -69,21 +69,42 @@ public class DatabaseConnection{
     static public void create(Connection conn) throws SQLException{
        Statement statement;
             
+            String myRegions = "CREATE TABLE Regions(\n"+
+            "Code INT PRIMARY KEY NOT NULL, \n" +
+            "Name CHAR(30) NOT NULL);";
+            
+            String myProvinces = "CREATE TABLE Provinces(\n"+
+            "Code INT PRIMARY KEY NOT NULL, \n" + 
+            "Name CHAR(30) NOT NULL, \n" +
+            "IDRegion INT NOT NULL,\n" +
+            "FOREIGN KEY(IDRegion) references Regions(Code));";
+            
+            String myCities = "CREATE TABLE Cities(\n"+
+            "Code INT PRIMARY KEY NOT NULL, \n" + 
+            "Name CHAR(30) NOT NULL, \n" +
+            "IDProvince INT NOT NULL,\n" +
+            "FOREIGN KEY(IDProvince) references Provinces(Code));";
+            
             String mySSR = "CREATE TABLE SSR(\n" +
             "Code CHAR(16) NOT NULL,\n"+
-            "email CHAR(40) NOT NULL);";
+            "email CHAR(40) NOT NULL," +
+            "IDProvince INT NOT NULL," +
+            "FOREIGN KEY(IDProvince) references Provinces(Code));";
                     
             String myAllUsers = "CREATE TABLE Users ( \n" +
             "Name CHAR(40) NOT NULL,\n"+
             "Surname CHAR(40) NOT NULL,\n" +
             "Age INT NOT NULL, \n" +        
             "BirthDate DATE NOT NULL,\n"+
-            "BirthPlace CHAR(40) NOT NULL, \n"+
+            "Birth_City_ID INT NOT NULL, \n"+
             "Gender CHAR(2) NOT NULL,\n" +
             "Address CHAR(80) NOT NULL, \n" +
+            "City_ID INT NOT NULL, \n" +
             "Code CHAR(16) NOT NULL PRIMARY KEY, \n" +
             "Email CHAR(40) NOT NULL, \n" +
-            "Password CHAR(80) NOT NULL);";
+            "Password CHAR(80) NOT NULL, \n" +
+            "FOREIGN KEY(Birth_City_ID) references Cities(Code), \n" +
+            "FOREIGN KEY(City_ID) references Cities(Code));";
 
        
             String myAllDoctors = "CREATE TABLE AllDoctors( \n" + 
@@ -117,17 +138,12 @@ public class DatabaseConnection{
             "IDExamination INT PRIMARY KEY NOT NULL,\n" +
             "IDPatient CHAR(16) NOT NULL,\n" +
             "IDDoctor CHAR(16)NOT NULL,\n" +
-            "IDPrescription INT,\n" +
-            "IDRecipe INT, \n" +
             "Time TIME,\n" +
             "IsDone BOOLEAN NOT NULL,\n"+
             "ExaminationDate DATE,\n"+
             "Argument CHAR(100),\n" +
             "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD),\n" +
-            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD),\n" +
-            "FOREIGN KEY (IDPrescription) REFERENCES Prescriptions(Code),\n" +
-            "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));";
-
+            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD));";
 
             String myTicket = "CREATE TABLE Tickets( \n"+
             "Code INT PRIMARY KEY NOT NULL,\n" +
@@ -150,21 +166,21 @@ public class DatabaseConnection{
             String myPrescription = "CREATE TABLE Prescriptions( \n" +
             "Code INT PRIMARY KEY NOT NULL,\n"+
             "Exam_type CHAR(20) NOT NULL,\n"+
-            "IDPatient CHAR(16) NOT NULL,\n"+
-            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD));";
+            "IDExam INT,\n"+
+            "IDExamination INT,\n" +
+            "FOREIGN KEY(IDExamination) REFERENCES Examinations(IDExamination),\n" +
+            "FOREIGN KEY(IDExam) REFERENCES Exams(Code));";     
 
             String myRecipe = "CREATE TABLE Recipes( \n"+
             "Code INT PRIMARY KEY NOT NULL,\n"+
             "IDDrug INT NOT NULL,\n"+
-            "IDPatient CHAR(16) NOT NULL,\n" +
-            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD),\n"+
+            "IDExamination INT,\n" +
+            "FOREIGN KEY(IDExamination) REFERENCES Examinations(IDExamination),\n" +
             "FOREIGN KEY (IDDrug) REFERENCES Drugs(Code));";
             
             String myExam = "CREATE TABLE Exams( \n"+
             "Code INT PRIMARY KEY NOT NULL, \n" +
             "IDDoctor CHAR(16)NOT NULL,\n" +
-            "IDPrescription INT,\n" +
-            "IDRecipe INT, \n" +
             "Result char(100),\n" +
             "Time TIME,\n" +
             "IsDone BOOLEAN NOT NULL,\n"+
@@ -172,11 +188,16 @@ public class DatabaseConnection{
             "IDPatient CHAR(16) NOT NULL, \n" +
             "IsRecall BOOLEAN, \n" +
             "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD)," +
-            "FOREIGN KEY (IDPatient) REFERENCES Patients(ssd),\n" +
-            "FOREIGN KEY (IDPrescription) REFERENCES Prescriptions(Code),\n" +
-            "FOREIGN KEY (IDRecipe) REFERENCES Recipes(Code));" ;        
+            "FOREIGN KEY (IDPatient) REFERENCES Patients(ssd));";
+            
             
             statement = conn.createStatement();
+            
+            
+            statement.executeUpdate(myRegions);
+            statement.executeUpdate(myProvinces);
+            statement.executeUpdate(myCities);
+
 
             statement.executeUpdate(myAllUsers);
 
@@ -185,11 +206,11 @@ public class DatabaseConnection{
             statement.executeUpdate(myPatient); 
             statement.executeUpdate(myImage);
             statement.executeUpdate(mySpecialist); 
+            statement.executeUpdate(myExamination);
+            statement.executeUpdate(myExam);
             statement.executeUpdate(myPrescription);
             statement.executeUpdate(myDrug); 
             statement.executeUpdate(myRecipe);
-            statement.executeUpdate(myExamination);
-            statement.executeUpdate(myExam);
             statement.executeUpdate(myTicket); 
             
             
@@ -201,6 +222,9 @@ public class DatabaseConnection{
     
     static public void drop(Connection conn) throws SQLException{
        Statement statement = conn.createStatement();
+       String myRegions = "DROP TABLE Regions CASCADE";   
+       String myProvinces = "DROP TABLE Provinces CASCADE";   
+       String myCities = "DROP TABLE Cities CASCADE"; 
        String myExam = "DROP TABLE Exams CASCADE";      
        String myRecipe = "DROP TABLE Recipes CASCADE"; 
        String myPrescription = "DROP TABLE Prescriptions CASCADE"; 
@@ -215,7 +239,9 @@ public class DatabaseConnection{
        String myAllUsers = "DROP TABLE Users CASCADE"; 
        String mySsr = "DROP TABLE Ssr CASCADE"; 
 
-       
+       statement.executeUpdate(myRegions);
+       statement.executeUpdate(myProvinces);
+       statement.executeUpdate(myCities);
        statement.executeUpdate(myExam);
        statement.executeUpdate(myRecipe);
        statement.executeUpdate(myPrescription);
