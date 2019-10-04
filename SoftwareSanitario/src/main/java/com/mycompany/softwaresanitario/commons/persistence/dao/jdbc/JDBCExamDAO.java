@@ -98,7 +98,6 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     exam.setExaminationDate(rst.getDate("ExaminationDate"));
                     exam.setIDRecipe(rst.getInt("IDRecipe"));
                     exam.setIsDone(rst.getBoolean("IsDone"));
-                    
                     exam.setIDPatient(rst.getString("IDPatient"));
                     exam.setIsRecall(rst.getBoolean("IsRecall"));
                     if(exam.getIsDone()==false){
