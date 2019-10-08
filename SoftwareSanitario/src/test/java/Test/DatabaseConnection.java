@@ -165,18 +165,22 @@ public class DatabaseConnection{
             
             String myPrescription = "CREATE TABLE Prescriptions( \n" +
             "Code INT PRIMARY KEY NOT NULL,\n"+
-            "Exam_type CHAR(20) NOT NULL,\n"+
+            "Analysis CHAR(100) NOT NULL,\n"+
             "IDExam INT,\n"+
             "IDExamination INT,\n" +
+            "IDRecipe INT,\n" +
+            "FOREIGN KEY(IDRecipe) REFERENCES Recipes(Code),\n" +
             "FOREIGN KEY(IDExamination) REFERENCES Examinations(IDExamination),\n" +
             "FOREIGN KEY(IDExam) REFERENCES Exams(Code));";     
 
             String myRecipe = "CREATE TABLE Recipes( \n"+
-            "Code INT PRIMARY KEY NOT NULL,\n"+
+            "Code INT PRIMARY KEY NOT NULL;\n";          
+            
+            String myRecipeDrug =  "CREATE TABLE DrugsRecipes( \n"+
+            "IDRecipe INT NOT NULL,\n"+
             "IDDrug INT NOT NULL,\n"+
-            "IDExamination INT,\n" +
-            "FOREIGN KEY(IDExamination) REFERENCES Examinations(IDExamination),\n" +
-            "FOREIGN KEY (IDDrug) REFERENCES Drugs(Code));";
+            "FOREIGN KEY(IDRecipe) REFERENCES Recipes(Code),\n" +
+            "FOREIGN KEY(IDDrug) REFERENCES Drugs(Code));";
             
             String myExam = "CREATE TABLE Exams( \n"+
             "Code INT PRIMARY KEY NOT NULL, \n" +
@@ -211,6 +215,7 @@ public class DatabaseConnection{
             statement.executeUpdate(myPrescription);
             statement.executeUpdate(myDrug); 
             statement.executeUpdate(myRecipe);
+            statement.executeUpdate(myRecipeDrug);
             statement.executeUpdate(myTicket); 
             
             
