@@ -16,7 +16,7 @@ public class DatabaseConnection{
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
 
-    private final String password = "61223180";
+    private final String password = "chiaravise";
 
  
     /**
@@ -160,7 +160,6 @@ public class DatabaseConnection{
             
             String myDrug = "CREATE TABLE Drugs( \n"+
             "Code INT PRIMARY KEY NOT NULL,\n"+
-            "IsForPrescription BOOLEAN NOT NULL,\n"+
             "Name char(100))";
             
             String myPrescription = "CREATE TABLE Prescriptions( \n" +
@@ -234,6 +233,7 @@ public class DatabaseConnection{
        String myRecipe = "DROP TABLE Recipes CASCADE"; 
        String myPrescription = "DROP TABLE Prescriptions CASCADE"; 
        String myDrug = "DROP TABLE Drugs CASCADE"; 
+       String myDrugRecipe = "DROP TABLE DrugsRecipes CASCADE"; 
        String myTicket = "DROP TABLE Tickets CASCADE"; 
        String myExamination = "DROP TABLE Examinations CASCADE"; 
        String mySpecialist = "DROP TABLE Specialists CASCADE"; 
@@ -251,6 +251,7 @@ public class DatabaseConnection{
        statement.executeUpdate(myRecipe);
        statement.executeUpdate(myPrescription);
        statement.executeUpdate(myDrug);
+       statement.executeUpdate(myDrugRecipe);
        statement.executeUpdate(myTicket);
        statement.executeUpdate(myExamination);
        statement.executeUpdate(mySpecialist);
@@ -299,6 +300,9 @@ public class DatabaseConnection{
     static public void copy(Connection conn) throws SQLException{
         Statement statement= conn.createStatement();
         
+        String copy_regions = "COPY PUBLIC.REGIONS FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\Regions_data.csv' DELIMITER ';' CSV;";
+        String copy_provinces = "COPY PUBLIC.PROVINCES FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\Provinces_data.csv' DELIMITER ';' CSV;";
+        String copy_cities = "COPY PUBLIC.CITIES FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\Cities_data.csv' DELIMITER ';' CSV;";
         String copy_users = "COPY PUBLIC.USERS FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\users.csv' DELIMITER ';' CSV;";
         String copy_allDoctors = " COPY PUBLIC.alldoctors FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\allDoctors_data.csv' DELIMITER ';' CSV;";
         String copy_generalDoctors = "COPY PUBLIC.generaldoctors FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\generalDoctors_data.csv' DELIMITER ';' CSV;";
@@ -309,10 +313,13 @@ public class DatabaseConnection{
         String copy_drugs = "COPY PUBLIC.drugs FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\drugs_data.csv' DELIMITER ';' CSV;";
         String copy_prescriptions = "COPY PUBLIC.prescriptions FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\prescriptions_data.csv' DELIMITER ';' CSV;";
         String copy_recipes = "COPY PUBLIC.recipes FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\recipes_data.csv' DELIMITER ';' CSV;";
+        String copy_drugrecipes = "COPY PUBLIC.DrugRecipes FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\recipeDrugs_data.csv' DELIMITER ';' CSV;";
         String copy_exams = "COPY PUBLIC.exams FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\exams_data.csv' DELIMITER ';' CSV;";
         String copy_images = "COPY PUBLIC.images FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\images_data.csv' DELIMITER ';' CSV;";
         
-        
+        statement.executeUpdate(copy_regions);
+        statement.executeUpdate(copy_provinces);
+        statement.executeUpdate(copy_cities);
         statement.executeUpdate(copy_users);
         statement.executeUpdate(copy_allDoctors);
         statement.executeUpdate(copy_generalDoctors);
@@ -322,6 +329,7 @@ public class DatabaseConnection{
         statement.executeUpdate(copy_drugs);
         statement.executeUpdate(copy_recipes);
         statement.executeUpdate(copy_examinations);
+        statement.executeUpdate(copy_drugrecipes);
         statement.executeUpdate(copy_exams);
         statement.executeUpdate(copy_tickets);
         statement.executeUpdate(copy_images);
