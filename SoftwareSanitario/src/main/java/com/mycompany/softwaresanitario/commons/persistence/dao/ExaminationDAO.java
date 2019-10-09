@@ -18,4 +18,5 @@ import java.util.ArrayList;
 public interface ExaminationDAO extends DAO<Examination, String>{
     public Examination getByCode(int code) throws DAOException;
     public ArrayList <Examination> getExaminations(String patient) throws DAOException;
+    public boolean newExamination(String date, String time, String idpatient, String iddoctor) throws DAOException;
 }

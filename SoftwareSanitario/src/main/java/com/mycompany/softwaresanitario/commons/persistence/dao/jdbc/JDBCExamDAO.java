@@ -43,10 +43,10 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
     }
 
     @Override
-    public Exam getByCode(String SSD) throws DAOException {
+    public Exam getByCode(int SSD) throws DAOException {
         Exam exam = new Exam();
         try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Exams WHERE Code = ?")) {
-            stm.setString(1, SSD);
+            stm.setInt(1, SSD);
             try (ResultSet rs = stm.executeQuery()) {
                // System.out.println(rs.next());
                 int count = 0;
@@ -98,7 +98,6 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     exam.setExaminationDate(rst.getDate("ExaminationDate"));
                     exam.setIDRecipe(rst.getInt("IDRecipe"));
                     exam.setIsDone(rst.getBoolean("IsDone"));
-                    
                     exam.setIDPatient(rst.getString("IDPatient"));
                     exam.setIsRecall(rst.getBoolean("IsRecall"));
                     if(exam.getIsDone()==false){

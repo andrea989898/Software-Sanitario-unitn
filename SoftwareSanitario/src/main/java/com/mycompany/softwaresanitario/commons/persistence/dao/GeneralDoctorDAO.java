@@ -7,7 +7,9 @@ package com.mycompany.softwaresanitario.commons.persistence.dao;
 
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor;
+import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.List;
 /**
  *
@@ -16,5 +18,9 @@ import java.util.List;
 public interface GeneralDoctorDAO extends DAO<GeneralDoctor, String>{
     
     public GeneralDoctor getByCode(String SSD) throws DAOException;
+    
+    public List<User> getAllGeneralDoctors(String ssd, String ssd2) throws DAOException;
+    
+    public boolean isAGeneralDoctor(String ssd) throws DAOException;
     
 }

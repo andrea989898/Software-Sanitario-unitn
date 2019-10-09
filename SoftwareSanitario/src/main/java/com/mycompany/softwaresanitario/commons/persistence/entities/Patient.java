@@ -30,6 +30,8 @@ public class Patient {
     public void setGeneralDoctorCf(String generalDoctorCf) {
         this.generalDoctorCf = generalDoctorCf;
     }
-    
+    public void getNameOfGeneralDoctor(){
+        
+    }
     
 }

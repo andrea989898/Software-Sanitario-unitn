@@ -10,6 +10,7 @@ import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
+import com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor;
 import com.mycompany.softwaresanitario.commons.persistence.entities.Patient;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
@@ -92,7 +93,9 @@ public class PatientFilter implements Filter {
         try {
             Patient patient = patientDao.getByCode(user.getCf());
             if(patient != null){
+                User generaldoctorpatient = userDao.getByCode(patient.getGeneralDoctorCf());
                 request.setAttribute("patient", patient);
+                request.setAttribute("generaldoctorpatient", generaldoctorpatient);
                 String avatarPath = "../images/avatar/" + user.getAvatarPath();
                 request.setAttribute("avatarPath", avatarPath);
             }

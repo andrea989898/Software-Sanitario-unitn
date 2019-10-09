@@ -14,6 +14,8 @@
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Patient"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.GeneralDoctorDAO"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.SpecialistDAO"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Specialist"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.ExamDAO"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Exam"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -31,6 +33,15 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
             body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
+            #myInput {
+                background-position: 10px 10px;
+                background-repeat: no-repeat;
+                width: 100%;
+                font-size: 16px;
+                padding: 12px 20px 12px 40px;
+                border: 1px solid #ddd;
+                margin-bottom: 12px;
+            }
         </style>
     </head>
     <body>
@@ -46,8 +57,7 @@
                 <img src="${avatarPath}" style="width:45%;" class="w3-round"><br><br>
                 <h4><b>${user.getName()} ${user.getSurname()}</b></h4>
                 <h5>
-                    Email: ${user.getEmail()}<br>
-                    Birthday: ${user.getBirthdate()}<br>
+                    GeneralDoctor: ${generaldoctorpatient.getName()} ${generaldoctorpatient.getSurname()}<br>
                 </h5>
             </div>
             <div class="w3-bar-block">
@@ -55,43 +65,36 @@
                     <c:when test="${!empty generalDoctor}">
                         <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard doctor</a> 
                     </c:when>
+                </c:choose>
+                <c:choose>
                     <c:when test="${!empty specialist}">
                         <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard specialist</a> 
                     </c:when>   
                 </c:choose>
             </div>
-            <div class="w3-panel w3-large">
-                <i class="fa fa-facebook-official w3-hover-opacity"></i>
-                <i class="fa fa-instagram w3-hover-opacity"></i>
-                <i class="fa fa-snapchat w3-hover-opacity"></i>
-                <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-                <i class="fa fa-twitter w3-hover-opacity"></i>
-                <i class="fa fa-linkedin w3-hover-opacity"></i>
+            <div class="w3-container">
+                <div class="w3-section w3-padding-16">
+                    <a href="cambioPassword.html" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-refresh w3-margin-right"></i>Cambia password</button></a>
+                    <a href="logout.handler" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-close w3-margin-right"></i>Esci</button></a>
+                    <!--<button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Photos</button>
+                    <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Art</button>-->
+                </div> 
             </div>
         </nav>
-        
+        <header id="portfolio">
+                <a href="#"><img src="${avatarPath}" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
+                <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
+        </header>
         <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
         
         <div class="w3-main" style="margin-left:300px">
         
-            <!-- Header -->
-            <header id="portfolio">
-                <a href="#"><img src="${avatarPath}" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
-                <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
-                <div class="w3-container">
-                    <h1><b>${user.getName()} ${user.getSurname()}</b></h1>
-                    <div class="w3-section w3-bottombar w3-padding-16">
-                        <a href="cambioPassword.html" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-refresh w3-margin-right"></i>Cambia password</button></a>
-                        <a href="logout.handler" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-close w3-margin-right"></i>Esci</button></a>
-                        <!--<button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Photos</button>
-                        <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Art</button>-->
-                    </div>
-                </div>
-            </header>
             <div class="w3-bar w3-white">
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExams')">Exams</button></h2>
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExaminations')">Examinations</button></h2>
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamTickets')">Tickets</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamGeneralDoctor')">Your general doctor</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamUsers')">Personal information</button></h2>
             </div>
                     
             <div id="screamExams" class="w3-container dash">
@@ -116,6 +119,11 @@
                                             <td>${exam.getCode()}</td>
                                             <td>${exam.getExaminationDate()}</td>
                                             <td>${exam.getIsDone()}</td>
+                                            <td>
+                                                <a href="exportToPDF.handler?id=exam.getCode()">
+                                                    <button class="w3-button w3-round-large w3-blue">go</button>
+                                                </a>
+                                            </td>
                                         </tr>          
                                     </c:forEach>
                                 </table>
@@ -135,7 +143,8 @@
                                 </div>
                             </c:when>
                             <c:otherwise>
-                                <table class="w3-table w3-bordered">
+                                <button class="w3-button w3-round-large w3-blue" onclick="sortTable('examTable')">Sort by date</button>
+                                <table class="w3-table w3-bordered" id="examTable">
                                         <tr>
                                              <th>Exam Code</th>
                                              <th>Exam Date</th>
@@ -147,6 +156,11 @@
                                             <td>${exam.getCode()}</td>
                                             <td>${exam.getExaminationDate()}</td>
                                             <td>${exam.getIsDone()}</td>
+                                            <td>
+                                                <a href="exportToPDF.handler?id=${exam.getCode()}&type=exam">
+                                                    <button class="w3-button w3-round-large w3-blue">go</button>
+                                                </a>
+                                            </td>
                                         </tr>          
                                     </c:forEach>
                                 </table>
@@ -201,7 +215,8 @@
                                 </div>
                             </c:when>
                             <c:otherwise>
-                                <table class="w3-table w3-bordered">
+                                <button class="w3-button w3-round-large w3-blue" onclick="sortTable('examinationTable')">Sort by date</button>
+                                <table class="w3-table w3-bordered" id="examinationTable">
                                         <tr>
                                              <th>Examination Code</th>
                                              <th>Examination Date</th>
@@ -218,8 +233,23 @@
                             </c:otherwise>
                 </c:choose>
                 </div>
+                <%--
+                <div id="newExamination" class="w3-container dash" style="display:none">
+                <h4>New examinations:</h4>
+                    <form class="w3-container " method="POST" action="newExamination.handler?idPatient=${user.getCf()}&idDoctor=${generaldoctorpatient.getCf()}">
+                        <label class="w3-text-teal"><b>Giorno:</b></label>
+                        <input class="w3-input w3-border w3-light-grey" type="date" id="date" name="date">
+
+                        <label class="w3-text-teal"><b>Ora:</b></label>
+                        <input class="w3-input w3-border w3-light-grey" type="time" name="time" id="time">
+                        <br>
+                        <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
+                        <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+                    </form>
+                </div>
+                --%>
                 <script>
-                    function openExaminations(){
+                    function openExaminations(){ 
                         document.getElementById("Examinations").style.display = "block";  
                     }
                 </script>
@@ -253,9 +283,11 @@
                                             <td>${ticket.getCost()}</td>
                                             <td>${ticket.getIsPaid()}</td>
                                             <td>
-                                                <button class="w3-button w3-round-large w3-blue">Go
-                                                    <a href="exportToPDF.handler?id=ticket.getCode()"></a>
-                                                </button>
+                                                <%--<button class="w3-button w3-round-large w3-blue">--%>
+                                                    <a href="exportToPDF.handler?id=${ticket.getCode()}&type=ticket">
+                                                        <button class="w3-button w3-round-large w3-blue">Go</button>
+                                                    </a>
+                                                <%--</button>--%>
                                             </td>
                                         </tr>          
                                     </c:forEach>
@@ -276,7 +308,8 @@
                                 </div>
                             </c:when>
                             <c:otherwise>
-                                <table class="w3-table w3-bordered">
+                                <button class="w3-button w3-round-large w3-blue" onclick="sortTable('ticketTable')">Sort by ticket date</button>
+                                <table class="w3-table w3-bordered" id="ticketTable">
                                         <tr>
                                              <th>Ticket Code</th>
                                              <th>Ticket Date</th>
@@ -294,7 +327,9 @@
                                             <td>${ticket.getIsPaid()}</td>
                                             <td>
                                                 <%--<button class="w3-button w3-round-large w3-blue" data-target="exportToPDF.handler?id=${ticket.getCode()}?type=ticket">--%>
-                                                    <a href="exportToPDF.handler?id=${ticket.getCode()}&type=ticket">Go</a>
+                                                    <a href="exportToPDF.handler?id=${ticket.getCode()}&type=ticket">
+                                                        <button class="w3-button w3-round-large w3-blue">Go</button>
+                                                    </a>
                                                 <%--</button>--%>
                                             </td>
                                         </tr>          
@@ -309,6 +344,214 @@
                     }
                 </script>
             </div>
+            
+            <div id="screamGeneralDoctor" class="w3-container dash" style="display:none">
+                    <h3>Your general doctor</h3>
+                    <div>
+                        
+                        <table class="w3-table w3-bordered">
+                            <tr>
+                                <td>
+                                    Name : 
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getName()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Surname :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getSurname()}
+                                </td>
+                            </tr>      
+                            <tr>
+                                <td>
+                                    Age :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getAge()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Birthdate :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getBirthdate()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Birthplace :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getBirthplace()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Address :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getAddress()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Gender :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getGender()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Codice fiscale :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getCf()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Email :
+                                </td>
+                                <td>
+                                    ${generaldoctorpatient.getEmail()}
+                                </td>
+                            </tr>
+                        </table>                     
+                        <h3><button class="w3-bar-item w3-button w3-blue w3-round-large" onclick="openDashGeneralDoctor('screamNewGeneralDoctor')">Change general doctor</button></h3>
+                        <div id="screamNewGeneralDoctor" class="w3-container dash" style="display:none">
+                            
+                            <table class="w3-table w3-bordered">
+                                <c:choose>
+                                    <c:when test="${empty AllGeneralDoctor}">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                You can't change general doctor
+                                            </div>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <input class="w3-bordered" type="text" id="myInput" onkeyup="search()" placeholder="Search for names..">
+                                        <table class="w3-table w3-bordered" id="myTable">
+                                                <tr>
+                                                     <th>Name</th>
+                                                     <th>Surname</th>
+                                                     <th>Age</th>
+                                                     <th>Studio address</th>
+                                                </tr>
+                                            <c:forEach var="doctor" items="${AllGeneralDoctor}">
+                                                <tr>
+                                                    <td>${doctor.getName()}</td>
+                                                    <td>${doctor.getSurname()}</td>
+                                                    <td>${doctor.getAge()}</td>
+                                                    <td>${doctor.getAddress()}</td>
+                                                    <td>
+                                                        <a href="changeGeneralDoctor.handler?id=${doctor.getCf()}&ssd=${user.getCf()}">
+                                                            <button class="w3-button w3-round-large w3-blue">Change</button>
+                                                        </a>
+                                                    </td>
+                                                </tr>          
+                                            </c:forEach>
+                                        </table>
+                                    </c:otherwise>
+                                </c:choose>
+                            </table>
+                        </div>
+                        <script>
+                            function openDashGeneralDoctor(dashName) {
+                                document.getElementById(dashName).style.display = "block";  
+                            }
+                            
+</script>
+                        </script>    
+                    </div>
+            </div>
+            
+            <div id="screamUsers" class="w3-container dash" style="display:none">
+                <h3>Personal information</h3>
+                    <div>
+                        <table class="w3-table w3-bordered">
+                            <tr>
+                                <td>
+                                    Name : 
+                                </td>
+                                <td>
+                                    ${user.getName()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Surname :
+                                </td>
+                                <td>
+                                    ${user.getSurname()}
+                                </td>
+                            </tr>      
+                            <tr>
+                                <td>
+                                    Age :
+                                </td>
+                                <td>
+                                    ${user.getAge()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Birthdate :
+                                </td>
+                                <td>
+                                    ${user.getBirthdate()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Birthplace :
+                                </td>
+                                <td>
+                                    ${user.getBirthplace()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Address :
+                                </td>
+                                <td>
+                                    ${user.getAddress()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Gender :
+                                </td>
+                                <td>
+                                    ${user.getGender()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Codice fiscale :
+                                </td>
+                                <td>
+                                    ${user.getCf()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Email :
+                                </td>
+                                <td>
+                                    ${user.getEmail()}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+            </div>
+            
         </div>
         <br>
     <script>
@@ -331,6 +574,96 @@
         function w3_close() {
             document.getElementById("mySidebar").style.display = "none";
             document.getElementById("myOverlay").style.display = "none";
+        }
+        function search() {
+            // Declare variables 
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+              td = tr[i].getElementsByTagName("td")[0];
+              if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                  tr[i].style.display = "";
+                } else {
+                  tr[i].style.display = "none";
+                }
+              } 
+            }
+        }
+        function sortTable(myTable) {
+          var table, rows, switching, i, x, y, shouldSwitch, count;
+          count = 0;
+          table = document.getElementById(myTable);
+          switching = true;
+          /*Make a loop that will continue until
+          no switching has been done:*/
+          while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /*Loop through all table rows (except the
+            first, which contains table headers):*/
+            for (i = 1; i < (rows.length - 1); i++) {
+              //start by saying there should be no switching:
+              shouldSwitch = false;
+              /*Get the two elements you want to compare,
+              one from current row and one from the next:*/
+              x = rows[i].getElementsByTagName("TD")[1];
+              y = rows[i + 1].getElementsByTagName("TD")[1];
+              //check if the two rows should switch place:
+              if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                //if so, mark as a switch and break the loop:
+                count++;
+                shouldSwitch = true;
+                break;
+              }
+            }
+            if (shouldSwitch) {
+              /*If a switch has been marked, make the switch
+              and mark that a switch has been done:*/
+              rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+              switching = true;
+            }
+          }
+          if(count == 0){
+            switching = true;
+            /*Make a loop that will continue until
+            no switching has been done:*/
+            while (switching) {
+              //start by saying: no switching is done:
+              switching = false;
+              rows = table.rows;
+              /*Loop through all table rows (except the
+              first, which contains table headers):*/
+              for (i = 1; i < (rows.length - 1); i++) {
+                //start by saying there should be no switching:
+                shouldSwitch = false;
+                /*Get the two elements you want to compare,
+                one from current row and one from the next:*/
+                x = rows[i].getElementsByTagName("TD")[1];
+                y = rows[i + 1].getElementsByTagName("TD")[1];
+                //check if the two rows should switch place:
+                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                  //if so, mark as a switch and break the loop:
+                  //count++;
+                  shouldSwitch = true;
+                  break;
+                }
+              }
+              if (shouldSwitch) {
+                /*If a switch has been marked, make the switch
+                and mark that a switch has been done:*/
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+              }
+            }
+          }
         }
     </script>    
     

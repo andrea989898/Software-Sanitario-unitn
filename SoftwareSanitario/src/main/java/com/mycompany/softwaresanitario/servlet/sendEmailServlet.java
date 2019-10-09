@@ -109,7 +109,7 @@ public class sendEmailServlet extends HttpServlet {
             User user = userDao.getByEmail(to);
            
             if (user == null) {
-                response.sendRedirect(response.encodeRedirectURL(contextPath +"utenteInesistente.html"));
+                response.sendRedirect(response.encodeRedirectURL(contextPath +"index.html"));
                 return;
             } 
         } catch (DAOException ex) {

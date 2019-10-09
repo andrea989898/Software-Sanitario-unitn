@@ -17,5 +17,5 @@ public interface PatientDAO extends DAO<Patient, String>{
  
     public Patient getByCode(String SSD) throws DAOException;
     
-    
+    public boolean setNewDoctor(String ssdd, String ssd) throws DAOException;
 }

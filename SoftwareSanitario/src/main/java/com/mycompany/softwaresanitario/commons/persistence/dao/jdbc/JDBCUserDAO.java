@@ -130,7 +130,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
     }
     
     public User updatePassword(String email, String password) throws DAOException{
-         User user = new User();
+        User user = new User();
    
         try (PreparedStatement stm = CON.prepareStatement("UPDATE public.users\n" +
                                                           "   SET password=?\n" +
@@ -154,6 +154,51 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
         }
         
     }
+    
+    @Override
+    public User getByCode(String ssd) throws DAOException{
+        User user = new User();
+   
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM users WHERE code = ?")) {
+            stm.setString(1, ssd);
+            //System.out.println(code);
+            
+            try (ResultSet rs = stm.executeQuery()) {
+                
+                int count = 0;
+                while (rs.next()) {
+                    count++;
+                    if (count > 1) {
+                        throw new DAOException("Unique constraint violated! There are more than one user with the same email! WHY???");
+                    }
+                    
+                    user.setCf(rs.getString("code"));
+                    user.setEmail(rs.getString("email"));
+                    user.setPassword(rs.getString("password"));
+                    user.setName(rs.getString("name"));
+                    user.setSurname(rs.getString("surname"));
+                    user.setAge(rs.getInt("age"));
+                    user.setBirthdate(rs.getDate("birthdate"));
+                    user.setBirthplace(rs.getString("birthplace"));
+                    user.setGender(rs.getString("gender"));
+                    user.setAddress(rs.getString("address"));
+                    
+                    System.out.println(user.getAvatarPath());
+                    
+                    return user;
+                }
+
+                return null;
+            }
+            
+            
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to insert the user", ex);
+        }
+        
+    }
+
+    
 
 
 }
