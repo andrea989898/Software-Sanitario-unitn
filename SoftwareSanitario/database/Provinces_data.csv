@@ -7,6 +7,7 @@
 5;Asti;1
 64;Avellino;15
 72;Bari;16
+104;Barletta-Andria-Trani;16
 25;Belluno;5
 62;Benevento;15
 16;Bergamo;3
@@ -18,6 +19,7 @@
 92;Cagliari;20
 85;Caltanissetta;19
 70;Campobasso;14
+105;Carbonia-Iglesias;20
 61;Caserta;15
 87;Catania;19
 79;Catanzaro;18
@@ -28,6 +30,7 @@
 101;Crotone;18
 4;Cuneo;1
 86;Enna;19
+106;Fermo;11
 38;Ferrara;8
 48;Firenze;9
 71;Foggia;16
@@ -50,12 +53,16 @@
 20;Mantova;3
 45;Massa-Carrara;9
 77;Matera;17
+107;Medio Campidano;20
 83;Messina;19
 15;Milano;3
 36;Modena;8
+108;Monza e Brianza;3
 63;Napoli;15
 3;Novara;1
 91;Nuoro;20
+109;Ogliastra;20
+110;Olbia-Tempio;20
 95;Oristano;20
 28;Padova;5
 82;Palermo;19
