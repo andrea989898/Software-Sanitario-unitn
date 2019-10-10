@@ -50,7 +50,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     user.setSurname(rs.getString("surname"));
                     user.setAge(rs.getInt("age"));
                     user.setBirthdate(rs.getDate("birthdate"));
-                    user.setBirthplace(rs.getString("birthplace"));
+                   // user.setBirthplace(rs.getString("birthplace"));
                     user.setGender(rs.getString("gender"));
                     user.setAddress(rs.getString("address"));
                     user.setAvatarPath(rs.getString("data"));
@@ -95,7 +95,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     user.setSurname(rs.getString("surname"));
                     user.setAge(rs.getInt("age"));
                     user.setBirthdate(rs.getDate("birthdate"));
-                    user.setBirthplace(rs.getString("birthplace"));
+                    //user.setBirthplace(rs.getString("birthplace"));
                     user.setGender(rs.getString("gender"));
                     user.setAddress(rs.getString("address"));
                     user.setAvatarPath(rs.getString("data"));

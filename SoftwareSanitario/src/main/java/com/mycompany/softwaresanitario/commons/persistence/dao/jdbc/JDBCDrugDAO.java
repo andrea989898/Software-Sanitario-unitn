@@ -52,7 +52,6 @@ public class JDBCDrugDAO extends JDBCDAO<Drug, String> implements DrugDAO{
                 while (rst.next()) {
                     Drug drug = new Drug();
                     drug.setCode(rst.getInt("code"));
-                    drug.setIsforprescription(rst.getBoolean("isforprescription"));
                     drug.setName(rst.getString("name"));
                     drugs.add(drug); 
                 }

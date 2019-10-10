@@ -93,7 +93,7 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                 while (rst.next()) {
                     Exam exam = new Exam();
                     exam.setCode(rst.getInt("code"));
-                    exam.setIDPrescription(rst.getInt("IDPrescription"));
+                    //exam.setIDPrescription(rst.getInt("IDPrescription"));
                     exam.setIDDoctor(rst.getString("IDDoctor"));
                     exam.setExaminationDate(rst.getDate("ExaminationDate"));
                     exam.setIDRecipe(rst.getInt("IDRecipe"));
