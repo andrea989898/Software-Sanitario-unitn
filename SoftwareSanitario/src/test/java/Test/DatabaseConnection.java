@@ -16,7 +16,7 @@ public class DatabaseConnection{
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
 
-    private final String password = "chiaravise";
+    private final String password = "61223180";
 
  
     /**
@@ -56,12 +56,12 @@ public class DatabaseConnection{
             catch(SQLException e){
                 System.out.println(e.getMessage());
             }
-            /*try{
+            try{
                 copy(conn);                
                 //fillImages(conn);
             }catch(SQLException e){
                 System.out.println(e.getMessage());
-            }*/
+            }
             
             
     }
@@ -81,7 +81,7 @@ public class DatabaseConnection{
             
             String myCities = "CREATE TABLE Cities(\n"+
             "Code INT PRIMARY KEY NOT NULL, \n" + 
-            "Name CHAR(30) NOT NULL, \n" +
+            "Name CHAR(100) NOT NULL, \n" +
             "IDProvince INT NOT NULL,\n" +
             "FOREIGN KEY(IDProvince) references Provinces(Code));";
             
@@ -173,7 +173,7 @@ public class DatabaseConnection{
             "FOREIGN KEY(IDExam) REFERENCES Exams(Code));";     
 
             String myRecipe = "CREATE TABLE Recipes( \n"+
-            "Code INT PRIMARY KEY NOT NULL;\n";          
+            "Code INT PRIMARY KEY NOT NULL);";          
             
             String myRecipeDrug =  "CREATE TABLE DrugsRecipes( \n"+
             "IDRecipe INT NOT NULL,\n"+
@@ -190,7 +190,7 @@ public class DatabaseConnection{
             "ExaminationDate DATE,\n"+
             "IDPatient CHAR(16) NOT NULL, \n" +
             "IsRecall BOOLEAN, \n" +
-            "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD)," +
+            "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD), \n" +
             "FOREIGN KEY (IDPatient) REFERENCES Patients(ssd));";
             
             
@@ -211,13 +211,11 @@ public class DatabaseConnection{
             statement.executeUpdate(mySpecialist); 
             statement.executeUpdate(myExamination);
             statement.executeUpdate(myExam);
-            statement.executeUpdate(myPrescription);
             statement.executeUpdate(myDrug); 
             statement.executeUpdate(myRecipe);
             statement.executeUpdate(myRecipeDrug);
             statement.executeUpdate(myTicket); 
-            
-            
+            statement.executeUpdate(myPrescription);
             
             statement.executeUpdate(mySSR);
             statement.close();
@@ -302,7 +300,7 @@ public class DatabaseConnection{
         
         String copy_regions = "COPY PUBLIC.REGIONS FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\Regions_data.csv' DELIMITER ';' CSV;";
         String copy_provinces = "COPY PUBLIC.PROVINCES FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\Provinces_data.csv' DELIMITER ';' CSV;";
-        String copy_cities = "COPY PUBLIC.CITIES FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\Cities_data.csv' DELIMITER ';' CSV;";
+        String copy_cities = "COPY PUBLIC.CITIES FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\Cities_data.csv' DELIMITER ';' CSV ENCODING 'windows-1251';";
         String copy_users = "COPY PUBLIC.USERS FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\users.csv' DELIMITER ';' CSV;";
         String copy_allDoctors = " COPY PUBLIC.alldoctors FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\allDoctors_data.csv' DELIMITER ';' CSV;";
         String copy_generalDoctors = "COPY PUBLIC.generaldoctors FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\generalDoctors_data.csv' DELIMITER ';' CSV;";
@@ -313,7 +311,7 @@ public class DatabaseConnection{
         String copy_drugs = "COPY PUBLIC.drugs FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\drugs_data.csv' DELIMITER ';' CSV;";
         String copy_prescriptions = "COPY PUBLIC.prescriptions FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\prescriptions_data.csv' DELIMITER ';' CSV;";
         String copy_recipes = "COPY PUBLIC.recipes FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\recipes_data.csv' DELIMITER ';' CSV;";
-        String copy_drugrecipes = "COPY PUBLIC.DrugRecipes FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\recipeDrugs_data.csv' DELIMITER ';' CSV;";
+        String copy_drugrecipes = "COPY PUBLIC.DrugsRecipes FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\recipeDrugs_data.csv' DELIMITER ';' CSV;";
         String copy_exams = "COPY PUBLIC.exams FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\exams_data.csv' DELIMITER ';' CSV;";
         String copy_images = "COPY PUBLIC.images FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\images_data.csv' DELIMITER ';' CSV;";
         
@@ -325,12 +323,12 @@ public class DatabaseConnection{
         statement.executeUpdate(copy_generalDoctors);
         statement.executeUpdate(copy_specialists);
         statement.executeUpdate(copy_patients);
-        statement.executeUpdate(copy_prescriptions);
         statement.executeUpdate(copy_drugs);
-        statement.executeUpdate(copy_recipes);
         statement.executeUpdate(copy_examinations);
-        statement.executeUpdate(copy_drugrecipes);
         statement.executeUpdate(copy_exams);
+        statement.executeUpdate(copy_recipes);
+        statement.executeUpdate(copy_prescriptions);
+        statement.executeUpdate(copy_drugrecipes);
         statement.executeUpdate(copy_tickets);
         statement.executeUpdate(copy_images);
         
