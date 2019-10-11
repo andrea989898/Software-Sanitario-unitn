@@ -66,7 +66,6 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     examination.setIsDone(rs.getBoolean("isdone"));
                     examination.setTime(rs.getString("time"));
                     examination.setIDPatient(rs.getString("IDPatient"));
-                    examination.setIDPrescription(rs.getInt("IDPrescription"));
                     examination.setIDRecipe(rs.getInt("IDRecipe"));
                    
                     return examination;

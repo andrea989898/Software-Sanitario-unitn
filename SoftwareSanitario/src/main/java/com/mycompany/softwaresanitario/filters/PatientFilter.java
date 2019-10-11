@@ -5,11 +5,13 @@
  */
 package com.mycompany.softwaresanitario.filters;
 
+import com.mycompany.softwaresanitario.commons.persistence.dao.CityDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.PatientDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
+import com.mycompany.softwaresanitario.commons.persistence.entities.City;
 import com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor;
 import com.mycompany.softwaresanitario.commons.persistence.entities.Patient;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
@@ -70,6 +72,14 @@ public class PatientFilter implements Filter {
             throw new RuntimeException(new ServletException("Impossible to get the dao factory for shopping list storage system", ex));
         }
         
+        CityDAO cityDao = null;
+        try {
+            cityDao = daoFactory.getDAO(CityDAO.class);
+            request.setAttribute("cityDao", cityDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for shopping list storage system", ex));
+        }
+        
         String contextPath = request.getServletContext().getContextPath();
         if (contextPath.endsWith("/")) {
             contextPath = contextPath.substring(0, contextPath.length() - 1);
@@ -94,8 +104,13 @@ public class PatientFilter implements Filter {
             Patient patient = patientDao.getByCode(user.getCf());
             if(patient != null){
                 User generaldoctorpatient = userDao.getByCode(patient.getGeneralDoctorCf());
+                System.out.println(user.getBirth_city_id() + " " + user.getCity_id());
+                City birth_city_Patient = cityDao.getByCode(user.getBirth_city_id());
+                City city_Patient = cityDao.getByCode(user.getCity_id());
                 request.setAttribute("patient", patient);
                 request.setAttribute("generaldoctorpatient", generaldoctorpatient);
+                request.setAttribute("birth_city_Patient", birth_city_Patient);
+                request.setAttribute("city_Patient", city_Patient);
                 String avatarPath = "../images/avatar/" + user.getAvatarPath();
                 request.setAttribute("avatarPath", avatarPath);
             }

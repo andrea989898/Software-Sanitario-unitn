@@ -2,7 +2,7 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <context-param>
         <param-name>dburl</param-name>
-        <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=chiaravise</param-value>
+        <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=61223180</param-value>
     </context-param>
     <context-param>
         <description>The folder where are stored the exported pdfs</description>
@@ -117,6 +117,10 @@
         <jsp-file>/cambioPassword.jsp</jsp-file>
     </servlet>
     <servlet>
+        <servlet-name>IndexPage</servlet-name>
+        <jsp-file>/index.jsp</jsp-file>
+    </servlet>
+    <servlet>
         <servlet-name>HomePage</servlet-name>
         <jsp-file>/homePage.jsp</jsp-file>
     </servlet>
@@ -159,6 +163,10 @@
     <servlet-mapping>
         <servlet-name>LogoutServlet</servlet-name>
         <url-pattern>/restricted/logout.handler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>IndexPage</servlet-name>
+        <url-pattern>/index.html</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>HomePage</servlet-name>

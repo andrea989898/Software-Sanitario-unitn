@@ -1,3 +1,11 @@
+<%-- 
+    Document   : index
+    Created on : 10 ott 2019, 23:39:52
+    Author     : franc
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <!DOCTYPE html>
 <html>
     <head>

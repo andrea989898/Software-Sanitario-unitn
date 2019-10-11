@@ -11,29 +11,13 @@ package com.mycompany.softwaresanitario.commons.persistence.entities;
  */
 public class Recipe {
     private int code;
-    private int idDrug;
     private String idPatient;
-    private String drugName;
     
     public int getCode(){
         return code;
     }
     public void setCode(int c){
         this.code=c;
-    }
-    
-    public String getDrugName(){
-        return drugName;
-    }
-    public void setDrugName(String d){
-        this.drugName=d;
-    }
-    
-    public int getIdDrug(){
-        return idDrug;
-    }
-    public void setIdDrug(int d){
-        this.idDrug=d;
     }
     
     public String getIdPatient(){

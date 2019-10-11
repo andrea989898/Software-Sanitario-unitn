@@ -60,8 +60,6 @@ public class JDBCRecipeDAO extends JDBCDAO<Recipe, String> implements RecipeDAO{
                 while (rst.next()) {
                     Recipe recipe = new Recipe();
                     recipe.setCode(rst.getInt("code"));
-                    recipe.setDrugName(rst.getString("name"));
-                    recipe.setIdDrug(rst.getInt("iddrug"));
                     recipe.setIdPatient(rst.getString("ssd"));
                     recipes.add(recipe); 
                     //System.out.println(recipe.code + recipe.drugName + recipe.idDrug +" "+ recipe.idPatient);

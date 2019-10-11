@@ -16,14 +16,31 @@ public class User {
     private String surname;
     private int age;
     private Date birthdate;
-    private String birthplace;
+    private int birth_city_id;
     private String address;
+    private int city_id;
     private String gender;
     private String cf;
     private String email;
     private String password;
     private String avatarPath;
 
+    public void setBirth_city_id(int birth_city_id) {
+        this.birth_city_id = birth_city_id;
+    }
+
+    public void setCity_id(int city_id) {
+        this.city_id = city_id;
+    }
+
+    public int getBirth_city_id() {
+        return birth_city_id;
+    }
+
+    public int getCity_id() {
+        return city_id;
+    }
+    
     public String getEmail() {
         return email;
     }
@@ -56,10 +73,6 @@ public class User {
         return birthdate;
     }
 
-    public String getBirthplace() {
-        return birthplace;
-    }
-
     public String getCf() {
         return cf;
     }
@@ -86,10 +99,6 @@ public class User {
 
     public void setBirthdate(Date birthdate) {
         this.birthdate = birthdate;
-    }
-
-    public void setBirthplace(String birthplace) {
-        this.birthplace = birthplace;
     }
 
     public void setCf(String cf) {

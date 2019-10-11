@@ -57,10 +57,8 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     }
                     
                     exam.setCode(rs.getInt("code"));
-                    exam.setIDPrescription(rs.getInt("IDPrescription"));
                     exam.setIDDoctor(rs.getString("IDDoctor"));
                     exam.setExaminationDate(rs.getDate("ExaminationDate"));
-                    exam.setIDRecipe(rs.getInt("IDRecipe"));
                     exam.setIsDone(rs.getBoolean("IsDone"));
                     exam.setResult(rs.getString("Result"));
                     exam.setIDPatient(rs.getString("IDPatient"));
@@ -96,7 +94,6 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     //exam.setIDPrescription(rst.getInt("IDPrescription"));
                     exam.setIDDoctor(rst.getString("IDDoctor"));
                     exam.setExaminationDate(rst.getDate("ExaminationDate"));
-                    exam.setIDRecipe(rst.getInt("IDRecipe"));
                     exam.setIsDone(rst.getBoolean("IsDone"));
                     exam.setIDPatient(rst.getString("IDPatient"));
                     exam.setIsRecall(rst.getBoolean("IsRecall"));

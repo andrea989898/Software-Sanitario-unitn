@@ -51,6 +51,8 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     user.setAge(rs.getInt("age"));
                     user.setBirthdate(rs.getDate("birthdate"));
                    // user.setBirthplace(rs.getString("birthplace"));
+                    user.setBirth_city_id(rs.getInt("birth_city_id"));
+                    user.setCity_id(rs.getInt("city_id"));
                     user.setGender(rs.getString("gender"));
                     user.setAddress(rs.getString("address"));
                     user.setAvatarPath(rs.getString("data"));
@@ -95,7 +97,8 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     user.setSurname(rs.getString("surname"));
                     user.setAge(rs.getInt("age"));
                     user.setBirthdate(rs.getDate("birthdate"));
-                    //user.setBirthplace(rs.getString("birthplace"));
+                    user.setBirth_city_id(rs.getInt("birth_city_id"));
+                    user.setCity_id(rs.getInt("city_id"));
                     user.setGender(rs.getString("gender"));
                     user.setAddress(rs.getString("address"));
                     user.setAvatarPath(rs.getString("data"));
@@ -159,7 +162,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
     public User getByCode(String ssd) throws DAOException{
         User user = new User();
    
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM users WHERE code = ?")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM users u WHERE code = ?")) {
             stm.setString(1, ssd);
             //System.out.println(code);
             
@@ -179,7 +182,8 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     user.setSurname(rs.getString("surname"));
                     user.setAge(rs.getInt("age"));
                     user.setBirthdate(rs.getDate("birthdate"));
-                    user.setBirthplace(rs.getString("birthplace"));
+                    user.setBirth_city_id(rs.getInt("birth_city_id"));
+                    user.setCity_id(rs.getInt("city_id"));
                     user.setGender(rs.getString("gender"));
                     user.setAddress(rs.getString("address"));
                     

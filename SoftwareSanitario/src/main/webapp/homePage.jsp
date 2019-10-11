@@ -18,6 +18,8 @@
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Specialist"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.ExamDAO"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Exam"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.CityDAO"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.City"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -384,14 +386,6 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Birthplace :
-                                </td>
-                                <td>
-                                    ${generaldoctorpatient.getBirthplace()}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
                                     Address :
                                 </td>
                                 <td>
@@ -466,8 +460,6 @@
                             function openDashGeneralDoctor(dashName) {
                                 document.getElementById(dashName).style.display = "block";  
                             }
-                            
-</script>
                         </script>    
                     </div>
             </div>
@@ -513,7 +505,7 @@
                                     Birthplace :
                                 </td>
                                 <td>
-                                    ${user.getBirthplace()}
+                                    ${birth_city_Patient.getName()}
                                 </td>
                             </tr>
                             <tr>
@@ -522,6 +514,14 @@
                                 </td>
                                 <td>
                                     ${user.getAddress()}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    City :
+                                </td>
+                                <td>
+                                    ${city_Patient.getName()}
                                 </td>
                             </tr>
                             <tr>
