@@ -8,6 +8,7 @@ package com.mycompany.softwaresanitario.commons.persistence.dao.jdbc;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import com.mycompany.softwaresanitario.crypt.CryptPassword;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -72,15 +73,15 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
     
     
     
+    @Override
     public User getByEmailAndPassword(String email, String password) throws DAOException {
         User user = new User();
         if ((email == null) || (password == null)) {
             throw new DAOException("Email and password are mandatory fields", new NullPointerException("email or password are null"));
         }
 
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users u, Images i WHERE u.email = ? AND u.password = ? AND i.idpatient=u.code")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users u, Images i WHERE u.email = ? AND i.idpatient=u.code")) {
             stm.setString(1, email);
-            stm.setString(2, password);
             try (ResultSet rs = stm.executeQuery()) {
                 
                 int count = 0;
@@ -92,7 +93,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     
                     user.setCf(rs.getString("code"));
                     user.setEmail(rs.getString("email"));
-                    user.setPassword(rs.getString("password"));
+                    
                     user.setName(rs.getString("name"));
                     user.setSurname(rs.getString("surname"));
                     user.setAge(rs.getInt("age"));
@@ -104,8 +105,14 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     user.setAvatarPath(rs.getString("data"));
                     
                     System.out.println(user.getAvatarPath());
+                    System.out.println(CryptPassword.validate(password, rs.getString("password")));
                     
-                    return user;
+                    
+                    if(CryptPassword.validate(password, rs.getString("password"))) {
+                        user.setPassword(rs.getString("password"));
+                        return user;
+                    }
+                    else return null;
                 }
 
                 return null;

@@ -7,9 +7,9 @@ package com.mycompany.softwaresanitario.servlet;
 
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +38,15 @@ public class LogoutServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null) {
             User user = (User) session.getAttribute("user");
+            Cookie cEmail = new Cookie("cookemail", null);
+            Cookie cPassword = new Cookie("cookpass", null);
+            Cookie cRemember = new Cookie("cookrem", null);
+            cEmail.setMaxAge(0);
+            cPassword.setMaxAge(0);
+            cRemember.setMaxAge(0);
+            response.addCookie(cEmail);
+            response.addCookie(cPassword);
+            response.addCookie(cRemember);
             if (user != null) {
                 session.setAttribute("user", null);
                 session.invalidate();

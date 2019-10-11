@@ -1,6 +1,7 @@
 package Test;
 
 import static Test.InsertQuerys.insertImage;
+import com.mycompany.softwaresanitario.crypt.CryptPassword;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class DatabaseConnection{
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
 
-    private final String password = "chiaravise";
+    private final String password = "61223180";
 
  
     /**
@@ -62,6 +63,11 @@ public class DatabaseConnection{
             }catch(SQLException e){
                 System.out.println(e.getMessage());
             }
+            try{
+                crypt(conn);
+            }catch(SQLException e){
+                System.out.println(e.getMessage());
+            }
             
             
     }
@@ -102,7 +108,7 @@ public class DatabaseConnection{
             "City_ID INT NOT NULL, \n" +
             "Code CHAR(16) NOT NULL PRIMARY KEY, \n" +
             "Email CHAR(40) NOT NULL, \n" +
-            "Password CHAR(80) NOT NULL, \n" +
+            "Password CHAR(100) NOT NULL, \n" +
             "FOREIGN KEY(Birth_City_ID) references Cities(Code), \n" +
             "FOREIGN KEY(City_ID) references Cities(Code));";
 
@@ -333,11 +339,32 @@ public class DatabaseConnection{
         statement.executeUpdate(copy_images);
         
        
-        
-         
         statement.close();
+    }
+    
+    static public void crypt(Connection con) throws SQLException{
+        ArrayList<String> emails = new ArrayList<String>();
+        ArrayList<String> cryptatedPasswords = new ArrayList<String>();
         
-        
+        PreparedStatement stm = con.prepareStatement("SELECT * FROM Users ");
+        ResultSet rs = stm.executeQuery();
+               
+        while (rs.next()) {
+
+            emails.add(rs.getString("email"));
+            //System.out.println(rs.getString("password").substring(0, 8));
+            cryptatedPasswords.add(CryptPassword.hashPassword(rs.getString("password").substring(0, 8)));
+        }
+
+                
+           
+        stm = con.prepareStatement("UPDATE Users SET password = ? WHERE email = ?");
+        for(int i=0;i<emails.size();i++){
+            stm.setString(1, cryptatedPasswords.get(i));
+            stm.setString(2, emails.get(i));
+
+            stm.executeUpdate();
+        }
         
     }
 }
