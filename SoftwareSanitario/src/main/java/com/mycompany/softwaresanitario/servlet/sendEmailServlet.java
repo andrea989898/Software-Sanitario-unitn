@@ -128,6 +128,7 @@ public class sendEmailServlet extends HttpServlet {
         
         String subject= new String("Recovery password\n");
         String msg= new String("New Password for the user: " + password);  
+        //System.out.print(password);
           
         Mailer.send(to, subject, msg);  
         try {

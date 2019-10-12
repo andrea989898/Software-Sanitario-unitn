@@ -21,6 +21,7 @@ public class CryptPassword {
     
      public static String hashPassword(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt(COST));
+        
     }
      
      

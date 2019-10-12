@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.mindrot.jbcrypt.BCrypt;
 /**
  *
  * @author franc
@@ -104,11 +105,12 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     user.setAddress(rs.getString("address"));
                     user.setAvatarPath(rs.getString("data"));
                     
-                    System.out.println(user.getAvatarPath());
-                    System.out.println(CryptPassword.validate(password, rs.getString("password")));
+                    //System.out.println(user.getAvatarPath());
+                    //System.out.print(rs.getString("password"));
+                    //System.out.println(CryptPassword.validate(password, "$2a$12$CI8PpQb0f0j6wwc2gB6KCuF15mEqXnaG8UXvV5VS782cq557SuO/i"));
+                    String psw = rs.getString("password");
                     
-                    
-                    if(CryptPassword.validate(password, rs.getString("password"))) {
+                    if(CryptPassword.validate(password, psw.substring(0,60))) {
                         user.setPassword(rs.getString("password"));
                         return user;
                     }
@@ -145,7 +147,9 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
         try (PreparedStatement stm = CON.prepareStatement("UPDATE public.users\n" +
                                                           "   SET password=?\n" +
                                                           " WHERE email = ?;")) {
-            stm.setString(1, password);
+            String psw = CryptPassword.hashPassword(password);
+            //System.out.println(psw);
+            stm.setString(1, psw);
             stm.setString(2, email);
             //System.out.println(code);
             
