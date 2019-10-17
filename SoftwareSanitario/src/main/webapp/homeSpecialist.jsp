@@ -33,9 +33,6 @@
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
         <style>
             body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
             #myInput {
@@ -65,9 +62,9 @@
             <div class="w3-bar-block">
                 <a href="homePage.html" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard patient</a> 
                 <c:choose>
-                    <c:when test="${!empty specialist}">
-                        <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard specialist</a> 
-                    </c:when>   
+                    <c:when test="${!empty generalDoctor}">
+                        <a href="homeGeneralDoctor.html" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard doctor</a> 
+                    </c:when>
                 </c:choose>
             </div>
             <div class="w3-container">
@@ -91,114 +88,7 @@
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamPatients')">Patients</button></h2>
             </div>
             <div id="screamPatients" class="w3-container dash">
-                <br>
-                <input class="w3-bordered" type="text" id="myInput" onkeyup="search()" placeholder="Search for names..">
-                <table class="w3-table w3-bordered" id="myTable">
-                        <tr>
-                             <th>Name</th>
-                             <th>Surname</th>
-                             <th>Age</th>
-                        </tr>
-                    <jsp:scriptlet>
-                        int i=0; 
-                    </jsp:scriptlet>       
-                    <c:forEach var="patient" items="${patients}">
-                        <tr>
-                            <td>${patient.getName()}</td>
-                            <td>${patient.getSurname()}</td> 
-                            <td>${patient.getAge()}</td>
-                            <td>
-                                <div class="container">
-                                    <h2><button class="btn btn-info" data-toggle="collapse" data-target="#collapse<%=(i)%>" aria-expanded="true" aria-controls="collapse${i}"> -> </button></h2>
-                                    <div id="collapse<%=(i)%>" class="collapse" aria-labelledby="heading<%=(i++)%>">
-                                        <table class="w3-table w3-bordered" id="notmyTable">
-                                            <tr>
-                                                <td>
-                                                    Name : 
-                                                </td>
-                                                <td>
-                                                    ${patient.getName()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Surname :
-                                                </td>
-                                                <td>
-                                                    ${patient.getSurname()}
-                                                </td>
-                                            </tr>      
-                                            <tr>
-                                                <td>
-                                                    Age :
-                                                </td>
-                                                <td>
-                                                    ${patient.getAge()}
-                                                </td
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Birthdate :
-                                                </td>
-                                                <td>
-                                                    ${patient.getBirthdate()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Birthplace :
-                                                </td>
-                                                <td>
-                                                    ${patient.getBirth_city()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Address :
-                                                </td>
-                                                <td>
-                                                    ${patient.getAddress()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    City :
-                                                </td>
-                                                <td>
-                                                    ${patient.getCity()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Gender :
-                                                </td>
-                                                <td>
-                                                    ${patient.getGender()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Codice fiscale :
-                                                </td>
-                                                <td>
-                                                    ${patient.getCf()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Email :
-                                                </td>
-                                                <td>
-                                                    ${patient.getEmail()}
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>   
-                                </div>    
-                            </td>
-                        </tr>          
-                    </c:forEach>
-                </table>
+                
             </div>       
             
         </div>
@@ -233,7 +123,6 @@
             tr = table.getElementsByTagName("tr");
 
             // Loop through all table rows, and hide those who don't match the search query
-            
             for (i = 0; i < tr.length; i++) {
               td = tr[i].getElementsByTagName("td")[0];
               if (td) {

@@ -5,17 +5,20 @@
  */
 package com.mycompany.softwaresanitario.filters;
 
-import com.mycompany.softwaresanitario.commons.persistence.dao.SpecialistDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.TicketDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Specialist;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Ticket;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import com.mycompany.softwaresanitario.manipulate.ManipulateTickets;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -28,9 +31,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author PC Andrea
+ * @author franc
  */
-public class SpecialistFilter implements Filter {
+public class TicketsFilterByPatient implements Filter {
     
     private static final boolean debug = true;
 
@@ -39,16 +42,15 @@ public class SpecialistFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public SpecialistFilter() {
+    public TicketsFilterByPatient() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("SpecialistFilter:DoBeforeProcessing");
+            log("TicketsFilter:DoBeforeProcessing");
         }
 
-        
         DAOFactory daoFactory = (DAOFactory) request.getServletContext().getAttribute("daoFactory");
         if (daoFactory == null) {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system"));
@@ -61,12 +63,12 @@ public class SpecialistFilter implements Filter {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
         }
         
-        SpecialistDAO specialistDao = null;
+        TicketDAO ticketDao = null;
         try {
-            specialistDao = daoFactory.getDAO(SpecialistDAO.class);
-            request.setAttribute("Specialist", specialistDao);
+            ticketDao = daoFactory.getDAO(TicketDAO.class);
+            request.setAttribute("TicketDao", ticketDao);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for specialistDAO storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }
         
         String contextPath = request.getServletContext().getContextPath();
@@ -88,21 +90,26 @@ public class SpecialistFilter implements Filter {
             return;
         }
         
-        //System.out.println("SONO QUI");
-        try {
-            Specialist specialist = specialistDao.getByCode(user.getCf());
-            //System.out.println(specialist.getCf());
-            if(specialist != null)      request.setAttribute("specialist", specialist);
-        } catch (DAOException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get user or specialist", ex));
-        }
+        //System.out.println(request.getAttribute("patient"));
         
+        try {
+            List<Ticket> screamTickets = new ArrayList<Ticket>();
+            List<Ticket> tickets = ticketDao.getTickets(user.getCf());
+            System.out.println(tickets.size());
+            if(tickets.size()>0){ 
+                request.setAttribute("tickets", tickets);
+                screamTickets = ManipulateTickets.ScreamTicketByPaid(tickets);
+                if(screamTickets.size()>0)  request.setAttribute("screamTickets", screamTickets);
+            }
+        } catch (DAOException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get tickets", ex));
+        }
     }    
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("SpecialistFilter:DoAfterProcessing");
+            log("TicketsFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -138,7 +145,7 @@ public class SpecialistFilter implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("SpecialistFilter:doFilter()");
+            log("TicketsFilter:doFilter()");
         }
         
         doBeforeProcessing(request, response);
@@ -198,7 +205,7 @@ public class SpecialistFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("SpecialistFilter:Initializing filter");
+                log("TicketsFilter:Initializing filter");
             }
         }
     }
@@ -209,9 +216,9 @@ public class SpecialistFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("SpecialistFilter()");
+            return ("TicketsFilter()");
         }
-        StringBuffer sb = new StringBuffer("SpecialistFilter(");
+        StringBuffer sb = new StringBuffer("TicketsFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
@@ -263,6 +270,10 @@ public class SpecialistFilter implements Filter {
     
     public void log(String msg) {
         filterConfig.getServletContext().log(msg);        
+    }
+
+    private List<Ticket> ManipulateTickets(List<Ticket> tickets) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

@@ -17,6 +17,8 @@ public class User {
     private int age;
     private Date birthdate;
     private int birth_city_id;
+    private String birth_city;
+    private String city;
     private String address;
     private int city_id;
     private String gender;
@@ -24,6 +26,22 @@ public class User {
     private String email;
     private String password;
     private String avatarPath;
+
+    public void setBirth_city(String birth_city) {
+        this.birth_city = birth_city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getBirth_city() {
+        return birth_city;
+    }
+
+    public String getCity() {
+        return city;
+    }
 
     public void setBirth_city_id(int birth_city_id) {
         this.birth_city_id = birth_city_id;

@@ -5,20 +5,21 @@
  */
 package com.mycompany.softwaresanitario.filters;
 
-import com.mycompany.softwaresanitario.commons.persistence.dao.TicketDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.DrugDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Ticket;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Drug;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
-import com.mycompany.softwaresanitario.manipulate.ManipulateTickets;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -31,9 +32,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author franc
+ * @author PC Andrea
  */
-public class TicketsFilter implements Filter {
+public class DrugFilterByPatient implements Filter {
     
     private static final boolean debug = true;
 
@@ -42,15 +43,16 @@ public class TicketsFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public TicketsFilter() {
+    public DrugFilterByPatient() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
+            throws IOException, ServletException, DAOFactoryException, SQLException {
         if (debug) {
-            log("TicketsFilter:DoBeforeProcessing");
+            log("DrugFilter:DoBeforeProcessing");
         }
-
+        
+        
         DAOFactory daoFactory = (DAOFactory) request.getServletContext().getAttribute("daoFactory");
         if (daoFactory == null) {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system"));
@@ -63,10 +65,10 @@ public class TicketsFilter implements Filter {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
         }
         
-        TicketDAO ticketDao = null;
+        DrugDAO drugDao = null;
         try {
-            ticketDao = daoFactory.getDAO(TicketDAO.class);
-            request.setAttribute("TicketDao", ticketDao);
+            drugDao = daoFactory.getDAO(DrugDAO.class);
+            request.setAttribute("drugDao", drugDao);
         } catch (DAOFactoryException ex) {
             throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }
@@ -91,25 +93,20 @@ public class TicketsFilter implements Filter {
         }
         
         //System.out.println(request.getAttribute("patient"));
-        
+        ArrayList<Drug> drugs = new ArrayList();
         try {
-            List<Ticket> screamTickets = new ArrayList<Ticket>();
-            List<Ticket> tickets = ticketDao.getTickets(user.getCf());
-            System.out.println(tickets.size());
-            if(tickets.size()>0){ 
-                request.setAttribute("tickets", tickets);
-                screamTickets = ManipulateTickets.ScreamTicketByPaid(tickets);
-                if(screamTickets.size()>0)  request.setAttribute("screamTickets", screamTickets);
-            }
+            drugs = drugDao.getAllDrugs();
+            if(drugs.size() > 0)   request.setAttribute("drugs", drugs);
         } catch (DAOException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get tickets", ex));
+            throw new RuntimeException(new ServletException("Impossible to get user or generalDoctor", ex));
         }
+        
     }    
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("TicketsFilter:DoAfterProcessing");
+            log("DrugFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -145,10 +142,16 @@ public class TicketsFilter implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("TicketsFilter:doFilter()");
+            log("DrugFilter:doFilter()");
         }
         
-        doBeforeProcessing(request, response);
+        try {
+            doBeforeProcessing(request, response);
+        } catch (DAOFactoryException ex) {
+            Logger.getLogger(DrugFilterByPatient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(DrugFilterByPatient.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         Throwable problem = null;
         try {
@@ -205,7 +208,7 @@ public class TicketsFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("TicketsFilter:Initializing filter");
+                log("DrugFilter:Initializing filter");
             }
         }
     }
@@ -216,9 +219,9 @@ public class TicketsFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("TicketsFilter()");
+            return ("DrugFilter()");
         }
-        StringBuffer sb = new StringBuffer("TicketsFilter(");
+        StringBuffer sb = new StringBuffer("DrugFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
@@ -270,10 +273,6 @@ public class TicketsFilter implements Filter {
     
     public void log(String msg) {
         filterConfig.getServletContext().log(msg);        
-    }
-
-    private List<Ticket> ManipulateTickets(List<Ticket> tickets) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

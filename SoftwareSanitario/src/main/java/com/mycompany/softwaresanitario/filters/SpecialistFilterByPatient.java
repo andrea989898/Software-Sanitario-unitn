@@ -5,15 +5,12 @@
  */
 package com.mycompany.softwaresanitario.filters;
 
-import com.mycompany.softwaresanitario.commons.persistence.dao.CityDAO;
-import com.mycompany.softwaresanitario.commons.persistence.dao.PatientDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.SpecialistDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
-import com.mycompany.softwaresanitario.commons.persistence.entities.City;
-import com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Patient;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Specialist;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -31,9 +28,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author franc
+ * @author PC Andrea
  */
-public class PatientFilter implements Filter {
+public class SpecialistFilterByPatient implements Filter {
     
     private static final boolean debug = true;
 
@@ -42,13 +39,13 @@ public class PatientFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public PatientFilter() {
+    public SpecialistFilterByPatient() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("PatientFilter:DoBeforeProcessing");
+            log("SpecialistFilter:DoBeforeProcessing");
         }
 
         
@@ -64,20 +61,12 @@ public class PatientFilter implements Filter {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
         }
         
-        PatientDAO patientDao = null;
+        SpecialistDAO specialistDao = null;
         try {
-            patientDao = daoFactory.getDAO(PatientDAO.class);
-            request.setAttribute("patientDao", patientDao);
+            specialistDao = daoFactory.getDAO(SpecialistDAO.class);
+            request.setAttribute("Specialist", specialistDao);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for shopping list storage system", ex));
-        }
-        
-        CityDAO cityDao = null;
-        try {
-            cityDao = daoFactory.getDAO(CityDAO.class);
-            request.setAttribute("cityDao", cityDao);
-        } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for shopping list storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for specialistDAO storage system", ex));
         }
         
         String contextPath = request.getServletContext().getContextPath();
@@ -99,32 +88,21 @@ public class PatientFilter implements Filter {
             return;
         }
         
-        
+        //System.out.println("SONO QUI");
         try {
-            Patient patient = patientDao.getByCode(user.getCf());
-            if(patient != null){
-                User generaldoctorpatient = userDao.getByCode(patient.getGeneralDoctorCf());
-                System.out.println(user.getBirth_city_id() + " " + user.getCity_id());
-                City birth_city_Patient = cityDao.getByCode(user.getBirth_city_id());
-                City city_Patient = cityDao.getByCode(user.getCity_id());
-                request.setAttribute("patient", patient);
-                request.setAttribute("generaldoctorpatient", generaldoctorpatient);
-                request.setAttribute("birth_city_Patient", birth_city_Patient);
-                request.setAttribute("city_Patient", city_Patient);
-                String avatarPath = "../images/avatar/" + user.getAvatarPath();
-                request.setAttribute("avatarPath", avatarPath);
-            }
+            Specialist specialist = specialistDao.getByCode(user.getCf());
+            //System.out.println(specialist.getCf());
+            if(specialist != null)      request.setAttribute("specialist", specialist);
         } catch (DAOException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get user or shopping lists", ex));
+            throw new RuntimeException(new ServletException("Impossible to get user or specialist", ex));
         }
-        
         
     }    
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("PatientFilter:DoAfterProcessing");
+            log("SpecialistFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -160,7 +138,7 @@ public class PatientFilter implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("PatientFilter:doFilter()");
+            log("SpecialistFilter:doFilter()");
         }
         
         doBeforeProcessing(request, response);
@@ -220,7 +198,7 @@ public class PatientFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("PatientFilter:Initializing filter");
+                log("SpecialistFilter:Initializing filter");
             }
         }
     }
@@ -231,9 +209,9 @@ public class PatientFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("PatientFilter()");
+            return ("SpecialistFilter()");
         }
-        StringBuffer sb = new StringBuffer("PatientFilter(");
+        StringBuffer sb = new StringBuffer("SpecialistFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

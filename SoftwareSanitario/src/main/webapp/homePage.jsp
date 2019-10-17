@@ -65,7 +65,7 @@
             <div class="w3-bar-block">
                 <c:choose>
                     <c:when test="${!empty generalDoctor}">
-                        <a href="homeGeneralDoctor.jsp" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard doctor</a> 
+                        <a href="homeGeneralDoctor.html" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard doctor</a> 
                     </c:when>
                 </c:choose>
                 <c:choose>

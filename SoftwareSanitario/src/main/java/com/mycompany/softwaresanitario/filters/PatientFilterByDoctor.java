@@ -5,22 +5,20 @@
  */
 package com.mycompany.softwaresanitario.filters;
 
-import com.mycompany.softwaresanitario.commons.persistence.dao.RecipeDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.CityDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.PatientDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Recipe;
+import com.mycompany.softwaresanitario.commons.persistence.entities.City;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Patient;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -35,7 +33,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author PC Andrea
  */
-public class RecipeFilter implements Filter {
+public class PatientFilterByDoctor implements Filter {
     
     private static final boolean debug = true;
 
@@ -44,14 +42,15 @@ public class RecipeFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public RecipeFilter() {
+    public PatientFilterByDoctor() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException, DAOFactoryException {
+            throws IOException, ServletException {
         if (debug) {
-            log("RecipeFilter:DoBeforeProcessing");
+            log("PatientFilterByGd:DoBeforeProcessing");
         }
+
         DAOFactory daoFactory = (DAOFactory) request.getServletContext().getAttribute("daoFactory");
         if (daoFactory == null) {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system"));
@@ -64,12 +63,20 @@ public class RecipeFilter implements Filter {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
         }
         
-        RecipeDAO recipeDao = null;
+        PatientDAO patientDao = null;
         try {
-            recipeDao = daoFactory.getDAO(RecipeDAO.class);
-            request.setAttribute("RecipeDao", recipeDao);
+            patientDao = daoFactory.getDAO(PatientDAO.class);
+            request.setAttribute("patientDao", patientDao);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for shopping list storage system", ex));
+        }
+        
+        CityDAO cityDao = null;
+        try {
+            cityDao = daoFactory.getDAO(CityDAO.class);
+            request.setAttribute("cityDao", cityDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for shopping list storage system", ex));
         }
         
         String contextPath = request.getServletContext().getContextPath();
@@ -91,20 +98,17 @@ public class RecipeFilter implements Filter {
             return;
         }
         
-        //System.out.println(request.getAttribute("patient"));
-        List<Recipe> recipes;
-        try {
-            recipes = recipeDao.getAllBySSDPatient(user.getCf());
-            if(recipes.size() > 0)   request.setAttribute("recipes", recipes);
-        } catch (DAOException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get user or prescription", ex));
-        }
+        List<User> patients = patientDao.getAllByDoctor(user.getCf());
+        if(patients != null)
+            request.setAttribute("patients", patients);
+        
+        
     }    
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("RecipeFilter:DoAfterProcessing");
+            log("PatientFilterByGd:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -140,14 +144,10 @@ public class RecipeFilter implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("RecipeFilter:doFilter()");
+            log("PatientFilterByGd:doFilter()");
         }
         
-        try {
-            doBeforeProcessing(request, response);
-        } catch (DAOFactoryException ex) {
-            Logger.getLogger(RecipeFilter.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        doBeforeProcessing(request, response);
         
         Throwable problem = null;
         try {
@@ -204,7 +204,7 @@ public class RecipeFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("RecipeFilter:Initializing filter");
+                log("PatientFilterByGd:Initializing filter");
             }
         }
     }
@@ -215,9 +215,9 @@ public class RecipeFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("RecipeFilter()");
+            return ("PatientFilterByGd()");
         }
-        StringBuffer sb = new StringBuffer("RecipeFilter(");
+        StringBuffer sb = new StringBuffer("PatientFilterByGd(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

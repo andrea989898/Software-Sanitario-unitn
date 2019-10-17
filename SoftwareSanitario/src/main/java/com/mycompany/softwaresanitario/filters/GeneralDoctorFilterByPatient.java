@@ -5,21 +5,19 @@
  */
 package com.mycompany.softwaresanitario.filters;
 
-import com.mycompany.softwaresanitario.commons.persistence.dao.PrescriptionDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.GeneralDoctorDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Prescription;
+import com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -34,7 +32,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author PC Andrea
  */
-public class PrescriptionFilter implements Filter {
+public class GeneralDoctorFilterByPatient implements Filter {
     
     private static final boolean debug = true;
 
@@ -43,14 +41,16 @@ public class PrescriptionFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public PrescriptionFilter() {
+    public GeneralDoctorFilterByPatient() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException, DAOFactoryException, SQLException {
+            throws IOException, ServletException {
         if (debug) {
-            log("PrescriptionFilter:DoBeforeProcessing");
+            log("GeneralDoctorFilter:DoBeforeProcessing");
         }
+
+        
         DAOFactory daoFactory = (DAOFactory) request.getServletContext().getAttribute("daoFactory");
         if (daoFactory == null) {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system"));
@@ -63,10 +63,10 @@ public class PrescriptionFilter implements Filter {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
         }
         
-        PrescriptionDAO prescriptionDao = null;
+        GeneralDoctorDAO generalDoctorDao = null;
         try {
-            prescriptionDao = daoFactory.getDAO(PrescriptionDAO.class);
-            request.setAttribute("PrescriptionDao", prescriptionDao);
+            generalDoctorDao = daoFactory.getDAO(GeneralDoctorDAO.class);
+            request.setAttribute("GeneralDoctorDao", generalDoctorDao);
         } catch (DAOFactoryException ex) {
             throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }
@@ -91,19 +91,23 @@ public class PrescriptionFilter implements Filter {
         }
         
         //System.out.println(request.getAttribute("patient"));
-        ArrayList<Prescription> prescriptions = new ArrayList();
+        
         try {
-            prescriptions = prescriptionDao.getPrescriptions(user.getCf());
-            if(prescriptions.size() > 0)   request.setAttribute("prescriptions", prescriptions);
-        } catch (SQLException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get user or prescription", ex));
+            boolean isAGeneralDoctor = generalDoctorDao.isAGeneralDoctor(user.getCf());
+            GeneralDoctor generalDoctor = generalDoctorDao.getByCode(user.getCf());
+            List<User> generalDoctors = generalDoctorDao.getAllGeneralDoctors(user.getCf(), generalDoctor.getCf());
+            if(generalDoctors != null)   request.setAttribute("AllGeneralDoctor", generalDoctors);
+            if(isAGeneralDoctor)   request.setAttribute("generalDoctor", "he/she is a doctor");
+        } catch (DAOException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get user or generalDoctor", ex));
         }
+        
     }    
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("PrescriptionFilter:DoAfterProcessing");
+            log("GeneralDoctorFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -139,16 +143,10 @@ public class PrescriptionFilter implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("PrescriptionFilter:doFilter()");
+            log("GeneralDoctorFilter:doFilter()");
         }
         
-        try {
-            doBeforeProcessing(request, response);
-        } catch (DAOFactoryException ex) {
-            Logger.getLogger(PrescriptionFilter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(PrescriptionFilter.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        doBeforeProcessing(request, response);
         
         Throwable problem = null;
         try {
@@ -205,7 +203,7 @@ public class PrescriptionFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("PrescriptionFilter:Initializing filter");
+                log("GeneralDoctorFilter:Initializing filter");
             }
         }
     }
@@ -216,9 +214,9 @@ public class PrescriptionFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("PrescriptionFilter()");
+            return ("GeneralDoctorFilter()");
         }
-        StringBuffer sb = new StringBuffer("PrescriptionFilter(");
+        StringBuffer sb = new StringBuffer("GeneralDoctorFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

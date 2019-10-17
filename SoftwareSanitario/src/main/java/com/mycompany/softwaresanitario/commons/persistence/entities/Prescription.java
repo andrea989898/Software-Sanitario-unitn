@@ -11,8 +11,6 @@ package com.mycompany.softwaresanitario.commons.persistence.entities;
  */
 public class Prescription {
     private int code;
-    private String examType;
-    private String idPatient;
     
     public int getCode(){
         return code;
@@ -21,18 +19,5 @@ public class Prescription {
         this.code=c;
     }
     
-    public String getType(){
-        return examType;
-    }
-    public void setType(String t){
-        this.examType=t;
-    }
-    
-    public String getIdPatient(){
-        return idPatient;
-    }
-    public void setIdPatient(String p){
-        this.idPatient=p;
-    }
 }
 
