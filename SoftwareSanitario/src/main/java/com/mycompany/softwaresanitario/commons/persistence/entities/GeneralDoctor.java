@@ -13,9 +13,7 @@ public class GeneralDoctor {
     private String cf;
     private String studio_address;
 
-    public String getCf() {
-        return cf;
-    }
+    
 
     public String getStudio_address() {
         return studio_address;
@@ -27,6 +25,9 @@ public class GeneralDoctor {
 
     public void setCf(String cf) {
         this.cf = cf;
+    }
+    public String getCf() {
+        return cf;
     }
     
     

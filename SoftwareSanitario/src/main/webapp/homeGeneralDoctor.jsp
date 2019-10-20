@@ -89,12 +89,16 @@
         
             <div class="w3-bar w3-white">
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamPatients')">Patients</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExPrescriptions')">Prescribe an examination</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExamPrescriptions')">Prescribe an exam</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamRePrescriptions')">Prescribe a recipe</button></h2>
             </div>
             <div id="screamPatients" class="w3-container dash">
                 <br>
-                <input class="w3-bordered" type="text" id="myInput" onkeyup="search()" placeholder="Search for names..">
+                <input class="w3-bordered" type="text" id="myInput" onkeyup="search()" placeholder="Search for surnames..">
                 <table class="w3-table w3-bordered" id="myTable">
                         <tr>
+                            <th>Cf</th>
                              <th>Name</th>
                              <th>Surname</th>
                              <th>Age</th>
@@ -104,6 +108,7 @@
                     </jsp:scriptlet>       
                     <c:forEach var="patient" items="${patients}">
                         <tr>
+                            <td>${patient.getCf()}</td>
                             <td>${patient.getName()}</td>
                             <td>${patient.getSurname()}</td> 
                             <td>${patient.getAge()}</td>
@@ -178,7 +183,7 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    Codice fiscale :
+                                                    Cf :
                                                 </td>
                                                 <td>
                                                     ${patient.getCf()}
@@ -192,6 +197,9 @@
                                                     ${patient.getEmail()}
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                
+                                            </tr>
                                         </table>
                                     </div>   
                                 </div>    
@@ -200,7 +208,75 @@
                     </c:forEach>
                 </table>
             </div>       
-            
+            <div id="screamExPrescriptions" class="w3-container dash" style="display:none">
+                <form class="w3-container " method="POST" action="newExamination.handler">
+                    <br><br>
+                    <select id="patient" name="patient">
+                        <option value="0">Select patient:</option>
+                        <c:forEach var="patient" items="${patients}">
+                            <option value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
+                        </c:forEach>
+                    </select>
+                    <br><br>
+                    <select id="type" name="type">
+                        <option value="0">Select type of examinations:</option>
+                        <option value="1">Normal examination</option>
+                        <option value="2">Special examination</option>
+                    </select>
+                    <br><br>
+                    <select id="doctor" name="doctor">
+                        <option value="0">Select the doctor:</option>
+                        <c:forEach var="doctor" items="${doctors}">
+                            <option value="${doctor.getCf()}">${doctor.getName()} ${doctor.getSurname()} specialization: ${doctor.getSpecialization()}</option>
+                        </c:forEach>
+                    </select>
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" name="analysis" id="analysis" placeholder="Write what needs to be done in the visit"></textarea>
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" type="date" name="date" id="date">
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" type="time" name="time" id="time">
+                    <br><br>
+                    <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
+                    <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+                </form>
+            </div>
+            <div id="screamExamPrescriptions" class="w3-container dash">
+                <form class="w3-container " method="POST" action="newExamination.handler">
+                    <br><br>
+                    <select id="patient" name="patient">
+                        <option value="0">Select patient:</option>
+                        <c:forEach var="patient" items="${patients}">
+                            <option value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
+                        </c:forEach>
+                    </select>
+                    <br><br>
+                    <select id="type" name="type">
+                        <option value="0">Select type of examinations:</option>
+                        <option value="1">Normal examination</option>
+                        <option value="2">Special examination</option>
+                    </select>
+                    <br><br>
+                    <select id="doctor" name="doctor">
+                        <option value="0">Select the doctor:</option>
+                        <c:forEach var="doctor" items="${doctors}">
+                            <option value="${doctor.getCf()}">${doctor.getName()} ${doctor.getSurname()} specialization: ${doctor.getSpecialization()}</option>
+                        </c:forEach>
+                    </select>
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" name="analysis" id="analysis" placeholder="Write what needs to be done in the visit"></textarea>
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" type="date" name="date" id="date">
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" type="time" name="time" id="time">
+                    <br><br>
+                    <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
+                    <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+                </form>
+            </div>
+            <div id="screamRePrescriptions" class="w3-container dash">
+                
+            </div>
         </div>
         <br>
     <script>
@@ -235,7 +311,7 @@
             // Loop through all table rows, and hide those who don't match the search query
             
             for (i = 0; i < tr.length; i++) {
-              td = tr[i].getElementsByTagName("td")[0];
+              td = tr[i].getElementsByTagName("td")[2];
               if (td) {
                 txtValue = td.textContent || td.innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {

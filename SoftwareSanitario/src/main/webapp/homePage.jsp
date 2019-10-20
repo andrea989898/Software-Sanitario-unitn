@@ -402,7 +402,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Codice fiscale :
+                                    Cf :
                                 </td>
                                 <td>
                                     ${generaldoctorpatient.getCf()}

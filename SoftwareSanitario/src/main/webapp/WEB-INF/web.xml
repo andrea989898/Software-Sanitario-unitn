@@ -53,6 +53,22 @@
         <filter-name>PatientFilterByDoctor</filter-name>
         <filter-class>com.mycompany.softwaresanitario.filters.PatientFilterByDoctor</filter-class>
     </filter>
+    <filter>
+        <filter-name>DoctorFilterByDoctor</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.DoctorFilterByDoctor</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>DoctorFilterByDoctor</filter-name>
+        <servlet-name>homeSpecialistPage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>DoctorFilterByDoctor</filter-name>
+        <servlet-name>homeGeneralDoctorPage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>RecipeFilterByPatient</filter-name>
         <servlet-name>HomePage</servlet-name>
@@ -121,6 +137,12 @@
     <filter-mapping>
         <filter-name>PatientFilterByDoctor</filter-name>
         <servlet-name>homeGeneralDoctorPage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PatientFilterByDoctor</filter-name>
+        <servlet-name>homeSpecialistPage</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
