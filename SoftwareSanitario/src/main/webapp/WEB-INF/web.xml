@@ -30,8 +30,8 @@
         <filter-class>com.mycompany.softwaresanitario.filters.ExamsFilterByPatient</filter-class>
     </filter>
     <filter>
-        <filter-name>DrugFilterByPatient</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.DrugFilterByPatient</filter-class>
+        <filter-name>DrugFilterByDoctor</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.DrugFilterByDoctor</filter-class>
     </filter>
     <filter>
         <filter-name>PrescriptionFilterByPatient</filter-name>
@@ -88,8 +88,14 @@
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>DrugFilterByPatient</filter-name>
-        <servlet-name>HomePage</servlet-name>
+        <filter-name>DrugFilterByDoctor</filter-name>
+        <servlet-name>homeGeneralDoctorPage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>DrugFilterByDoctor</filter-name>
+        <servlet-name>homeSpecialistPage</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
@@ -119,6 +125,12 @@
     <filter-mapping>
         <filter-name>PatientFilterByUser</filter-name>
         <servlet-name>homeGeneralDoctorPage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PatientFilterByUser</filter-name>
+        <servlet-name>homeSpecialistPage</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
@@ -194,6 +206,10 @@
         <servlet-name>newExaminationServlet</servlet-name>
         <servlet-class>com.mycompany.softwaresanitario.servlet.newExaminationServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>newExamServlet</servlet-name>
+        <servlet-class>com.mycompany.softwaresanitario.servlet.newExamServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CambioPasswordPage</servlet-name>
         <url-pattern>/restricted/cambioPassword.html</url-pattern>
@@ -245,6 +261,10 @@
     <servlet-mapping>
         <servlet-name>newExaminationServlet</servlet-name>
         <url-pattern>/restricted/newExamination.handler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>newExamServlet</servlet-name>
+        <url-pattern>/restricted/newExam.handler</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

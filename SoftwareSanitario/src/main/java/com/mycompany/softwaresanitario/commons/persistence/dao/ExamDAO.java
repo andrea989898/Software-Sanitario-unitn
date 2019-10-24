@@ -20,4 +20,6 @@ public interface ExamDAO extends DAO<Exam, String>{
     
     public Exam getByCode(int SSD) throws DAOException;
     public ArrayList <Exam> getExams(String patient) throws DAOException;
+    public boolean newExam(String date, String time, String idpatient, String iddoctor, String analisys , String recall) throws DAOException;
+
 }

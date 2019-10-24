@@ -34,7 +34,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author PC Andrea
  */
-public class DrugFilterByPatient implements Filter {
+public class DrugFilterByDoctor implements Filter {
     
     private static final boolean debug = true;
 
@@ -43,7 +43,7 @@ public class DrugFilterByPatient implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public DrugFilterByPatient() {
+    public DrugFilterByDoctor() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
@@ -148,9 +148,9 @@ public class DrugFilterByPatient implements Filter {
         try {
             doBeforeProcessing(request, response);
         } catch (DAOFactoryException ex) {
-            Logger.getLogger(DrugFilterByPatient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DrugFilterByDoctor.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(DrugFilterByPatient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DrugFilterByDoctor.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         Throwable problem = null;

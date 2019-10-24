@@ -86,6 +86,9 @@
         
             <div class="w3-bar w3-white">
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamPatients')">Patients</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExPrescriptions')">Prescribe an examination</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExamPrescriptions')">Prescribe an exam</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamRePrescriptions')">Prescribe a recipe</button></h2>
             </div>
             <div id="screamPatients" class="w3-container dash">
                 <br>
@@ -197,8 +200,76 @@
                         </tr>          
                     </c:forEach>
                 </table>      
-            </div>       
-            
+            </div>  
+            <div id="screamExPrescriptions" class="w3-container dash" style="display:none">
+                <form class="w3-container " method="POST" action="newExamination.handler">
+                    <br><br>
+                    <select id="patient" name="patient">
+                        <option value="0">Select patient:</option>
+                        <c:forEach var="patient" items="${patients}">
+                            <option value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
+                        </c:forEach>
+                    </select>
+                    <br><br>
+                    <select id="type" name="type">
+                        <option value="0">Select type of examinations:</option>
+                        <option value="1">Normal examination</option>
+                        <option value="2">Special examination</option>
+                    </select>
+                    <br><br>
+                    <select id="doctor" name="doctor">
+                        <option value="0">Select the doctor:</option>
+                        <c:forEach var="doctor" items="${doctors}">
+                            <option value="${doctor.getCf()}">${doctor.getName()} ${doctor.getSurname()} specialization: ${doctor.getSpecialization()}</option>
+                        </c:forEach>
+                    </select>
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" name="analysis" id="analysis" placeholder="Write what needs to be done in the visit"></textarea>
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" type="date" name="date" id="date">
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" type="time" name="time" id="time">
+                    <br><br>
+                    <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
+                    <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+                </form>
+            </div>
+            <div id="screamExamPrescriptions" class="w3-container dash">
+                <form class="w3-container " method="POST" action="newExam.handler">
+                    <br><br>
+                    <select id="patient" name="patient">
+                        <option value="0">Select patient:</option>
+                        <c:forEach var="patient" items="${patients}">
+                            <option value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
+                        </c:forEach>
+                    </select>
+                    <br><br>
+                    <select id="doctor" name="doctor">
+                        <option value="0">Select the doctor:</option>
+                        <c:forEach var="doctor" items="${doctors}">
+                            <option value="${doctor.getCf()}">${doctor.getName()} ${doctor.getSurname()} specialization: ${doctor.getSpecialization()}</option>
+                        </c:forEach>
+                    </select>
+                    <br><br>
+                    <select id="recall" name="recall">
+                        <option value="0">Select if is a recall:</option>
+                        <option value="true">This exam is a recall</option>
+                        <option value="false">This exam isn't a recall</option>
+                    </select>
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" name="analysis" id="analysis" placeholder="Write what needs to be done in the visit"></textarea>
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" type="date" name="date" id="date">
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" type="time" name="time" id="time">
+                    <br><br>                  
+                    <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
+                    <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+                </form>
+            </div>
+            <div id="screamRePrescriptions" class="w3-container dash">
+                
+            </div>
         </div>
         <br>
     <script>
