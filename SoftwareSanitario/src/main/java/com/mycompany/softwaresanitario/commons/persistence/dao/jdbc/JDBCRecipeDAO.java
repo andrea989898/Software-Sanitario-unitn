@@ -40,12 +40,18 @@ public class JDBCRecipeDAO extends JDBCDAO<Recipe, String> implements RecipeDAO{
 
     @Override
     public List<Recipe> getAllBySSDPatient(String SSD) throws DAOException {
-        String myGet = "select r.code, d.name, r.iddrug, pat.ssd\n" +
-                                "from recipes r\n" +
+        String myGet = "select r.code, d.name, rd.iddrug, pat.ssd\n" +
+                                "from recipes r\n" + 
+                                "inner join DrugsRecipes rd\n" +
+                                "on r.code = rd.idrecipe\n" +
                                 "inner join drugs d\n" +
-                                "on d.code = r.iddrug\n" +
+                                "on rd.IDDrug = d.code\n" +
+                                "inner join prescriptions pre\n" +
+                                "on pre.idrecipe = rd.idrecipe\n " +
+                                "inner join examinations ex\n"+
+                                "on ex.idexamination = pre.idexamination\n" +
                                 "inner join patients pat\n" +
-                                "on r.idpatient=pat.ssd\n" +
+                                "on ex.idpatient=pat.ssd\n" +
                                 "where pat.ssd = ?";
         try (PreparedStatement stm = CON.prepareStatement(myGet)){
             stm.setString(1, SSD);
@@ -54,8 +60,6 @@ public class JDBCRecipeDAO extends JDBCDAO<Recipe, String> implements RecipeDAO{
                 while (rst.next()) {
                     Recipe recipe = new Recipe();
                     recipe.setCode(rst.getInt("code"));
-                    recipe.setDrugName(rst.getString("name"));
-                    recipe.setIdDrug(rst.getInt("iddrug"));
                     recipe.setIdPatient(rst.getString("ssd"));
                     recipes.add(recipe); 
                     //System.out.println(recipe.code + recipe.drugName + recipe.idDrug +" "+ recipe.idPatient);

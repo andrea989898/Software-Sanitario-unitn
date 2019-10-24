@@ -5,18 +5,19 @@
  */
 package com.mycompany.softwaresanitario.filters;
 
-import com.mycompany.softwaresanitario.commons.persistence.dao.PatientDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.GeneralDoctorDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Patient;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -29,9 +30,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author franc
+ * @author PC Andrea
  */
-public class PatientFilter implements Filter {
+public class GeneralDoctorFilterByPatient implements Filter {
     
     private static final boolean debug = true;
 
@@ -40,13 +41,13 @@ public class PatientFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public PatientFilter() {
+    public GeneralDoctorFilterByPatient() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("PatientFilter:DoBeforeProcessing");
+            log("GeneralDoctorFilter:DoBeforeProcessing");
         }
 
         
@@ -62,12 +63,12 @@ public class PatientFilter implements Filter {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
         }
         
-        PatientDAO patientDao = null;
+        GeneralDoctorDAO generalDoctorDao = null;
         try {
-            patientDao = daoFactory.getDAO(PatientDAO.class);
-            request.setAttribute("patientDao", patientDao);
+            generalDoctorDao = daoFactory.getDAO(GeneralDoctorDAO.class);
+            request.setAttribute("GeneralDoctorDao", generalDoctorDao);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for shopping list storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }
         
         String contextPath = request.getServletContext().getContextPath();
@@ -89,27 +90,24 @@ public class PatientFilter implements Filter {
             return;
         }
         
+        //System.out.println(request.getAttribute("patient"));
         
         try {
-            Patient patient = patientDao.getByCode(user.getCf());
-            if(patient != null){
-                User generaldoctorpatient = userDao.getByCode(patient.getGeneralDoctorCf());
-                request.setAttribute("patient", patient);
-                request.setAttribute("generaldoctorpatient", generaldoctorpatient);
-                String avatarPath = "../images/avatar/" + user.getAvatarPath();
-                request.setAttribute("avatarPath", avatarPath);
-            }
+            boolean isAGeneralDoctor = generalDoctorDao.isAGeneralDoctor(user.getCf());
+            GeneralDoctor generalDoctor = generalDoctorDao.getByCode(user.getCf());
+            List<User> generalDoctors = generalDoctorDao.getAllGeneralDoctors(user.getCf(), generalDoctor.getCf());
+            if(generalDoctors != null)   request.setAttribute("AllGeneralDoctor", generalDoctors);
+            if(isAGeneralDoctor)   request.setAttribute("generalDoctor", "he/she is a doctor");
         } catch (DAOException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get user or shopping lists", ex));
+            throw new RuntimeException(new ServletException("Impossible to get user or generalDoctor", ex));
         }
-        
         
     }    
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("PatientFilter:DoAfterProcessing");
+            log("GeneralDoctorFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -145,7 +143,7 @@ public class PatientFilter implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("PatientFilter:doFilter()");
+            log("GeneralDoctorFilter:doFilter()");
         }
         
         doBeforeProcessing(request, response);
@@ -205,7 +203,7 @@ public class PatientFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("PatientFilter:Initializing filter");
+                log("GeneralDoctorFilter:Initializing filter");
             }
         }
     }
@@ -216,9 +214,9 @@ public class PatientFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("PatientFilter()");
+            return ("GeneralDoctorFilter()");
         }
-        StringBuffer sb = new StringBuffer("PatientFilter(");
+        StringBuffer sb = new StringBuffer("GeneralDoctorFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

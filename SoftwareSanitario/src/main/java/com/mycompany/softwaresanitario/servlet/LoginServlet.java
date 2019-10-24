@@ -9,17 +9,10 @@ import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFac
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
-import com.mycompany.softwaresanitario.commons.persistence.dao.PatientDAO;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Patient;
-import com.mycompany.softwaresanitario.commons.persistence.dao.GeneralDoctorDAO;
-import com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor;
-import com.mycompany.softwaresanitario.commons.persistence.dao.SpecialistDAO;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Specialist;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -101,6 +94,7 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("username");
         String password = request.getParameter("password");
         
+        
         String contextPath = getServletContext().getContextPath();
         if (!contextPath.endsWith("/")) {
             contextPath += "/";
@@ -113,22 +107,20 @@ public class LoginServlet extends HttpServlet {
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
                 //processRequest(request, response);
             } else {
+                if(request.getParameter("remember")!=null){
+                    String remember = request.getParameter("remember");
+                    Cookie cEmail = new Cookie("cookemail", email.trim());
+		    Cookie cPassword = new Cookie("cookpass", password.trim());
+                    Cookie cRemember = new Cookie("cookrem", remember.trim());
+		    cEmail.setMaxAge(60 /** 60 * 24 * 15*/);// 15 days
+		    cPassword.setMaxAge(60 /** 60 * 24 * 15*/);
+		    cRemember.setMaxAge(60 /** 60 * 24 * 15*/);
+                    response.addCookie(cEmail);
+		    response.addCookie(cPassword);
+                    response.addCookie(cRemember);
+                }
+                
                 request.getSession().setAttribute("user", user);
-                /*Patient patient = patientDao.getByCode(user.getCode());
-                request.getSession().setAttribute("patient", patient);
-                
-                GeneralDoctor generalDoctor = generalDoctorDao.getByCode(user.getCode());
-                Specialist specialist = specialistDao.getByCode(user.getCode());
-                
-                if(generalDoctor != null){
-                    request.getSession().setAttribute("generalDoctor", generalDoctor);
-                }
-                
-                if(specialist != null){
-                    request.getSession().setAttribute("specialist", specialist);
-                }
-                
-                */
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
 
             }

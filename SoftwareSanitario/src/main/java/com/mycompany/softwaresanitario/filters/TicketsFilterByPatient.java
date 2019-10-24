@@ -33,7 +33,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author franc
  */
-public class TicketsFilter implements Filter {
+public class TicketsFilterByPatient implements Filter {
     
     private static final boolean debug = true;
 
@@ -42,7 +42,7 @@ public class TicketsFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public TicketsFilter() {
+    public TicketsFilterByPatient() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)

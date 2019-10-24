@@ -83,10 +83,8 @@ public class ExamPDF {
                     Row<PDPage> header = table.createRow(20);
                     header.createCell(20, "Code");
                     header.createCell(20,"IDPatient");
-                    header.createCell(20, "IDPrescription");
                     header.createCell(20, "IDDoctor");
                     header.createCell(20, "ExaminationDate");
-                    header.createCell(20, "IDRecipe");
                     header.createCell(10,"IsDone");
                     header.createCell(10,"IsRecall");
                     header.createCell(50, "Result");
@@ -96,10 +94,8 @@ public class ExamPDF {
                     Row<PDPage> row = table.createRow(12);
                     row.createCell(String.valueOf(exam.getCode()));
                     row.createCell(String.valueOf(exam.getIDPatient()));
-                    row.createCell(String.valueOf(exam.getIDPrescription()));
                     row.createCell(String.valueOf(exam.getIDDoctor()));
                     row.createCell(String.valueOf(exam.getExaminationDate()));
-                    row.createCell(String.valueOf(exam.getIDRecipe()));
                     row.createCell(String.valueOf(exam.getIsDone()));
                     row.createCell(String.valueOf(exam.getIsRecall()));
                     row.createCell(String.valueOf(exam.getResult()));

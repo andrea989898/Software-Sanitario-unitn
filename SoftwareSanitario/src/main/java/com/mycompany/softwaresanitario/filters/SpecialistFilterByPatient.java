@@ -5,21 +5,17 @@
  */
 package com.mycompany.softwaresanitario.filters;
 
-import com.mycompany.softwaresanitario.commons.persistence.dao.ExamDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.SpecialistDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Exam;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Specialist;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
-import com.mycompany.softwaresanitario.manipulate.ManipulateExam;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -32,9 +28,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author franc
+ * @author PC Andrea
  */
-public class ExamsFilter implements Filter {
+public class SpecialistFilterByPatient implements Filter {
     
     private static final boolean debug = true;
 
@@ -43,14 +39,15 @@ public class ExamsFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public ExamsFilter() {
+    public SpecialistFilterByPatient() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException{
+            throws IOException, ServletException {
         if (debug) {
-            log("ExamsFilter:DoBeforeProcessing");
+            log("SpecialistFilter:DoBeforeProcessing");
         }
+
         
         DAOFactory daoFactory = (DAOFactory) request.getServletContext().getAttribute("daoFactory");
         if (daoFactory == null) {
@@ -64,12 +61,12 @@ public class ExamsFilter implements Filter {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
         }
         
-        ExamDAO examDao = null;
+        SpecialistDAO specialistDao = null;
         try {
-            examDao = daoFactory.getDAO(ExamDAO.class);
-            request.setAttribute("ExamDao", examDao);
+            specialistDao = daoFactory.getDAO(SpecialistDAO.class);
+            request.setAttribute("Specialist", specialistDao);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for specialistDAO storage system", ex));
         }
         
         String contextPath = request.getServletContext().getContextPath();
@@ -91,29 +88,21 @@ public class ExamsFilter implements Filter {
             return;
         }
         
-        //System.out.println(request.getAttribute("patient"));
-        
+        //System.out.println("SONO QUI");
         try {
-            List<Exam> screamExams = new ArrayList<Exam>();
-            List<Exam> exams = examDao.getExams(user.getCf());
-            if(exams.size()>0) {
-                screamExams = ManipulateExam.ScreamExamByDate(exams);
-                request.setAttribute("exams", exams);
-                if(screamExams.size()>0)    request.setAttribute("screamExams", screamExams);
-            }
+            Specialist specialist = specialistDao.getByCode(user.getCf());
+            //System.out.println(specialist.getCf());
+            if(specialist != null)      request.setAttribute("specialist", specialist);
         } catch (DAOException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get exams", ex));
+            throw new RuntimeException(new ServletException("Impossible to get user or specialist", ex));
         }
-        
-        
-        
         
     }    
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("ExamsFilter:DoAfterProcessing");
+            log("SpecialistFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -149,7 +138,7 @@ public class ExamsFilter implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("ExamsFilter:doFilter()");
+            log("SpecialistFilter:doFilter()");
         }
         
         doBeforeProcessing(request, response);
@@ -209,7 +198,7 @@ public class ExamsFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("ExamsFilter:Initializing filter");
+                log("SpecialistFilter:Initializing filter");
             }
         }
     }
@@ -220,9 +209,9 @@ public class ExamsFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("ExamsFilter()");
+            return ("SpecialistFilter()");
         }
-        StringBuffer sb = new StringBuffer("ExamsFilter(");
+        StringBuffer sb = new StringBuffer("SpecialistFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

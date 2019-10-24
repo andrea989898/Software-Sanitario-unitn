@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -66,7 +67,6 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     examination.setIsDone(rs.getBoolean("isdone"));
                     examination.setTime(rs.getString("time"));
                     examination.setIDPatient(rs.getString("IDPatient"));
-                    examination.setIDPrescription(rs.getInt("IDPrescription"));
                     examination.setIDRecipe(rs.getInt("IDRecipe"));
                    
                     return examination;
@@ -100,8 +100,8 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     examination.setIsDone(rst.getBoolean("isdone"));
                     examination.setTime(rst.getString("time"));
                     examination.setIDPatient(rst.getString("IDPatient"));
-                    examination.setIDPrescription(rst.getInt("IDPrescription"));
-                    examination.setIDRecipe(rst.getInt("IDRecipe"));
+                    //examination.setIDPrescription(rst.getInt("IDPrescription"));
+                    //examination.setIDRecipe(rst.getInt("IDRecipe"));
                     examinations.add(examination); 
                     //System.out.println(examination.SSD + examination.doctor + examination.time + examination.examinationDate);
                 }
@@ -115,41 +115,148 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
     }
 
     @Override
-    public boolean newExamination(String date, String time, String idpatient, String iddoctor) throws DAOException {
+    public boolean newExamination(String date, String time, String idpatient, String iddoctor, String type, String analisys) throws DAOException {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        /* (query di partenza)
         
-        try (PreparedStatement stm = CON.prepareStatement("INSERT INTO public.examinations(\n" +
-                                    "            idexamination, idpatient, iddoctor, \n" +
-                                    "            \"time\", isdone, examinationdate)\n" +
-                                    "    VALUES ((SELECT MAX(idexamination) FROM examinations)+1), ?, ?, \n" +
-                                    "            ?, false, ?);")) {
             
-            /*
+            select max(idexamination)
+            from examinations
             
-            Query di prova per test
-            
+            select max(code)
+            from tickets
+        
+            select max(code)
+            from prescriptions
+              
+        
+        
             INSERT INTO public.examinations(
-            idexamination, idpatient, iddoctor, isdone)
-             VALUES ((SELECT MAX(idexamination) FROM examinations)+1),'0ADDOVJ1SD1QR9R9', 'AEO8LWP5Q1I2KNS2', 
-             false);
-            */
+              idexamination, idpatient, iddoctor, "time", isdone, examinationdate, 
+              argument)
+                  VALUES ((?+1), ?, ?, ?, false, ?, 
+                          ?);
+
+
+            INSERT INTO public.tickets(
+                        code, cost, date, expirationdate, idexamination, idexam, idpatient, 
+                        ispaid)
+                VALUES ((?+1), 50, CONVERT (date, SYSDATETIME()), ?, "", ?, ?, 
+                        false);
+
+
+            INSERT INTO public.prescriptions(
+                        code, analysis, idexam, idexamination, idrecipe)
+                VALUES ((?+1), ?, "", ?, "");
             
             
+                
+            (query che va)
+            INSERT INTO public.examinations(
+                                  idexamination, idpatient, iddoctor, "time", isdone, examinationdate,
+                                  argument)
+                                      VALUES (((select max(idexamination)
+                                from examinations) +1), '0HPRHP7BDZ5K10UH', '0HPRHP7BDZ5K10UH', '10:30', false, '0001/03/03',
+                                              '');
             
+        INSERT INTO public.tickets(
+                                            code, cost, date, expirationdate, idexamination, idexam, idpatient, 
+                                            ispaid)
+                                    VALUES (((select max(code)
+                                                                    from tickets)
+                            +1), 50, now(), '2001/01/01', (select max(idexamination)
+                                from examinations), null, '0HPRHP7BDZ5K10UH', 
+                                            false);
+        INSERT INTO public.prescriptions(
+                        code, analysis, idexam, idexamination, idrecipe)
+                VALUES (((select max(code)
+            from prescriptions)+1), '', null, (select max(idexamination)
+            from examinations), null);
+        
+        */
+        //System.out.println(analisys);
+        
+        String temp1 = "1";
+        String temp2 = "2";
+        String myGet="";
+        if(type.equals(temp1)){
+            //System.out.println("Sono nel type 1");
+            myGet ="INSERT INTO public.examinations(\n" +
+                    "              idexamination, idpatient, iddoctor, \"time\", isdone, examinationdate, \n" +
+                    "              argument)\n" +
+                    "                  VALUES (((select max(idexamination)\n" +
+                    "            from examinations) +1), ?, ?, TO_TIMESTAMP(?, 'HH24:MI:SS'), false, TO_DATE(?, 'YYYY/MM/DD'), ?);"+
+                        
+                    "            INSERT INTO public.tickets(\n" +
+                    "                        code, cost, date, expirationdate, idexamination, idexam, idpatient, \n" +
+                    "                        ispaid)\n" +
+                    "                VALUES (((select max(code)\n" +
+                    "            from tickets)\n" +
+                    "        +1), 0, NOW(), TO_DATE(?, 'YYYY/MM/DD'), (select max(idexamination)\n" +
+                    "            from examinations), null, ?, \n" +
+                    "                        false);\n" +
+                    "\n" +
+                    "\n" +
+                    "            INSERT INTO public.prescriptions(\n" +
+                    "                        code, analysis, idexam, idexamination, idrecipe)\n" +
+                    "                VALUES (((select max(code)\n" +
+                    "            from prescriptions)+1), ?, null, (select max(idexamination)\n" +
+                    "            from examinations), null);";
             
-            //non va la query
+        }else if (type.equals(temp2)){
+                //System.out.println("Sono nel type 2");
+                myGet ="INSERT INTO public.examinations(\n" +
+                    "              idexamination, idpatient, iddoctor, \"time\", isdone, examinationdate, \n" +
+                    "              argument)\n" +
+                    "                  VALUES (((select max(idexamination)\n" +
+                    "            from examinations) +1), ?, ?, TO_TIMESTAMP(?, 'HH24:MI:SS'), false, TO_DATE(?, 'YYYY/MM/DD'), ?);"+
+                        
+                    "            INSERT INTO public.tickets(\n" +
+                    "                        code, cost, date, expirationdate, idexamination, idexam, idpatient, \n" +
+                    "                        ispaid)\n" +
+                    "                VALUES (((select max(code)\n" +
+                    "            from tickets)\n" +
+                    "        +1), 50, NOW(), TO_DATE(?, 'YYYY/MM/DD'), (select max(idexamination)\n" +
+                    "            from examinations), null, ?, \n" +
+                    "                        false);\n" +
+                    "\n" +
+                    "\n" +
+                    "            INSERT INTO public.prescriptions(\n" +
+                    "                        code, analysis, idexam, idexamination, idrecipe)\n" +
+                    "                VALUES (((select max(code)\n" +
+                    "            from prescriptions)+1), ?, null, (select max(idexamination)\n" +
+                    "            from examinations), null);";
+            }
+        
+        
+         try (PreparedStatement stm = CON.prepareStatement(myGet)){
             stm.setString(1, idpatient);
             stm.setString(2, iddoctor);
             stm.setString(3, time);
             stm.setString(4, date);
-            //System.out.println(code);
+            stm.setString(5, analisys);
+            stm.setString(6, date);
+            stm.setString(7, idpatient);
+            stm.setString(8, analisys);
             
+            int c = stm.executeUpdate();
+            if(c == 1){
+                //System.out.println(c);
+                return true;
+            }
+        }catch (SQLException ex) {
+            System.out.print(String.valueOf(ex));
+            throw new DAOException("Impossible to find the user", ex);
+        }
+        
+        
+        /*(parte finale di controllo)
             if(stm.execute())  return true;
              
             return false;
             } catch (SQLException ex) {
             Logger.getLogger(JDBCPatientDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         return false;
     }
 

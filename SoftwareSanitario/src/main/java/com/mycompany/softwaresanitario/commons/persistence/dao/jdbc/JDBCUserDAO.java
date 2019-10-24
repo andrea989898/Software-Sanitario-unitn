@@ -8,6 +8,7 @@ package com.mycompany.softwaresanitario.commons.persistence.dao.jdbc;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import com.mycompany.softwaresanitario.crypt.CryptPassword;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.mindrot.jbcrypt.BCrypt;
 /**
  *
  * @author franc
@@ -50,7 +52,9 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     user.setSurname(rs.getString("surname"));
                     user.setAge(rs.getInt("age"));
                     user.setBirthdate(rs.getDate("birthdate"));
-                    user.setBirthplace(rs.getString("birthplace"));
+                   // user.setBirthplace(rs.getString("birthplace"));
+                    user.setBirth_city_id(rs.getInt("birth_city_id"));
+                    user.setCity_id(rs.getInt("city_id"));
                     user.setGender(rs.getString("gender"));
                     user.setAddress(rs.getString("address"));
                     user.setAvatarPath(rs.getString("data"));
@@ -70,15 +74,15 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
     
     
     
+    @Override
     public User getByEmailAndPassword(String email, String password) throws DAOException {
         User user = new User();
         if ((email == null) || (password == null)) {
             throw new DAOException("Email and password are mandatory fields", new NullPointerException("email or password are null"));
         }
 
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users u, Images i WHERE u.email = ? AND u.password = ? AND i.idpatient=u.code")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users u, Images i WHERE u.email = ? AND i.idpatient=u.code")) {
             stm.setString(1, email);
-            stm.setString(2, password);
             try (ResultSet rs = stm.executeQuery()) {
                 
                 int count = 0;
@@ -90,19 +94,27 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     
                     user.setCf(rs.getString("code"));
                     user.setEmail(rs.getString("email"));
-                    user.setPassword(rs.getString("password"));
+                    
                     user.setName(rs.getString("name"));
                     user.setSurname(rs.getString("surname"));
                     user.setAge(rs.getInt("age"));
                     user.setBirthdate(rs.getDate("birthdate"));
-                    user.setBirthplace(rs.getString("birthplace"));
+                    user.setBirth_city_id(rs.getInt("birth_city_id"));
+                    user.setCity_id(rs.getInt("city_id"));
                     user.setGender(rs.getString("gender"));
                     user.setAddress(rs.getString("address"));
                     user.setAvatarPath(rs.getString("data"));
                     
-                    System.out.println(user.getAvatarPath());
+                    //System.out.println(user.getAvatarPath());
+                    //System.out.print(rs.getString("password"));
+                    //System.out.println(CryptPassword.validate(password, "$2a$12$CI8PpQb0f0j6wwc2gB6KCuF15mEqXnaG8UXvV5VS782cq557SuO/i"));
+                    String psw = rs.getString("password");
                     
-                    return user;
+                    if(CryptPassword.validate(password, psw.substring(0,60))) {
+                        user.setPassword(rs.getString("password"));
+                        return user;
+                    }
+                    else return null;
                 }
 
                 return null;
@@ -135,7 +147,9 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
         try (PreparedStatement stm = CON.prepareStatement("UPDATE public.users\n" +
                                                           "   SET password=?\n" +
                                                           " WHERE email = ?;")) {
-            stm.setString(1, password);
+            String psw = CryptPassword.hashPassword(password);
+            //System.out.println(psw);
+            stm.setString(1, psw);
             stm.setString(2, email);
             //System.out.println(code);
             
@@ -159,7 +173,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
     public User getByCode(String ssd) throws DAOException{
         User user = new User();
    
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM users WHERE code = ?")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM users u WHERE code = ?")) {
             stm.setString(1, ssd);
             //System.out.println(code);
             
@@ -179,7 +193,8 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     user.setSurname(rs.getString("surname"));
                     user.setAge(rs.getInt("age"));
                     user.setBirthdate(rs.getDate("birthdate"));
-                    user.setBirthplace(rs.getString("birthplace"));
+                    user.setBirth_city_id(rs.getInt("birth_city_id"));
+                    user.setCity_id(rs.getInt("city_id"));
                     user.setGender(rs.getString("gender"));
                     user.setAddress(rs.getString("address"));
                     

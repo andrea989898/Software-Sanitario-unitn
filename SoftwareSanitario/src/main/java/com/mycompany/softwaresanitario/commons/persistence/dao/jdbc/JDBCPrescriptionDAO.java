@@ -41,19 +41,21 @@ public class JDBCPrescriptionDAO extends JDBCDAO<Prescription, String> implement
     }
     @Override
     public ArrayList <Prescription> getPrescriptions(String patient) throws SQLException{
-                String myGet = "select pr.code, pr.exam_type, pat.ssd\n" +
-                                "from prescriptions pr\n" +
-                                "inner join patients pat\n" +
-                                "on pr.idpatient=pat.ssd\n" +
-                                "where pat.ssd =" + patient ;
+                String myGet = "select *\n" +
+"                                from prescriptions pr\n" +
+"                                inner join examinations ex\n" +
+"                                on ex.idexamination = pr.idexamination\n" +
+"                                inner join patients pat\n" +
+"                                on ex.idpatient=pat.ssd\n" +
+"                                where pat.ssd = ?";
+                
         try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, patient);
             try(ResultSet rst = stm.executeQuery()){
                 ArrayList<Prescription> prescriptions = new ArrayList<Prescription>();
                 while (rst.next()) {
                     Prescription prescription = new Prescription();
                     prescription.setCode(rst.getInt("code"));
-                    prescription.setType(rst.getString("exam_type"));
-                    prescription.setIdPatient(rst.getString("ssd"));
                     prescriptions.add(prescription); 
                     //System.out.println(prescription.code + " " + prescription.examType + prescription.idPatient);
                 }

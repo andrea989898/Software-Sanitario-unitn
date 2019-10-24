@@ -95,11 +95,13 @@ public class newExaminationServlet extends HttpServlet {
         } catch (DAOFactoryException ex) {
             throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }
-        
+        String type = request.getParameter("type");
+        String analysis = request.getParameter("analysis");
         String time = request.getParameter("time");
         String date = request.getParameter("date");
-        String idpatient = request.getParameter("idPatient");
-        String iddoctor = request.getParameter("idDoctor");
+        String idpatient = request.getParameter("patient");
+        //System.out.println(analysis);
+        String iddoctor = request.getParameter("doctor");
         
         String contextPath = getServletContext().getContextPath();
         if (!contextPath.endsWith("/")) {
@@ -107,11 +109,13 @@ public class newExaminationServlet extends HttpServlet {
         }
 
         try {
-            boolean examination = examinationDao.newExamination(date, time, idpatient, iddoctor);
+            boolean examination = examinationDao.newExamination(date, time, idpatient, iddoctor, type, analysis);
             
             if (examination) {
                 //request.getSession().setAttribute("user", user);
-                response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
+                response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homeGeneralDoctor.html"));
+            }else{
+                response.sendRedirect(response.encodeRedirectURL(contextPath + "errorPage.html"));
             }
         } catch (DAOException ex) {
             //TODO: log exception

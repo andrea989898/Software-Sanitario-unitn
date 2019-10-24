@@ -9,9 +9,9 @@ import java.sql.Date;
 
 /**
  *
- * @author franc
+ * @author PC Andrea
  */
-public class User {
+public class Doctor {
     private String name;
     private String surname;
     private int age;
@@ -26,6 +26,26 @@ public class User {
     private String email;
     private String password;
     private String avatarPath;
+    private String studio_address;
+    private String specialization;
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    
+
+    public String getStudio_address() {
+        return studio_address;
+    }
+
+    public void setStudio_address(String studio_address) {
+        this.studio_address = studio_address;
+    }
 
     public void setBirth_city(String birth_city) {
         this.birth_city = birth_city;
@@ -139,9 +159,4 @@ public class User {
         this.surname = surname;
     }
 
-    
-    
-     
-    
-    
 }

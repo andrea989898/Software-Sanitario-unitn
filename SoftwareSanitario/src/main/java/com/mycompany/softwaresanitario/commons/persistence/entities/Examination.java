@@ -15,7 +15,6 @@ import java.sql.Date;
 public class Examination{
     private int SSD;
     private String IDPatient;
-    private int IDPrescription;
     private int IDRecipe;
     private String IDdoctor;
     private String time;
@@ -27,20 +26,12 @@ public class Examination{
         this.IDPatient = IDPatient;
     }
 
-    public void setIDPrescription(int IDPrescription) {
-        this.IDPrescription = IDPrescription;
-    }
-
     public void setIDRecipe(int IDRecipe) {
         this.IDRecipe = IDRecipe;
     }
 
     public String getIDPatient() {
         return IDPatient;
-    }
-
-    public int getIDPrescription() {
-        return IDPrescription;
     }
 
     public int getIDRecipe() {

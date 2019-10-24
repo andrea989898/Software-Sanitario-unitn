@@ -13,10 +13,8 @@ import java.sql.Date;
  */
 public class Exam {
     private int code;
-    private int IDPrescription;
     private String IDDoctor;
     private Date ExaminationDate;
-    private int IDRecipe;
     private String Result;
     private boolean IsDone;
     private String IDPatient;
@@ -50,15 +48,6 @@ public class Exam {
         return code;
     }
 
-    public int getIDPrescription() {
-        return IDPrescription;
-    }
-
-    public int getIDRecipe() {
-        return IDRecipe;
-    }
-
-   
 
     public String getResult() {
         return Result;
@@ -75,16 +64,6 @@ public class Exam {
     public void setCode(int code) {
         this.code = code;
     }
-
-    public void setIDPrescription(int IDPrescription) {
-        this.IDPrescription = IDPrescription;
-    }
-
-    public void setIDRecipe(int IDRecipe) {
-        this.IDRecipe = IDRecipe;
-    }
-
-    
 
     public void setResult(String Result) {
         this.Result = Result;

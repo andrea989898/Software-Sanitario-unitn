@@ -57,10 +57,8 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     }
                     
                     exam.setCode(rs.getInt("code"));
-                    exam.setIDPrescription(rs.getInt("IDPrescription"));
                     exam.setIDDoctor(rs.getString("IDDoctor"));
                     exam.setExaminationDate(rs.getDate("ExaminationDate"));
-                    exam.setIDRecipe(rs.getInt("IDRecipe"));
                     exam.setIsDone(rs.getBoolean("IsDone"));
                     exam.setResult(rs.getString("Result"));
                     exam.setIDPatient(rs.getString("IDPatient"));
@@ -93,10 +91,9 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                 while (rst.next()) {
                     Exam exam = new Exam();
                     exam.setCode(rst.getInt("code"));
-                    exam.setIDPrescription(rst.getInt("IDPrescription"));
+                    //exam.setIDPrescription(rst.getInt("IDPrescription"));
                     exam.setIDDoctor(rst.getString("IDDoctor"));
                     exam.setExaminationDate(rst.getDate("ExaminationDate"));
-                    exam.setIDRecipe(rst.getInt("IDRecipe"));
                     exam.setIsDone(rst.getBoolean("IsDone"));
                     exam.setIDPatient(rst.getString("IDPatient"));
                     exam.setIsRecall(rst.getBoolean("IsRecall"));
@@ -114,5 +111,57 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
         }catch (SQLException ex) {
             throw new DAOException("Impossible to find the user", ex);
         }
+    }
+    public boolean newExam(String date, String time, String idpatient, String iddoctor, String analisys, String recall) throws DAOException {
+        /*
+        code, iddoctor, result, "time", isdone, examinationdate, idpatient, 
+            isrecall)
+    VALUES (?, ?, ?, ?, ?, ?, ?, 
+            ?)
+        */
+        
+        
+        
+        String myGet ="INSERT INTO public.exams(\n" +
+                    "              code, iddoctor, result, \"time\", isdone, examinationdate, idpatient, \n" +
+"            isrecall)\n" +
+                    "                  VALUES (((select max(code)\n" +
+                    "            from exams) +1), ?, '', TO_TIMESTAMP(?, 'HH24:MI:SS'), false, TO_DATE(?, 'YYYY/MM/DD'), ?, CAST(? AS BOOLEAN));"+
+                        
+                    "            INSERT INTO public.tickets(\n" +
+                    "                        code, cost, date, expirationdate, idexamination, idexam, idpatient, \n" +
+                    "                        ispaid)\n" +
+                    "                VALUES (((select max(code)\n" +
+                    "            from tickets)\n" +
+                    "        +1), 11, NOW(), TO_DATE(?, 'YYYY/MM/DD'), null,(select max(code)\n" +
+                    "            from exams),  ?, \n" +
+                    "                        false);\n" +
+                    "\n" +
+                    "\n" +
+                    "            INSERT INTO public.prescriptions(\n" +
+                    "                        code, analysis, idexam, idexamination, idrecipe)\n" +
+                    "                VALUES (((select max(code)\n" +
+                    "            from prescriptions)+1), ?, (select max(code)\n" +
+                    "            from exams), null, null);";
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, iddoctor);
+            stm.setString(2, time);
+            stm.setString(3, date);
+            stm.setString(4, idpatient);
+            stm.setString(5, recall);
+            stm.setString(6, date);
+            stm.setString(7, idpatient);
+            stm.setString(8, analisys);
+            
+            int c = stm.executeUpdate();
+            if(c == 1){
+                //System.out.println(c);
+                return true;
+            }
+        }catch (SQLException ex) {
+            System.out.print(String.valueOf(ex));
+            throw new DAOException("Impossible to find the user", ex);
+        }
+        return false;
     }
 }
