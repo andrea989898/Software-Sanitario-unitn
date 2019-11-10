@@ -8,6 +8,7 @@ package com.mycompany.softwaresanitario.servlet;
 import com.mycompany.softwaresanitario.PDFmanagement.ExamPDF;
 import com.mycompany.softwaresanitario.PDFmanagement.TicketPDF;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
+import com.mycompany.softwaresanitario.image.ImageUtil;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -78,8 +79,8 @@ public class PDFservlet extends HttpServlet {
         }
         
         String contextPath = getServletContext().getContextPath();
-        
-        System.out.println(pdfFolder);
+        ImageUtil.configure(getServletContext());
+        //System.out.println(pdfFolder);
         //pdfFolder = contextPath + pdfFolder;
         pdfFolder = getServletContext().getRealPath(pdfFolder);
         pdfFolder = pdfFolder.substring(0, pdfFolder.length() - 42);

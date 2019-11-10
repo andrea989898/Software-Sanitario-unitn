@@ -95,7 +95,7 @@ public class PrescriptionFilterByPatient implements Filter {
         try {
             prescriptions = prescriptionDao.getPrescriptions(user.getCf());
             if(prescriptions.size() > 0)   request.setAttribute("prescriptions", prescriptions);
-        } catch (SQLException ex) {
+        } catch (DAOException ex) {
             throw new RuntimeException(new ServletException("Impossible to get user or prescription", ex));
         }
     }    

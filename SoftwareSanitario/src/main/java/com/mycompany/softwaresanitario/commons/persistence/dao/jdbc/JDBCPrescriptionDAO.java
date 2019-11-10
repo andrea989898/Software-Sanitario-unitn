@@ -40,15 +40,15 @@ public class JDBCPrescriptionDAO extends JDBCDAO<Prescription, String> implement
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     @Override
-    public ArrayList <Prescription> getPrescriptions(String patient) throws SQLException{
-                String myGet = "select *\n" +
+    public ArrayList <Prescription> getPrescriptions(String patient) throws DAOException{
+        String myGet = "select *\n" +
 "                                from prescriptions pr\n" +
 "                                inner join examinations ex\n" +
 "                                on ex.idexamination = pr.idexamination\n" +
 "                                inner join patients pat\n" +
 "                                on ex.idpatient=pat.ssd\n" +
 "                                where pat.ssd = ?";
-                
+
         try (PreparedStatement stm = CON.prepareStatement(myGet)){
             stm.setString(1, patient);
             try(ResultSet rst = stm.executeQuery()){
@@ -61,6 +61,27 @@ public class JDBCPrescriptionDAO extends JDBCDAO<Prescription, String> implement
                 }
                 stm.close();
                 return prescriptions;
+            }
+        } catch (SQLException ex) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
+    
+    @Override
+    public Prescription getPrescriptionByExamCode(int idExam) throws DAOException{
+         String myGet = "select *\n" +
+"                                from prescriptions pr\n" +
+"                                where pr.idexam = ?";
+         try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setInt(1, idExam);
+            try(ResultSet rst = stm.executeQuery()){
+                Prescription prescription = new Prescription();
+                while (rst.next()) {
+                    prescription.setCode(rst.getInt("code"));
+                    //System.out.println(prescription.code + " " + prescription.examType + prescription.idPatient);
+                }
+                stm.close();
+                return prescription;
             }
         } catch (SQLException ex) {
             throw new UnsupportedOperationException("Not supported yet.");
