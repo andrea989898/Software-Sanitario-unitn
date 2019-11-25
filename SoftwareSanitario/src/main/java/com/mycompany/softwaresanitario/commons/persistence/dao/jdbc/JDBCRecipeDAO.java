@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -80,6 +81,39 @@ public class JDBCRecipeDAO extends JDBCDAO<Recipe, String> implements RecipeDAO{
     @Override
     public Recipe getByCode(String arg0) throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean newrecipe(String idpatient, String analysis) {
+        //INSERT INTO public.prescriptions(
+       //     code, analysis, idexam, idexamination, idrecipe)
+    //VALUES (?, ?, ?, ?, ?);
+
+        
+        
+        
+        String myGet="INSERT INTO public.recipes(\n" +
+"            code)\n" +
+"    VALUES ((select max(code) from recipes)+1);"
+                + ""
+                + "INSERT INTO public.prescriptions(\n" +
+"            code, analysis, idexam, idexamination, idrecipe)\n" +
+"    VALUES (((select max(code)\n" +
+                    "            from prescriptions)+1, ?, null, null, (select max(code) from recipes));"
+                + "";
+        
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, analysis);
+            int c = stm.executeUpdate();
+            if(c == 1){
+                //System.out.println(c);
+                return true;
+            }
+        } catch (SQLException ex) {
+             Logger.getLogger(JDBCRecipeDAO.class.getName()).log(Level.SEVERE, null, ex);
+         }
+        
+         return false;
     }
 
     

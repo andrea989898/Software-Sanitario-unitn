@@ -268,7 +268,75 @@
                 </form>
             </div>
             <div id="screamRePrescriptions" class="w3-container dash">
+                <h3>Prescribe a new recipe:</h3>
                 
+                <form class="w3-container " method="POST" action="newExam.handler">
+                    <br><br>
+                    <select id="patient" name="patient">
+                        <option value="0">Select patient:</option>
+                        <c:forEach var="patient" items="${patients}">
+                            <option value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
+                        </c:forEach>
+                    </select>
+                    <br><br>
+                    <jsp:scriptlet>
+                        int j=0; 
+                    </jsp:scriptlet>
+                    <select id="drug-1" name="drug-1">
+                        <option value="false">Select drug 1:</option>
+                        <c:forEach var="drug" items="${drugs}">
+                            <option value="<%=(j++)%>">${drug.getName()}</option>
+                        </c:forEach>
+                    </select>
+                    <jsp:scriptlet>
+                        j=0; 
+                    </jsp:scriptlet> 
+                    <br><br>
+                    <select id="drug-2" name="drug-2">
+                        <option value="false">Select drug 2:</option>
+                        <c:forEach var="drug" items="${drugs}">
+                            <option value="<%=(j++)%>">${drug.getName()}</option>
+                        </c:forEach>
+                    </select>
+                    <jsp:scriptlet>
+                        j=0; 
+                    </jsp:scriptlet> 
+                    <br><br>
+                    <select id="drug-3" name="drug-3">
+                        <option value="false">Select drug 3:</option>
+                        <c:forEach var="drug" items="${drugs}">
+                            <option value="<%=(j++)%>">${drug.getName()}</option>
+                        </c:forEach>
+                    </select>
+                    <jsp:scriptlet>
+                        j=0; 
+                    </jsp:scriptlet> 
+                    <br><br>
+                    <select id="drug-4" name="drug-4">
+                        <option value="false">Select drug 4:</option>
+                        <c:forEach var="drug" items="${drugs}">
+                            <option value="<%=(j++)%>">${drug.getName()}</option>
+                        </c:forEach>
+                    </select>
+                    <jsp:scriptlet>
+                        j=0; 
+                    </jsp:scriptlet> 
+                    <br><br>
+                    <select id="drug-5" name="drug-5">
+                        <option value="false">Select drug 5:</option>
+                        <c:forEach var="drug" items="${drugs}">
+                            <option value="<%=(j++)%>">${drug.getName()}</option>
+                        </c:forEach>
+                    </select>
+                    <jsp:scriptlet>
+                        j=0; 
+                    </jsp:scriptlet> 
+                    <br><br>
+                    <input class="w3-input w3-border w3-light-grey" name="analysis" id="analysis" placeholder="Write the information about the recipe"></textarea>
+                    <br><br>               
+                    <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
+                    <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+                </form>
             </div>
         </div>
         <br>

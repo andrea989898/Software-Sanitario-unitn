@@ -45,7 +45,7 @@ public class JDBCDrugDAO extends JDBCDAO<Drug, String> implements DrugDAO{
     @Override
     public ArrayList<Drug> getAllDrugs() throws DAOException{
         String myGet = "select *\n" +
-                                "from drugs pr\n" ;
+                                "from drugs order by code\n" ;
         try (PreparedStatement stm = CON.prepareStatement(myGet)){
             try(ResultSet rst = stm.executeQuery()){
                 ArrayList<Drug> drugs = new ArrayList<Drug>();
@@ -62,5 +62,24 @@ public class JDBCDrugDAO extends JDBCDAO<Drug, String> implements DrugDAO{
             throw new UnsupportedOperationException("Not supported yet.");
         }
     }  
+
+    @Override
+    public boolean newdrugforrecipe(String drug) throws DAOException {
+        String myGet ="INSERT INTO public.drugsrecipes(\n" +
+                        "            idrecipe, iddrug)\n" +
+                        "    VALUES (((select max(code)\n" +
+                    "            from recipes)), ?);";
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, drug);
+            int c = stm.executeUpdate();
+            if(c == 1){
+                //System.out.println(c);
+                return true;
+            }
+    }   catch (SQLException ex) {
+            Logger.getLogger(JDBCDrugDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
 }
 
