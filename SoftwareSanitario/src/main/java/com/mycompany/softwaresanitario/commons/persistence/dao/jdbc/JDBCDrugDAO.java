@@ -70,7 +70,7 @@ public class JDBCDrugDAO extends JDBCDAO<Drug, String> implements DrugDAO{
                         "    VALUES (((select max(code)\n" +
                     "            from recipes)), ?);";
         try (PreparedStatement stm = CON.prepareStatement(myGet)){
-            stm.setString(1, drug);
+            stm.setInt(1, Integer.parseInt(drug));
             int c = stm.executeUpdate();
             if(c == 1){
                 //System.out.println(c);

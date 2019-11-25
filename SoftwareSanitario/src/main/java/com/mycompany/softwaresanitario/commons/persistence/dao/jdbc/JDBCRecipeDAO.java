@@ -99,7 +99,7 @@ public class JDBCRecipeDAO extends JDBCDAO<Recipe, String> implements RecipeDAO{
                 + "INSERT INTO public.prescriptions(\n" +
 "            code, analysis, idexam, idexamination, idrecipe)\n" +
 "    VALUES (((select max(code)\n" +
-                    "            from prescriptions)+1, ?, null, null, (select max(code) from recipes));"
+                    "            from prescriptions)+1), ?, null, null, (select max(code) from recipes));"
                 + "";
         
         try (PreparedStatement stm = CON.prepareStatement(myGet)){
