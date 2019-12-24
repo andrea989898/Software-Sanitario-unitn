@@ -31,5 +31,16 @@ public class ManipulateExaminations {
         return examinationsScream;
     }
     
+    public static ArrayList<Examination> ScreamExaminationsByDone(List<Examination> examinations){
+        ArrayList<Examination> examinationsScream = new ArrayList<Examination>();
+        
+        for(Examination examination:examinations){
+            if(!examination.getIsDone()){
+                examinationsScream.add(examination);
+            }
+        }
+        return examinationsScream;
+    }
+    
     
 }

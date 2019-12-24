@@ -6,21 +6,16 @@
 package com.mycompany.softwaresanitario.commons.persistence.dao;
 
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
-import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Ssp;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 /**
  *
  * @author franc
  */
-public interface UserDAO extends DAO<User, String>{
+public interface SspDAO extends DAO<Ssp, String>{
     
-    public User updatePassword(String email, String password) throws DAOException;
+    public Ssp getByEmailAndPassword(String email, String password) throws DAOException;
     
-    public User getByEmail(String email) throws DAOException;
-    
-    public User getByEmailAndPassword(String email, String password) throws DAOException;
-    
-    public User getByCode(String ssd) throws DAOException;
-    
+    public Ssp getByCity(Integer cityid) throws DAOException;
 }

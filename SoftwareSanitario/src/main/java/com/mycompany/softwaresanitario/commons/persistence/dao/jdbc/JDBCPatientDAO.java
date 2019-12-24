@@ -143,5 +143,96 @@ public class JDBCPatientDAO extends JDBCDAO<Patient, String> implements PatientD
         }
         return null;
     }
+
+    @Override
+    public List<User> getAllExecptSSP() throws DAOException {
+        String myGet = "select u.name, u.surname, u.age, u.birthdate, u.gender, u.address, u.code, u.email, c.name as city, ci.name as birth_city\n" +
+                        "from users u\n" +
+                        "inner join patients pat\n" +
+                        "on u.code = pat.ssd\n" +
+                        "inner join cities c\n" +
+                        "on u.city_id = c.code\n" +
+                        "inner join cities ci\n" +
+                        "on u.birth_city_id = ci.code";
+                        //"where pat.ssd <> (select code from ssr)";
+        try(PreparedStatement stm = CON.prepareStatement(myGet)){
+            try(ResultSet rst = stm.executeQuery()){
+                ArrayList<User> patients = new ArrayList<User>();
+                //System.out.println("Sono qui");
+                while (rst.next()) {
+                    User user = new User();
+                    //user.setCode(rst.getInt("code"));
+                    user.setCf(rst.getString("code"));
+                    user.setEmail(rst.getString("email"));
+                    //user.setPassword(rst.getString("password"));
+                    user.setName(rst.getString("name"));
+                    user.setSurname(rst.getString("surname"));
+                    user.setAge(rst.getInt("age"));
+                    user.setBirthdate(rst.getDate("birthdate"));
+                   // user.setBirthplace(rs.getString("birthplace"));
+                    user.setBirth_city(rst.getString("birth_city"));
+                    user.setCity(rst.getString("city"));
+                    user.setGender(rst.getString("gender"));
+                    user.setAddress(rst.getString("address"));
+                    
+                    
+                    patients.add(user); 
+                    //System.out.println(ticket.code + " " + ticket.isPaid +" "+ ticket.expirationDate);
+                }
+                
+                
+                return patients;
+            }
+        }catch (SQLException ex) {
+            Logger.getLogger(JDBCPatientDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    public List<User> getAllByProvince(int province) throws DAOException {
+        String myGet = "select u.name, u.surname, u.age, u.birthdate, u.gender, u.address, u.code, u.email, c.name as city, ci.name as birth_city\n" +
+                        "from users u\n" +
+                        "inner join patients pat\n" +
+                        "on u.code = pat.ssd\n" +
+                        "inner join cities c\n" +
+                        "on u.city_id = c.code\n" +
+                        "inner join cities ci\n" +
+                        "on u.birth_city_id = ci.code\n" +
+                        "where c.idprovince = ?";
+        try(PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setInt(1, province);
+            try(ResultSet rst = stm.executeQuery()){
+                ArrayList<User> patients = new ArrayList<User>();
+                //System.out.println("Sono qui");
+                while (rst.next()) {
+                    User user = new User();
+                    //user.setCode(rst.getInt("code"));
+                    user.setCf(rst.getString("code"));
+                    user.setEmail(rst.getString("email"));
+                    //user.setPassword(rst.getString("password"));
+                    user.setName(rst.getString("name"));
+                    user.setSurname(rst.getString("surname"));
+                    user.setAge(rst.getInt("age"));
+                    user.setBirthdate(rst.getDate("birthdate"));
+                   // user.setBirthplace(rs.getString("birthplace"));
+                    user.setBirth_city(rst.getString("birth_city"));
+                    user.setCity(rst.getString("city"));
+                    user.setGender(rst.getString("gender"));
+                    user.setAddress(rst.getString("address"));
+                    
+                    
+                    patients.add(user); 
+                    //System.out.println(ticket.code + " " + ticket.isPaid +" "+ ticket.expirationDate);
+                }
+                
+                
+                return patients;
+            }
+        }catch (SQLException ex) {
+            Logger.getLogger(JDBCPatientDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     
 }

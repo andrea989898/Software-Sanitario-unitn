@@ -112,28 +112,95 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
             throw new DAOException("Impossible to find the user", ex);
         }
     }
+    
+    @Override
+    public ArrayList <Exam> getExamsOfSpecialist(String specialist) throws DAOException{
+        String myGet = "select *\n" +
+                                "from exams e\n" +
+                                "inner join specialists s\n" +
+                                "on s.ssd = e.iddoctor\n" +
+                                "where s.ssd = ?";
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, specialist);
+            try (ResultSet rst = stm.executeQuery()){
+                ArrayList<Exam> exams = new ArrayList<Exam>();
+                while (rst.next()) {
+                    Exam exam = new Exam();
+                    exam.setCode(rst.getInt("code"));
+                    //exam.setIDPrescription(rst.getInt("IDPrescription"));
+                    exam.setIDDoctor(rst.getString("IDDoctor"));
+                    exam.setExaminationDate(rst.getDate("ExaminationDate"));
+                    exam.setIsDone(rst.getBoolean("IsDone"));
+                    exam.setIDPatient(rst.getString("IDPatient"));
+                    exam.setIsRecall(rst.getBoolean("IsRecall"));
+                    if(exam.getIsDone()==false){
+                        exam.setResult("not done yet"); 
+                    }else{
+                        exam.setResult(rst.getString("Result"));
+                    }
+                    exams.add(exam); 
+                    //System.out.println(exam.code + " " + exam.IsDone +" s"+ exam.Result);
+                }
+                
+                return exams;
+            }
+        }catch (SQLException ex) {
+            throw new DAOException("Impossible to find exams", ex);
+        }
+    }
+    
+    @Override
+    public ArrayList <Exam> getExamsOfSsp(String ssp) throws DAOException{
+        String myGet = "select *\n" +
+                                "from exams e\n" +
+                                "inner join ssp s\n" +
+                                "on s.code = e.sspcode\n" +
+                                "where s.code = ?";
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, ssp);
+            try (ResultSet rst = stm.executeQuery()){
+                ArrayList<Exam> exams = new ArrayList<Exam>();
+                while (rst.next()) {
+                    Exam exam = new Exam();
+                    exam.setCode(rst.getInt("code"));
+                    //exam.setIDPrescription(rst.getInt("IDPrescription"));
+                    exam.setIDDoctor(rst.getString("IDDoctor"));
+                    exam.setExaminationDate(rst.getDate("ExaminationDate"));
+                    exam.setIsDone(rst.getBoolean("IsDone"));
+                    exam.setIDPatient(rst.getString("IDPatient"));
+                    exam.setIsRecall(rst.getBoolean("IsRecall"));
+                    if(exam.getIsDone()==false){
+                        exam.setResult("not done yet"); 
+                    }else{
+                        exam.setResult(rst.getString("Result"));
+                    }
+                    exams.add(exam); 
+                    //System.out.println(exam.code + " " + exam.IsDone +" s"+ exam.Result);
+                }
+                
+                return exams;
+            }
+        }catch (SQLException ex) {
+            throw new DAOException("Impossible to find exams", ex);
+        }
+    }
+    
     public boolean newExam(String date, String time, String idpatient, String iddoctor, String analisys, String recall) throws DAOException {
-        /*
-        code, iddoctor, result, "time", isdone, examinationdate, idpatient, 
-            isrecall)
-    VALUES (?, ?, ?, ?, ?, ?, ?, 
-            ?)
-        */
         
         
-        
+        iddoctor = iddoctor.replaceAll("\\s+$", "");
         String myGet ="INSERT INTO public.exams(\n" +
-                    "              code, iddoctor, result, \"time\", isdone, examinationdate, idpatient, \n" +
+                    "              code, iddoctor, sspcode, result, \"time\", isdone, examinationdate, idpatient, \n" +
 "            isrecall)\n" +
                     "                  VALUES (((select max(code)\n" +
-                    "            from exams) +1), ?, '', TO_TIMESTAMP(?, 'HH24:MI:SS'), false, TO_DATE(?, 'YYYY/MM/DD'), ?, CAST(? AS BOOLEAN));"+
+                    "            from exams) +1), ?, ?, '', TO_TIMESTAMP(?, 'HH24:MI:SS'), false, TO_DATE(?, 'YYYY/MM/DD'), ?, CAST(? AS BOOLEAN));"+
                         
                     "            INSERT INTO public.tickets(\n" +
                     "                        code, cost, date, expirationdate, idexamination, idexam, idpatient, \n" +
                     "                        ispaid)\n" +
                     "                VALUES (((select max(code)\n" +
                     "            from tickets)\n" +
-                    "        +1), 11, NOW(), TO_DATE(?, 'YYYY/MM/DD'), null,(select max(code)\n" +
+                    "        +1), ?, NOW(), TO_DATE(?, 'YYYY/MM/DD'), null,(select max(code)\n" +
                     "            from exams),  ?, \n" +
                     "                        false);\n" +
                     "\n" +
@@ -144,14 +211,19 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     "            from prescriptions)+1), ?, (select max(code)\n" +
                     "            from exams), null, null);";
         try (PreparedStatement stm = CON.prepareStatement(myGet)){
-            stm.setString(1, iddoctor);
-            stm.setString(2, time);
-            stm.setString(3, date);
-            stm.setString(4, idpatient);
-            stm.setString(5, recall);
-            stm.setString(6, date);
-            stm.setString(7, idpatient);
-            stm.setString(8, analisys);
+            if(iddoctor.length() >= 16)     stm.setString(1, iddoctor);
+            else stm.setString(1, null);
+            if(iddoctor.length() < 16)     stm.setString(2, iddoctor);
+            else stm.setString(2, null);
+            stm.setString(3, time);
+            stm.setString(4, date);
+            stm.setString(5, idpatient);
+            stm.setString(6, recall);
+            if(iddoctor.length() >= 16)     stm.setInt(7, 50);
+            else stm.setInt(7, 11);
+            stm.setString(8, date);
+            stm.setString(9, idpatient);
+            stm.setString(10, analisys);
             
             int c = stm.executeUpdate();
             if(c == 1){
@@ -163,5 +235,30 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
             throw new DAOException("Impossible to find the user", ex);
         }
         return false;
+    }
+    
+    @Override
+    public boolean updateExam(int ssd, String report) throws DAOException {
+        String myGet = "update exams\n" +
+                                "set result = ?, isdone = true\n" +
+                                "where code = ?;" +
+                        "update tickets\n" +
+                                "set ispaid = true\n" +
+                                "where idexam = ?;";
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, report);
+            stm.setInt(2, ssd);
+            stm.setInt(3, ssd);
+            int c = stm.executeUpdate();
+            if(c == 1){
+                //System.out.println(c);
+                return true;
+            }
+            return false;
+             
+        }catch (SQLException ex) {
+            throw new DAOException("Impossible to update exam", ex);
+        }
+        
     }
 }

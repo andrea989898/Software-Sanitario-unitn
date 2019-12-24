@@ -21,4 +21,8 @@ public interface PatientDAO extends DAO<Patient, String>{
     public boolean setNewDoctor(String ssdd, String ssd) throws DAOException;
 
     public List<User> getAllByDoctor(String cf);
+    
+    public List<User> getAllExecptSSP() throws DAOException;
+    
+    public List<User> getAllByProvince(int province) throws DAOException;
 }

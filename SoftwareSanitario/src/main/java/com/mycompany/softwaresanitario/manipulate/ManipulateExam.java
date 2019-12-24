@@ -33,6 +33,16 @@ public class ManipulateExam {
         
     }
  
+    public static ArrayList<Exam> ScreamExamsByDone(List<Exam> exams){
+        ArrayList<Exam> examsScream = new ArrayList<Exam>();
+        
+        for(Exam exam:exams){
+            if(!exam.getIsDone()){
+                examsScream.add(exam);
+            }
+        }
+        return examsScream;
+    }
     
     
 }

@@ -6,11 +6,13 @@
 package com.mycompany.softwaresanitario.filters;
 
 import com.mycompany.softwaresanitario.commons.persistence.dao.DoctorDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.SspDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.commons.persistence.entities.Doctor;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Ssp;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -63,6 +65,14 @@ public class DoctorFilterByDoctor implements Filter {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
         }
         
+        SspDAO sspDao = null;
+        try {
+            sspDao = daoFactory.getDAO(SspDAO.class);
+            request.setAttribute("sspDao", sspDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get dao factory for ssp storage system", ex));
+        }
+        
         DoctorDAO doctorDao = null;
         try {
             doctorDao = daoFactory.getDAO(DoctorDAO.class);
@@ -91,9 +101,13 @@ public class DoctorFilterByDoctor implements Filter {
             return;
         }
         
-        List<Doctor> doctors = doctorDao.getAllDoctors();
+        List<Doctor> doctors = doctorDao.getAllSpecialist();
         if(doctors != null)
             request.setAttribute("doctors", doctors);
+        
+        Ssp ssp = sspDao.getByCity(user.getCity_id());
+        if(ssp != null)
+            request.setAttribute("ssp", ssp);
         
     }
 

@@ -15,4 +15,5 @@ import java.util.ArrayList;
  */
 public interface DoctorDAO extends DAO<Doctor, String>{
     public ArrayList<Doctor> getAllDoctors() throws DAOException;
+    public ArrayList<Doctor> getAllSpecialist() throws DAOException;
 }

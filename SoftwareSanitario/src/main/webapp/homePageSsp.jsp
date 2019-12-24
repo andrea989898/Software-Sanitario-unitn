@@ -7,6 +7,7 @@
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException"%>
 <%@page import="java.util.List"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.User"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Ssp"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO"%>
@@ -20,7 +21,6 @@
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Exam"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.CityDAO"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.City"%>
-<%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Examination"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -37,6 +37,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+       
         <style>
             body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
             #myInput {
@@ -66,36 +67,18 @@
                 border: 1px solid #ddd;
                 margin-bottom: 12px;
             }
-            #myInputExams {
-                background-position: 10px 10px;
-                background-repeat: no-repeat;
-                width: 100%;
-                font-size: 16px;
-                padding: 12px 20px 12px 40px;
-                border: 1px solid #ddd;
-                margin-bottom: 12px;
-            }
-            #myInputConfirmedExams {
-                background-position: 10px 10px;
-                background-repeat: no-repeat;
-                width: 100%;
-                font-size: 16px;
-                padding: 12px 20px 12px 40px;
-                border: 1px solid #ddd;
-                margin-bottom: 12px;
-            }
             textarea {
                 resize: none;
             }
         </style>
     </head>
     <body>
-        <header class="w3-container w3-teal">
-            <h2>Software sanitario</h2>
-        </header>
         <jsp:scriptlet>
              response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
         </jsp:scriptlet>
+        <header class="w3-container w3-teal">
+            <h2>Software sanitario</h2>
+        </header>
         <!-- Sidebar/menu -->
         <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
             <div class="w3-container">
@@ -103,15 +86,8 @@
                   <i class="fa fa-remove"></i>
                 </a>
                 <img src="${avatarPath}" style="width:45%;" class="w3-round"><br><br>
-                <h4><b>${user.getName()} ${user.getSurname()}</b></h4>
-            </div>
-            <div class="w3-bar-block">
-                <a href="homePage.html" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard patient</a> 
-                <c:choose>
-                    <c:when test="${!empty generalDoctor}">
-                        <a href="homeGeneralDoctor.html" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard doctor</a> 
-                    </c:when>
-                </c:choose>
+                <h4>Email: ${ssp.getEmail()}</h4>
+                <h4>Province: ${ssp.getProvinceName()}</h4>
             </div>
             <div class="w3-container">
                 <div class="w3-section w3-padding-16">
@@ -129,15 +105,12 @@
         
             <div class="w3-bar w3-white">
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('allPatients')">All patients</button></h2>
-                <h2><button class="w3-bar-item w3-button" onclick="openDash('allexaminations')">All examinations</button></h2>
-                <h2><button class="w3-bar-item w3-button" onclick="openDash('confirmExaminations')">Confirm an examinations</button></h2>
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('allExams')">All exams</button></h2>
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('confirmExams')">Confirm exams</button></h2>
             </div>
+                    
             <div id="allPatients" class="w3-container dash">
-
-                <h3>All patients:</h3>
-
+                <h3>Patients of your province:</h3>
                 <input class="w3-bordered" type="text" id="myInput" onkeyup="search('myInput', 'myTable')" placeholder="Search for surnames..">
                 <table class="w3-table w3-bordered" id="myTable">
                     <tr>
@@ -197,106 +170,7 @@
                     </div>
                 </c:forEach>    
             </div>
-            <div id="allexaminations" class="w3-container dash" style="display:none">
-                <c:choose>
-                            <c:when test="${empty examinations}">
-                                <div class="card">
-                                    <div class="card-body">
-                                        You haven't already done any examination.
-                                    </div>
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <h3>Examinations:</h3>
-                                <input class="w3-bordered" type="text" id="myInputPassed" onkeyup="search('myInputPassed', 'myTablePassed')" placeholder="Search for dates..">
-                                
-                                <table class="w3-table w3-bordered" id="myTablePassed">
-                                        <tr>
-                                            <th>Code</th>
-                                             <th>Patient</th>
-                                             <th>Date</th>
-                                             <th>Time</th>
-                                             <th>Done</th>
-                                             <th>Argument</th>
-                                        </tr>   
-                                    <c:forEach var="examination" items="${examinations}">
-                                        <tr>
-                                            <td>${examination.getSSD()}</td>
-                                            <td>${examination.getIDPatient()}</td>
-                                            <td>${examination.getExaminationDate()}</td> 
-                                            <td>${examination.getTime()}</td>
-                                            <td>${examination.getIsDone()}</td>
-                                            <td>${examination.getArgument()}</td>
-                                        </tr>          
-                                    </c:forEach>
-                                </table>
-                            </c:otherwise>
-                </c:choose>
-            </div>              
-            <div id="confirmExaminations" class="w3-container dash" style="display:none">
-                
-                <c:choose>
-                            <c:when test="${empty screamExaminationsByDone}">
-                                <div class="card">
-                                    <div class="card-body">
-                                        You don't have examinations to confirm.
-                                    </div>
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <h3>Examinations that have to be confirmed:</h3>
-
-                                <input class="w3-bordered" type="text" id="myInputConfirmed" onkeyup="search('myInputConfirmed', 'myTableConfirmed')" placeholder="Search for dates..">
-                                <table class="w3-table w3-bordered" id="myTableConfirmed">
-                                        <tr>
-                                            <th>Code</th>
-                                             <th>Patient</th>
-                                             <th>Date</th>
-                                             <th>Time</th>
-                                             <th>Done</th>
-                                             <th>Argument</th>
-                                             <th>Confirm examination</th>
-                                        </tr>  
-                                        <c:forEach var="examination" items="${screamExaminationsByDone}">
-                                            <tr>
-                                                <td>${examination.getSSD()}</td>
-                                                <td>${examination.getIDPatient()}</td>
-                                                <td>${examination.getExaminationDate()}</td> 
-                                                <td>${examination.getTime()}</td>
-                                                <td>${examination.getIsDone()}</td>
-                                                <td>${examination.getArgument()}</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#examinationToConfirm${examination.getSSD()}">-></button>
-                                                </td>
-                                            </tr>    
-                                            <div class="modal fade" id="examinationToConfirm${examination.getSSD()}" style="display:none" role="dialog">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                            <h4 class="modal-title">Examination ${examination.getSSD()}. <br> Confirm examination and write the report. When you confirm the examination, this means that the ticket has been payed.</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form method="POST" action="confirmExamination.handler">
-                                                                <div class="form-group">
-                                                                  <label for="comment">Report:</label>
-                                                                  <input name="id" id="id" type="text" class="form-control" value="${examination.getSSD()}" style="display:none">
-                                                                  <textarea class="form-control noresize" rows="5" id="report" name="report"></textarea>
-                                                                </div>
-                                                                <button type="submit" class="btn btn-default">Conferma</button>
-                                                            </form>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </c:forEach>
-                                </table>
-                            </c:otherwise>
-                </c:choose>
-            </div>
+            
             <div id="allExams" class="w3-container dash" style="display:none">
                 <c:choose>
                             <c:when test="${empty exams}">
@@ -308,7 +182,7 @@
                             </c:when>
                             <c:otherwise>
                                 <h3>Exams:</h3>
-                                <input class="w3-bordered" type="text" id="myInputExams" onkeyup="search('myInputPassed', 'myTablePassed')" placeholder="Search for dates..">
+                                <input class="w3-bordered" type="text" id="myInputPassed" onkeyup="search('myInputPassed', 'myTablePassed')" placeholder="Search for surnames..">
                                 
                                 <table class="w3-table w3-bordered" id="myTablePassed">
                                         <tr>
@@ -348,7 +222,7 @@
                             <c:otherwise>
                                 <h3>Exams that have to be confirmed:</h3>
 
-                                <input class="w3-bordered" type="text" id="myInputConfirmedExams" onkeyup="search('myInputConfirmed', 'myTableConfirmed')" placeholder="Search for dates..">
+                                <input class="w3-bordered" type="text" id="myInputConfirmed" onkeyup="search('myInputConfirmed', 'myTableConfirmed')" placeholder="Search for surnames..">
                                 <table class="w3-table w3-bordered" id="myTableConfirmed">
                                         <tr>
                                             <th>Code</th>
@@ -383,7 +257,7 @@
                                                                 <div class="form-group">
                                                                   <label for="comment">Result:</label>
                                                                   <input name="id" id="id" type="text" class="form-control" value="${exam.getCode()}" style="display:none">
-                                                                  <input name="type" value="specialist" style="display:none">
+                                                                  <input name="type" value="ssp" style="display:none">
                                                                   <textarea class="form-control noresize" rows="5" id="result" name="result"></textarea>
                                                                 </div>
                                                                 <button type="submit" class="btn btn-default">Confirm</button>
@@ -399,12 +273,11 @@
                                 </table>
                             </c:otherwise>
                 </c:choose>
-            </div>
+            </div>   
+            
         </div>
         <br>
     <script type="text/javascript" src="<%=request.getContextPath()%>/linkers/connector.js"></script>
+    
     </body>
 </html>
-
-
-                

@@ -110,71 +110,12 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                 return examinations;
             }
         }catch (SQLException ex) {
-            throw new DAOException("Impossible to find the user", ex);
+            throw new DAOException("Impossible to find examinations", ex);
         }
     }
 
     @Override
     public boolean newExamination(String date, String time, String idpatient, String iddoctor, String type, String analisys) throws DAOException {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        /* (query di partenza)
-        
-            
-            select max(idexamination)
-            from examinations
-            
-            select max(code)
-            from tickets
-        
-            select max(code)
-            from prescriptions
-              
-        
-        
-            INSERT INTO public.examinations(
-              idexamination, idpatient, iddoctor, "time", isdone, examinationdate, 
-              argument)
-                  VALUES ((?+1), ?, ?, ?, false, ?, 
-                          ?);
-
-
-            INSERT INTO public.tickets(
-                        code, cost, date, expirationdate, idexamination, idexam, idpatient, 
-                        ispaid)
-                VALUES ((?+1), 50, CONVERT (date, SYSDATETIME()), ?, "", ?, ?, 
-                        false);
-
-
-            INSERT INTO public.prescriptions(
-                        code, analysis, idexam, idexamination, idrecipe)
-                VALUES ((?+1), ?, "", ?, "");
-            
-            
-                
-            (query che va)
-            INSERT INTO public.examinations(
-                                  idexamination, idpatient, iddoctor, "time", isdone, examinationdate,
-                                  argument)
-                                      VALUES (((select max(idexamination)
-                                from examinations) +1), '0HPRHP7BDZ5K10UH', '0HPRHP7BDZ5K10UH', '10:30', false, '0001/03/03',
-                                              '');
-            
-        INSERT INTO public.tickets(
-                                            code, cost, date, expirationdate, idexamination, idexam, idpatient, 
-                                            ispaid)
-                                    VALUES (((select max(code)
-                                                                    from tickets)
-                            +1), 50, now(), '2001/01/01', (select max(idexamination)
-                                from examinations), null, '0HPRHP7BDZ5K10UH', 
-                                            false);
-        INSERT INTO public.prescriptions(
-                        code, analysis, idexam, idexamination, idrecipe)
-                VALUES (((select max(code)
-            from prescriptions)+1), '', null, (select max(idexamination)
-            from examinations), null);
-        
-        */
-        //System.out.println(analisys);
         
         String temp1 = "1";
         String temp2 = "2";
@@ -258,6 +199,64 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
             Logger.getLogger(JDBCPatientDAO.class.getName()).log(Level.SEVERE, null, ex);
         }*/
         return false;
+    }
+
+    @Override
+    public ArrayList<Examination> getExaminationsSpecialist(String specialist) throws DAOException {
+        String myGet = "select *\n" +
+                                "from examinations\n" +
+                                "where iddoctor=?\n" +
+                                "order by examinationdate DESC";
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, specialist);
+            try(ResultSet rst = stm.executeQuery()){
+                ArrayList<Examination> examinations = new ArrayList<Examination>();
+                while (rst.next()) {
+                    Examination examination = new Examination();
+                    examination.setSSD(rst.getInt("idexamination"));
+                    examination.setArgument(rst.getString("argument"));
+                    examination.setIDdoctor(rst.getString("iddoctor"));
+                    examination.setExaminationDate(rst.getDate("examinationdate"));
+                    examination.setIsDone(rst.getBoolean("isdone"));
+                    examination.setTime(rst.getString("time"));
+                    examination.setIDPatient(rst.getString("idpatient"));
+                    //examination.setIDPrescription(rst.getInt("IDPrescription"));
+                    //examination.setIDRecipe(rst.getInt("IDRecipe"));
+                    examinations.add(examination); 
+                    //System.out.println(examination.SSD + examination.doctor + examination.time + examination.examinationDate);
+                }
+                
+                
+                return examinations;
+            }
+        }catch (SQLException ex) {
+            throw new DAOException("Impossible to find the user", ex);
+        }
+    }
+
+    @Override
+    public boolean updateExamination(int ssd, String report) throws DAOException {
+        String myGet = "update examinations\n" +
+                                "set report = ?, isdone = true\n" +
+                                "where idexamination = ?;" +
+                        "update tickets\n" +
+                                "set ispaid = true\n" +
+                                "where idexamination = ?;";
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, report);
+            stm.setInt(2, ssd);
+            stm.setInt(3, ssd);
+            int c = stm.executeUpdate();
+            if(c == 1){
+                //System.out.println(c);
+                return true;
+            }
+            return false;
+             
+        }catch (SQLException ex) {
+            throw new DAOException("Impossible to update exam", ex);
+        }
+        
     }
 
     

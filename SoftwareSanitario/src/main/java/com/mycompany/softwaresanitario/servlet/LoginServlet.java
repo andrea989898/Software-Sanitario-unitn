@@ -4,10 +4,12 @@
  * and open the template in the editor.
  */
 package com.mycompany.softwaresanitario.servlet;
+import com.mycompany.softwaresanitario.commons.persistence.dao.SspDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Ssp;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginServlet extends HttpServlet {
 
     private UserDAO userDao;
+    private SspDAO sspDao;
     
     @Override
     public void init() throws ServletException {
@@ -35,6 +38,11 @@ public class LoginServlet extends HttpServlet {
             userDao = daoFactory.getDAO(UserDAO.class);
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get dao factory for user storage system", ex);
+        }
+        try {
+            sspDao = daoFactory.getDAO(SspDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get dao factory for ssp storage system", ex);
         }
         
     }
@@ -104,7 +112,28 @@ public class LoginServlet extends HttpServlet {
             User user = userDao.getByEmailAndPassword(email, password);
             
             if (user == null) {
-                response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
+                Ssp ssp = sspDao.getByEmailAndPassword(email, password);
+                if(ssp == null){
+                    response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
+                }else{
+                    if(request.getParameter("remember")!=null){
+                        String remember = request.getParameter("remember");
+                        Cookie cEmail = new Cookie("cookemail", email.trim());
+                        Cookie cPassword = new Cookie("cookpass", password.trim());
+                        Cookie cRemember = new Cookie("cookrem", remember.trim());
+                        cEmail.setMaxAge(60 /** 60 * 24 * 15*/);// 15 days
+                        cPassword.setMaxAge(60 /** 60 * 24 * 15*/);
+                        cRemember.setMaxAge(60 /** 60 * 24 * 15*/);
+                        response.addCookie(cEmail);
+                        response.addCookie(cPassword);
+                        response.addCookie(cRemember);
+                    }
+
+                    request.getSession().setAttribute("ssp", ssp);
+                    response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePageSsp.html"));
+                }
+                
+                
                 //processRequest(request, response);
             } else {
                 if(request.getParameter("remember")!=null){

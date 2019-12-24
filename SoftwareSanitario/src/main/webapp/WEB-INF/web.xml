@@ -2,13 +2,17 @@
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <context-param>
         <param-name>dburl</param-name>
-        <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=chiaravise</param-value>
+        <param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=postgres&amp;password=61223180</param-value>
     </context-param>
     <context-param>
         <description>The folder where are stored the exported pdfs</description>
         <param-name>pdfFolder</param-name>
         <param-value>pdfs</param-value>
     </context-param>
+    <filter>
+        <filter-name>SspFilter</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.SspFilter</filter-class>
+    </filter>
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
         <filter-class>com.mycompany.softwaresanitario.filters.AuthenticationFilter</filter-class>
@@ -57,8 +61,18 @@
         <filter-name>DoctorFilterByDoctor</filter-name>
         <filter-class>com.mycompany.softwaresanitario.filters.DoctorFilterByDoctor</filter-class>
     </filter>
+    <filter>
+        <filter-name>ExaminationsFilterBySpecialist</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.ExaminationsFilterBySpecialist</filter-class>
+    </filter>
     <filter-mapping>
-        <filter-name>DoctorFilterByDoctor</filter-name>
+        <filter-name>SspFilter</filter-name>
+        <servlet-name>homePageSsp</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ExaminationsFilterBySpecialist</filter-name>
         <servlet-name>homeSpecialistPage</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
@@ -147,14 +161,20 @@
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>PatientFilterByDoctor</filter-name>
+        <filter-name>GeneralDoctorFilterByPatient</filter-name>
+        <servlet-name>homeSpecialistPage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>SpecialistFilterByPatient</filter-name>
         <servlet-name>homeGeneralDoctorPage</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
     <filter-mapping>
         <filter-name>PatientFilterByDoctor</filter-name>
-        <servlet-name>homeSpecialistPage</servlet-name>
+        <servlet-name>homeGeneralDoctorPage</servlet-name>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
@@ -181,6 +201,10 @@
     <servlet>
         <servlet-name>HomePage</servlet-name>
         <jsp-file>/homePage.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>HomePageSsp</servlet-name>
+        <jsp-file>/homePageSsp.jsp</jsp-file>
     </servlet>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
@@ -213,6 +237,14 @@
     <servlet>
         <servlet-name>NewRecipeServlet</servlet-name>
         <servlet-class>com.mycompany.softwaresanitario.servlet.NewRecipeServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>confirmExaminationServlet</servlet-name>
+        <servlet-class>com.mycompany.softwaresanitario.servlet.confirmExaminationServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>confirmExamServlet</servlet-name>
+        <servlet-class>com.mycompany.softwaresanitario.servlet.confirmExamServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CambioPasswordPage</servlet-name>
@@ -247,6 +279,10 @@
         <url-pattern>/restricted/homePage.html</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>HomePageSsp</servlet-name>
+        <url-pattern>/restricted/homePageSsp.html</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>changePassowordServlet</servlet-name>
         <url-pattern>/restricted/changePassoword.handler</url-pattern>
     </servlet-mapping>
@@ -273,6 +309,14 @@
     <servlet-mapping>
         <servlet-name>NewRecipeServlet</servlet-name>
         <url-pattern>/restricted/newRecipe.handler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>confirmExaminationServlet</servlet-name>
+        <url-pattern>/restricted/confirmExamination.handler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>confirmExamServlet</servlet-name>
+        <url-pattern>/restricted/confirmExam.handler</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

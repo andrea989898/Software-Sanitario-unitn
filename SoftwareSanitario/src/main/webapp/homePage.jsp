@@ -47,6 +47,9 @@
         </style>
     </head>
     <body>
+        <header class="w3-container w3-teal">
+            <h2>Software sanitario</h2>
+        </header>
         <jsp:scriptlet>
              response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
         </jsp:scriptlet>
@@ -70,7 +73,7 @@
                 </c:choose>
                 <c:choose>
                     <c:when test="${!empty specialist}">
-                        <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard specialist</a> 
+                        <a href="homeSpecialist.html" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard specialist</a> 
                     </c:when>   
                 </c:choose>
             </div>
@@ -83,10 +86,7 @@
                 </div> 
             </div>
         </nav>
-        <header id="portfolio">
-                <a href="#"><img src="${avatarPath}" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
-                <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
-        </header>
+        
         <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
         
         <div class="w3-main" style="margin-left:300px">
@@ -169,11 +169,7 @@
                             </c:otherwise>
                 </c:choose>
                 </div>
-                <script>
-                    function openExams(){
-                        document.getElementById("Exams").style.display = "block";  
-                    }
-                </script>
+                
             </div>     
 
             <div id="screamExaminations" class="w3-container dash" style="display:none">
@@ -250,11 +246,7 @@
                     </form>
                 </div>
                 --%>
-                <script>
-                    function openExaminations(){ 
-                        document.getElementById("Examinations").style.display = "block";  
-                    }
-                </script>
+                
             </div>
 
             <div id="screamTickets" class="w3-container dash" style="display:none">
@@ -340,11 +332,7 @@
                             </c:otherwise>
                 </c:choose>
                 </div>
-                <script>
-                    function openTickets(){
-                        document.getElementById("Tickets").style.display = "block";  
-                    }
-                </script>
+                
             </div>
             
             <div id="screamGeneralDoctor" class="w3-container dash" style="display:none">
@@ -456,11 +444,7 @@
                                 </c:choose>
                             </table>
                         </div>
-                        <script>
-                            function openDashGeneralDoctor(dashName) {
-                                document.getElementById(dashName).style.display = "block";  
-                            }
-                        </script>    
+                         
                     </div>
             </div>
             
@@ -554,118 +538,7 @@
             
         </div>
         <br>
-    <script>
-        
-        function openDash(dashName) {
-            var i;
-            var x = document.getElementsByClassName("dash");
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";  
-            }
-            document.getElementById(dashName).style.display = "block";  
-        }
-
-        // Script to open and close sidebar
-        function w3_open() {
-            document.getElementById("mySidebar").style.display = "block";
-            document.getElementById("myOverlay").style.display = "block";
-        }
- 
-        function w3_close() {
-            document.getElementById("mySidebar").style.display = "none";
-            document.getElementById("myOverlay").style.display = "none";
-        }
-        function search() {
-            // Declare variables 
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("myInput");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("myTable");
-            tr = table.getElementsByTagName("tr");
-
-            // Loop through all table rows, and hide those who don't match the search query
-            for (i = 0; i < tr.length; i++) {
-              td = tr[i].getElementsByTagName("td")[0];
-              if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                  tr[i].style.display = "";
-                } else {
-                  tr[i].style.display = "none";
-                }
-              } 
-            }
-        }
-        function sortTable(myTable) {
-          var table, rows, switching, i, x, y, shouldSwitch, count;
-          count = 0;
-          table = document.getElementById(myTable);
-          switching = true;
-          /*Make a loop that will continue until
-          no switching has been done:*/
-          while (switching) {
-            //start by saying: no switching is done:
-            switching = false;
-            rows = table.rows;
-            /*Loop through all table rows (except the
-            first, which contains table headers):*/
-            for (i = 1; i < (rows.length - 1); i++) {
-              //start by saying there should be no switching:
-              shouldSwitch = false;
-              /*Get the two elements you want to compare,
-              one from current row and one from the next:*/
-              x = rows[i].getElementsByTagName("TD")[1];
-              y = rows[i + 1].getElementsByTagName("TD")[1];
-              //check if the two rows should switch place:
-              if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                //if so, mark as a switch and break the loop:
-                count++;
-                shouldSwitch = true;
-                break;
-              }
-            }
-            if (shouldSwitch) {
-              /*If a switch has been marked, make the switch
-              and mark that a switch has been done:*/
-              rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-              switching = true;
-            }
-          }
-          if(count == 0){
-            switching = true;
-            /*Make a loop that will continue until
-            no switching has been done:*/
-            while (switching) {
-              //start by saying: no switching is done:
-              switching = false;
-              rows = table.rows;
-              /*Loop through all table rows (except the
-              first, which contains table headers):*/
-              for (i = 1; i < (rows.length - 1); i++) {
-                //start by saying there should be no switching:
-                shouldSwitch = false;
-                /*Get the two elements you want to compare,
-                one from current row and one from the next:*/
-                x = rows[i].getElementsByTagName("TD")[1];
-                y = rows[i + 1].getElementsByTagName("TD")[1];
-                //check if the two rows should switch place:
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                  //if so, mark as a switch and break the loop:
-                  //count++;
-                  shouldSwitch = true;
-                  break;
-                }
-              }
-              if (shouldSwitch) {
-                /*If a switch has been marked, make the switch
-                and mark that a switch has been done:*/
-                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                switching = true;
-              }
-            }
-          }
-        }
-    </script>    
+    <script type="text/javascript" src="<%=request.getContextPath()%>/linkers/connector.js"></script>
     
     </body>
 </html>
