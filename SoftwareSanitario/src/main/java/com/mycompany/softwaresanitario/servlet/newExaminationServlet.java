@@ -95,6 +95,8 @@ public class newExaminationServlet extends HttpServlet {
         } catch (DAOFactoryException ex) {
             throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }
+        
+        String prescriptor = request.getParameter("prescriptor");
         String type = request.getParameter("type");
         String analysis = request.getParameter("analysis");
         String time = request.getParameter("time");
@@ -109,7 +111,7 @@ public class newExaminationServlet extends HttpServlet {
         }
 
         try {
-            boolean examination = examinationDao.newExamination(date, time, idpatient, iddoctor, type, analysis);
+            boolean examination = examinationDao.newExamination(date, time, idpatient, iddoctor, type, analysis, prescriptor);
             
             if (examination) {
                 //request.getSession().setAttribute("user", user);

@@ -16,5 +16,6 @@ import java.util.ArrayList;
  */
 public interface DrugDAO extends DAO<Drug, String>{
     public ArrayList<Drug> getAllDrugs() throws DAOException;
+    public ArrayList<Drug> getAllDrugsByRecipe(int idrecipe) throws DAOException;
     public boolean newdrugforrecipe(String drug) throws DAOException;
 }

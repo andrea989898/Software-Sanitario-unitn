@@ -203,6 +203,7 @@
                 <h3>Prescribe a new examination:</h3>
                 
                 <form class="w3-container " method="POST" action="newExamination.handler">
+                    <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
                     <br><br>
                     <select id="patient" name="patient" class="form-control selectpicker">
                         <option value="0" disabled selected hidden>Select patient:</option>
@@ -239,6 +240,7 @@
                 <h3>Prescribe a new exam:</h3>
                 
                 <form class="w3-container " method="POST" action="newExam.handler">
+                    <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
                     <br><br>
                     <select class="form-control selectpicker" id="patient" name="patient">
                         <option value="0" disabled selected hidden>Select patient:</option>
@@ -275,6 +277,7 @@
                 <h3>Prescribe a new recipe:</h3>
                 
                 <form class="w3-container " method="POST" action="newRecipe.handler">
+                    <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
                     <br><br>
                     <select id="patient" name="patient" class="form-control selectpicker">
                         <option value="0" disabled selected hidden>Select patient:</option>

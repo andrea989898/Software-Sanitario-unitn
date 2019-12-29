@@ -7,6 +7,7 @@ package com.mycompany.softwaresanitario.filters;
 
 import com.mycompany.softwaresanitario.commons.persistence.dao.ExamDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.PatientDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.PrescriptionDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.SspDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
@@ -85,6 +86,14 @@ public class SspFilter implements Filter {
             throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }
         
+        PrescriptionDAO prescriptionDao = null;
+        try {
+            prescriptionDao = daoFactory.getDAO(PrescriptionDAO.class);
+            request.setAttribute("PrescriptionDao", prescriptionDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for prescriptions storage system", ex));
+        }
+        
         String contextPath = request.getServletContext().getContextPath();
         if (contextPath.endsWith("/")) {
             contextPath = contextPath.substring(0, contextPath.length() - 1);
@@ -111,7 +120,9 @@ public class SspFilter implements Filter {
             List<User> allPatients = patientDao.getAllByProvince(ssp.getProvince_id());
             List<Exam> screamExamsByDone = new ArrayList<Exam>();
             List<Exam> exams = examDao.getExamsOfSsp(ssp.getId());
+            List<String> datesofRecipe = prescriptionDao.getAllDateOfRecipe(ssp.getProvince_id());
             if(allPatients.size()>0)    request.setAttribute("patients", allPatients);
+            if(datesofRecipe.size()>0)    request.setAttribute("datesofRecipe", datesofRecipe);
             if(exams.size()>0) {
                 screamExamsByDone = ManipulateExam.ScreamExamsByDone(exams);
                 request.setAttribute("exams", exams);

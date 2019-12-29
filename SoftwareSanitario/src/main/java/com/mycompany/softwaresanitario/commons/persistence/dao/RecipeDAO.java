@@ -22,7 +22,7 @@ public interface RecipeDAO extends DAO<Recipe, String>{
     
     public Recipe getByCode(String SSD) throws DAOException;
 
-    public boolean newrecipe(String idpatient, String analysis);
+    public boolean newrecipe(String idpatient, String analysis, String prescriptor);
     
     
 }

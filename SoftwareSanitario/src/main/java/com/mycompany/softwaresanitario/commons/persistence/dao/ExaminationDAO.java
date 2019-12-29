@@ -19,6 +19,6 @@ public interface ExaminationDAO extends DAO<Examination, String>{
     public Examination getByCode(int code) throws DAOException;
     public ArrayList <Examination> getExaminations(String patient) throws DAOException;
     public ArrayList <Examination> getExaminationsSpecialist(String specialist) throws DAOException;
-    public boolean newExamination(String date, String time, String idpatient, String iddoctor, String type, String analysis) throws DAOException;
+    public boolean newExamination(String date, String time, String idpatient, String iddoctor, String type, String analysis, String prescriptor) throws DAOException;
     public boolean updateExamination(int ssd, String report) throws DAOException;
 }

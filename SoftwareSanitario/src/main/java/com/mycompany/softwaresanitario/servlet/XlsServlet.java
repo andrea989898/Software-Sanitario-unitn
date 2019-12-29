@@ -5,26 +5,22 @@
  */
 package com.mycompany.softwaresanitario.servlet;
 
-import com.mycompany.softwaresanitario.PDFmanagement.ExamPDF;
-import com.mycompany.softwaresanitario.PDFmanagement.TicketPDF;
+import com.mycompany.softwaresanitario.XLSmanagement.PrescriptionsRecipeXLS;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
-import com.mycompany.softwaresanitario.image.ImageUtil;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Calendar;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.pdfbox.pdmodel.PDDocument;
 
 /**
  *
  * @author franc
  */
-public class PDFservlet extends HttpServlet {
+public class XlsServlet extends HttpServlet {
 
+    
     DAOFactory daoFactory;
     
     
@@ -51,10 +47,10 @@ public class PDFservlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet PDFservlet</title>");            
+            out.println("<title>Servlet XlsServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet PDFservlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet XlsServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -72,33 +68,22 @@ public class PDFservlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String pdfFolder = getServletContext().getInitParameter("pdfFolder");
-        if (pdfFolder == null) {
-            throw new ServletException("PDFs folder not configured");
+        String xlsFolder = getServletContext().getInitParameter("xlsFolder");
+        if (xlsFolder == null) {
+            throw new ServletException("XLSs folder not configured");
         }
         
         String contextPath = getServletContext().getContextPath();
-        ImageUtil.configure(getServletContext());
-        //System.out.println(pdfFolder);
-        //pdfFolder = contextPath + pdfFolder;
-        pdfFolder = getServletContext().getRealPath(pdfFolder);
-        pdfFolder = pdfFolder.substring(0, pdfFolder.length() - 42);
-        pdfFolder =  pdfFolder +"src\\main\\webapp\\pdfs";
+        xlsFolder = getServletContext().getRealPath(xlsFolder);
+        xlsFolder = xlsFolder.substring(0, xlsFolder.length() - 42);
+        xlsFolder =  xlsFolder +"\\src\\main\\webapp\\xls";
         
-        String type = request.getParameter("type");
-        if(type.equals("ticket")){
-            TicketPDF.generateTicketPDF(request.getParameter("id"), daoFactory, request, response, pdfFolder);
-        }
-        
-        if(type.equals("exam")){
-            ExamPDF.generateExamPDF(request.getParameter("id"), daoFactory, request, response, pdfFolder);
-        }
+        PrescriptionsRecipeXLS.generatePrescriptionsXLS(request.getParameter("date"), request.getParameter("province"), daoFactory, request, response, xlsFolder);
         
         if (!contextPath.endsWith("/")) {
             contextPath += "/";
         }
-        response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
+        response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePageSsp.html"));
     }
 
     /**

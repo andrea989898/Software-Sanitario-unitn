@@ -10,6 +10,7 @@ import com.mycompany.softwaresanitario.commons.persistence.entities.Prescription
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -18,4 +19,6 @@ import java.util.ArrayList;
 public interface PrescriptionDAO extends DAO<Prescription, String>{
     public ArrayList <Prescription> getPrescriptions(String patient) throws DAOException;
     public Prescription getPrescriptionByExamCode(int idExam) throws DAOException;
+    public List<String> getAllDateOfRecipe(int idprovince) throws DAOException;
+    public List<Prescription> getPrescriptionsByDateAndProvince(String date, String idprovince) throws DAOException;
 }

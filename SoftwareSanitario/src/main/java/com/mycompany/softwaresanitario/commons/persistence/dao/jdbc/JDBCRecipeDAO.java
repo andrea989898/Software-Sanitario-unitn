@@ -14,7 +14,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -84,26 +87,32 @@ public class JDBCRecipeDAO extends JDBCDAO<Recipe, String> implements RecipeDAO{
     }
 
     @Override
-    public boolean newrecipe(String idpatient, String analysis) {
+    public boolean newrecipe(String idpatient, String analysis, String prescriptor) {
         //INSERT INTO public.prescriptions(
        //     code, analysis, idexam, idexamination, idrecipe)
     //VALUES (?, ?, ?, ?, ?);
 
-        
-        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	Date d = new Date();
+        String dayofprescription = dateFormat.format(d);
+	dayofprescription = dayofprescription.substring(0, 10);
+        prescriptor = prescriptor.replaceAll("\\s+$", "");
         
         String myGet="INSERT INTO public.recipes(\n" +
 "            code)\n" +
 "    VALUES ((select max(code) from recipes)+1);"
                 + ""
                 + "INSERT INTO public.prescriptions(\n" +
-"            code, analysis, idexam, idexamination, idrecipe)\n" +
+"            code, analysis, idexam, idexamination, idrecipe, iddoctor, idpatient, date)\n" +
 "    VALUES (((select max(code)\n" +
-                    "            from prescriptions)+1), ?, null, null, (select max(code) from recipes));"
+                    "            from prescriptions)+1), ?, null, null, (select max(code) from recipes), ?, ?, TO_DATE(?, 'YYYY/MM/DD'));"
                 + "";
         
         try (PreparedStatement stm = CON.prepareStatement(myGet)){
             stm.setString(1, analysis);
+            stm.setString(2, prescriptor);
+            stm.setString(3, idpatient);
+            stm.setString(4, dayofprescription);
             int c = stm.executeUpdate();
             if(c == 1){
                 //System.out.println(c);

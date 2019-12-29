@@ -22,12 +22,14 @@ import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.logging.Level;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.JPEGFactory;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -45,13 +47,13 @@ public class ExamPDF {
         try {
             examDao = daoFactory.getDAO(ExamDAO.class);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for exam storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for exams storage system", ex));
         }
         
         try {
             prescriptionDao = daoFactory.getDAO(PrescriptionDAO.class);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for prescription storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for prescriptions storage system", ex));
         }
         
         String qrCodeMessage = null;
@@ -73,6 +75,9 @@ public class ExamPDF {
             
             try (PDDocument doc = new PDDocument()) {
                 PDPage page = new PDPage();
+                PDFont font = PDType1Font.TIMES_ROMAN;
+                PDFont fontBold = PDType1Font.TIMES_BOLD;
+                int fontSize = 12;
                 doc.addPage(page);
                 PDImageXObject qrCode = JPEGFactory.createFromImage(doc,
                     QRCode.generate(JSON.toJSONString(qrCodeMessage)));
@@ -95,38 +100,14 @@ public class ExamPDF {
                         30,
                         676-60-26,
                         Color.BLUE);
-
-                    float margin = 30;
-                    float yStartNewPage = page.getMediaBox().getHeight() - (4 * margin);
-                    float tableWidth = page.getMediaBox().getWidth() - (4 * margin);
-                
-                    boolean drawContent = true;
-                    float yStart = yStartNewPage;
-                    float bottomMargin = 70;
-                    float yPosition = 676-60-26-14;
-                
-                    BaseTable table = new BaseTable(yPosition, yStartNewPage, bottomMargin, tableWidth, margin, doc, page, true, drawContent);
-                    Row<PDPage> header = table.createRow(20);
-                    header.createCell(20, "Code");
-                    header.createCell(20,"IDPatient");
-                    header.createCell(20, "IDDoctor");
-                    header.createCell(20, "ExaminationDate");
-                    header.createCell(10,"IsDone");
-                    header.createCell(10,"IsRecall");
-                    header.createCell(30, "Result");
-                    table.addHeaderRow(header);
-                
                     
-                    Row<PDPage> row = table.createRow(12);
-                    row.createCell(String.valueOf(exam.getCode()));
-                    row.createCell(String.valueOf(exam.getIDPatient()));
-                    row.createCell(String.valueOf(exam.getIDDoctor()));
-                    row.createCell(String.valueOf(exam.getExaminationDate()));
-                    row.createCell(String.valueOf(exam.getIsDone()));
-                    row.createCell(String.valueOf(exam.getIsRecall()));
-                    row.createCell(String.valueOf(exam.getResult()));
-                
-                    table.draw();
+                    scriviPdf(doc, contents, 30, 560, Color.BLACK, "Exam code: ", String.valueOf(exam.getCode()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 540, Color.BLACK, "SSD patient: ", String.valueOf(exam.getIDPatient()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 520, Color.BLACK, "SSD doctor: ", String.valueOf(exam.getIDDoctor()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 500, Color.BLACK, "Exam date: ", String.valueOf(exam.getExaminationDate()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 480, Color.BLACK, "The exam has been already done: ", String.valueOf(exam.getIsDone()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 460, Color.BLACK, "The exam is a recall: ", String.valueOf(exam.getIsRecall()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 440, Color.BLACK, "Result of the exam: ", String.valueOf(exam.getResult()), font, fontBold, fontSize);
                     
                 }
                 //"C:\\Users\\franc\\Desktop\\Software-Sanitario-unitn\\SoftwareSanitario\\src\\main\\webapp\\pdfs"
@@ -135,7 +116,7 @@ public class ExamPDF {
                 
                 response.setContentType("application/pdf");
                 
-                response.setHeader("Content-disposition", "attachment; filename='exam.pdf'");
+                response.setHeader("Content-disposition", "attachment; filename=exam.pdf");
                 //System.out.println("ticket-" + ticket.getCode() + "-" + Calendar.getInstance().getTimeInMillis() + ".pdf");
                 doc.save(response.getOutputStream());   
                 
@@ -144,5 +125,22 @@ public class ExamPDF {
             }
         }
         //return null;
+    }
+    
+    
+    private static void scriviPdf(PDDocument document, PDPageContentStream contentStream, int x, int y, Color color, String stringa1, String stringa2, PDFont font, PDFont fontBold, int fontSize) {
+        try {
+            contentStream.beginText();
+            contentStream.setFont(fontBold, fontSize);
+            contentStream.setNonStrokingColor(color);
+            contentStream.newLineAtOffset(x, y);
+            contentStream.showText(stringa1);
+            contentStream.setFont(font, fontSize);
+            contentStream.setNonStrokingColor(color);
+            contentStream.showText(stringa2);
+            contentStream.endText();
+        } catch (IOException ex) {
+            System.err.println("Unable to generatePDF a Prescription Exam PDF");
+        }
     }
 }

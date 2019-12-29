@@ -67,6 +67,15 @@
                 border: 1px solid #ddd;
                 margin-bottom: 12px;
             }
+            #myInputXls {
+                background-position: 10px 10px;
+                background-repeat: no-repeat;
+                width: 100%;
+                font-size: 16px;
+                padding: 12px 20px 12px 40px;
+                border: 1px solid #ddd;
+                margin-bottom: 12px;
+            }
             textarea {
                 resize: none;
             }
@@ -107,6 +116,7 @@
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('allPatients')">All patients</button></h2>
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('allExams')">All exams</button></h2>
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('confirmExams')">Confirm exams</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('allRecipes')">Recipes of the province</button></h2>
             </div>
                     
             <div id="allPatients" class="w3-container dash">
@@ -273,7 +283,40 @@
                                 </table>
                             </c:otherwise>
                 </c:choose>
-            </div>   
+            </div> 
+            
+            <div id="allRecipes" class="w3-container dash" style="display:none">
+                <c:choose>
+                            <c:when test="${empty datesofRecipe}">
+                                <div class="card">
+                                    <div class="card-body">
+                                        There aren't any recipes.
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <h3>Recipes for date:</h3>
+                                <input class="w3-bordered" type="text" id="myInputXls" onkeyup="search('myInputXls', 'myTableXls')" placeholder="Search for date..">
+                                
+                                <table class="w3-table w3-bordered" id="myTableXls">
+                                        <tr>
+                                            <th>Recipes</th>
+                                            <th>Get the xls report</th>
+                                        </tr>   
+                                    <c:forEach var="date" items="${datesofRecipe}">
+                                        <tr>
+                                            <td>Recipes of the ${date}</td>
+                                            <td>
+                                                <a href="exportToXLS.handler?date=${date}&province=${ssp.getProvince_id()}">
+                                                    <button class="w3-button w3-round-large w3-blue">go</button>
+                                                </a>
+                                            </td>
+                                        </tr>          
+                                    </c:forEach>
+                                </table>
+                            </c:otherwise>
+                </c:choose>
+            </div>
             
         </div>
         <br>

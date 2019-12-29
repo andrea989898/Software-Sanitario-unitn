@@ -10,9 +10,12 @@ import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOExc
 import com.mycompany.softwaresanitario.commons.persistence.entities.Exam;
 import com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor;
 import java.sql.Connection;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,10 +188,14 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
         }
     }
     
-    public boolean newExam(String date, String time, String idpatient, String iddoctor, String analisys, String recall) throws DAOException {
+    public boolean newExam(String date, String time, String idpatient, String iddoctor, String analisys, String recall, String prescriptor) throws DAOException {
         
-        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	Date d = new Date();
+        String dayofprescription = dateFormat.format(d);
+	dayofprescription = dayofprescription.substring(0, 10);
         iddoctor = iddoctor.replaceAll("\\s+$", "");
+        prescriptor = prescriptor.replaceAll("\\s+$", "");
         String myGet ="INSERT INTO public.exams(\n" +
                     "              code, iddoctor, sspcode, result, \"time\", isdone, examinationdate, idpatient, \n" +
 "            isrecall)\n" +
@@ -206,10 +213,10 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     "\n" +
                     "\n" +
                     "            INSERT INTO public.prescriptions(\n" +
-                    "                        code, analysis, idexam, idexamination, idrecipe)\n" +
+                    "                        code, analysis, idexam, idexamination, idrecipe, iddoctor, idpatient, date)\n" +
                     "                VALUES (((select max(code)\n" +
                     "            from prescriptions)+1), ?, (select max(code)\n" +
-                    "            from exams), null, null);";
+                    "            from exams), null, null, ?, ?, TO_DATE(?, 'YYYY/MM/DD'));";
         try (PreparedStatement stm = CON.prepareStatement(myGet)){
             if(iddoctor.length() >= 16)     stm.setString(1, iddoctor);
             else stm.setString(1, null);
@@ -224,6 +231,9 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
             stm.setString(8, date);
             stm.setString(9, idpatient);
             stm.setString(10, analisys);
+            stm.setString(11, prescriptor);
+            stm.setString(12, idpatient);
+            stm.setString(13, dayofprescription);
             
             int c = stm.executeUpdate();
             if(c == 1){

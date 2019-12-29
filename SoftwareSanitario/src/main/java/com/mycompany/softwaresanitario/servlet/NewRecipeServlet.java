@@ -103,29 +103,41 @@ public class NewRecipeServlet extends HttpServlet {
         }
         String[] drugs;
         drugs = new String[5];
+        int y = 0;
         
         String idpatient = request.getParameter("patient");
         String analysis = request.getParameter("analysis");
-        if(request.getParameter("drug-1") != "false")
+        String prescriptor = request.getParameter("prescriptor");
+        if(request.getParameter("drug-1") != null){
             drugs[0] = request.getParameter("drug-1");
-        if(request.getParameter("drug-2") != "false")
+            y++;
+        }
+        if(request.getParameter("drug-2") != null){
             drugs[1] = request.getParameter("drug-2");
-        if(request.getParameter("drug-3") != "false")    
+            y++;
+        }
+        if(request.getParameter("drug-3") != null){
             drugs[2] = request.getParameter("drug-3");
-        if(request.getParameter("drug-4") != "false")
+            y++;
+        }
+        if(request.getParameter("drug-4") != null){
             drugs[3] = request.getParameter("drug-4");
-        if(request.getParameter("drug-5") != "false")
+            y++;
+        }
+        if(request.getParameter("drug-5") != null){
             drugs[4] = request.getParameter("drug-5");
+            y++;
+        }
         
         String contextPath = getServletContext().getContextPath();
         if (!contextPath.endsWith("/")) {
             contextPath += "/";
         }
-
+        
         try {
             int x=0;
             boolean drug = false;
-            boolean recipe = recipeDao.newrecipe(idpatient, analysis);
+            boolean recipe = recipeDao.newrecipe(idpatient, analysis, prescriptor);
             
             if (recipe) {
                 for(int j=0;j<5;j++){
@@ -134,7 +146,7 @@ public class NewRecipeServlet extends HttpServlet {
                     if (drug) x++;
                     drug = false;
                 }
-                if(x==5) response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homeGeneralDoctor.html"));
+                if(x==y) response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homeGeneralDoctor.html"));
                 else response.sendRedirect(response.encodeRedirectURL(contextPath + "errorPage.html"));
             }
         } catch (DAOException ex) {

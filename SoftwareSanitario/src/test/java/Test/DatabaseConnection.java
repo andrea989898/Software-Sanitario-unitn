@@ -180,6 +180,11 @@ public class DatabaseConnection{
             "IDExam INT,\n"+
             "IDExamination INT,\n" +
             "IDRecipe INT,\n" +
+            "IDDoctor CHAR(16) NOT NULL,\n"+
+            "IDPatient CHAR(16) NOT NULL,\n"+
+            "Date DATE NOT NULL,\n"+
+            "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD),\n" +
+            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD),\n" +
             "FOREIGN KEY(IDRecipe) REFERENCES Recipes(Code),\n" +
             "FOREIGN KEY(IDExamination) REFERENCES Examinations(IDExamination),\n" +
             "FOREIGN KEY(IDExam) REFERENCES Exams(Code));";     

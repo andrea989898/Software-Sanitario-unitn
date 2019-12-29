@@ -81,5 +81,29 @@ public class JDBCDrugDAO extends JDBCDAO<Drug, String> implements DrugDAO{
         }
         return false;
     }
+
+    @Override
+    public ArrayList<Drug> getAllDrugsByRecipe(int idrecipe) throws DAOException {
+        String myGet = "select distinct dr.code, dr.name\n" +
+                       "from drugs dr, drugsrecipes drec\n" +
+                       "where drec.idrecipe = ? AND dr.code = drec.iddrug\n" +
+                       "order by code;" ;
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setInt(1, idrecipe);
+            try(ResultSet rst = stm.executeQuery()){
+                ArrayList<Drug> drugs = new ArrayList<Drug>();
+                while (rst.next()) {
+                    Drug drug = new Drug();
+                    drug.setCode(rst.getInt("code"));
+                    drug.setName(rst.getString("name"));
+                    drugs.add(drug); 
+                }
+                stm.close();
+                return drugs;
+            }
+        } catch (SQLException ex) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
 }
 

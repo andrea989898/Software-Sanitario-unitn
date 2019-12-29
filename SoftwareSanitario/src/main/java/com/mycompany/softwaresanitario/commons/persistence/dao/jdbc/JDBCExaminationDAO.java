@@ -14,7 +14,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -115,8 +118,14 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
     }
 
     @Override
-    public boolean newExamination(String date, String time, String idpatient, String iddoctor, String type, String analisys) throws DAOException {
+    public boolean newExamination(String date, String time, String idpatient, String iddoctor, String type, String analisys, String prescriptor) throws DAOException {
         
+        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	Date d = new Date();
+        String dayofprescription = dateFormat.format(d);
+	dayofprescription = dayofprescription.substring(0, 10);
+        prescriptor = prescriptor.replaceAll("\\s+$", "");
         String temp1 = "1";
         String temp2 = "2";
         String myGet="";
@@ -139,10 +148,10 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     "\n" +
                     "\n" +
                     "            INSERT INTO public.prescriptions(\n" +
-                    "                        code, analysis, idexam, idexamination, idrecipe)\n" +
+                    "                        code, analysis, idexam, idexamination, idrecipe, iddoctor, idpatient, date)\n" +
                     "                VALUES (((select max(code)\n" +
                     "            from prescriptions)+1), ?, null, (select max(idexamination)\n" +
-                    "            from examinations), null);";
+                    "            from examinations), null, ?, ?, TO_DATE(?, 'YYYY/MM/DD'));";
             
         }else if (type.equals(temp2)){
                 //System.out.println("Sono nel type 2");
@@ -163,10 +172,10 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     "\n" +
                     "\n" +
                     "            INSERT INTO public.prescriptions(\n" +
-                    "                        code, analysis, idexam, idexamination, idrecipe)\n" +
+                    "                        code, analysis, idexam, idexamination, idrecipe, iddoctor, idpatient, date)\n" +
                     "                VALUES (((select max(code)\n" +
                     "            from prescriptions)+1), ?, null, (select max(idexamination)\n" +
-                    "            from examinations), null);";
+                    "            from examinations), null, ?, ?, TO_DATE(?, 'YYYY/MM/DD'));";
             }
         
         
@@ -179,6 +188,9 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
             stm.setString(6, date);
             stm.setString(7, idpatient);
             stm.setString(8, analisys);
+            stm.setString(9, prescriptor);
+            stm.setString(10, idpatient);
+            stm.setString(11, dayofprescription);
             
             int c = stm.executeUpdate();
             if(c == 1){
