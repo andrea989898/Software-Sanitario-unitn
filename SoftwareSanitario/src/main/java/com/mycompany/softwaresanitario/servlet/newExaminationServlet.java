@@ -6,11 +6,13 @@
 package com.mycompany.softwaresanitario.servlet;
 
 import com.mycompany.softwaresanitario.commons.persistence.dao.ExaminationDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.commons.persistence.entities.Examination;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import com.mycompany.softwaresanitario.mailer.Mailer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Time;
@@ -37,12 +39,24 @@ public class newExaminationServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     DAOFactory daoFactory;
+    ExaminationDAO examinationDao;
+    UserDAO userDao;
     
     
     public void init() throws ServletException {
         daoFactory = (DAOFactory) super.getServletContext().getAttribute("daoFactory");
         if (daoFactory == null) {
             throw new ServletException("Impossible to get dao factory for storage system");
+        }
+        try {
+            examinationDao = daoFactory.getDAO(ExaminationDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for examinations storage system", ex));
+        }
+        try {
+            userDao = daoFactory.getDAO(UserDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get dao factory for user storage system", ex);
         }
     }
     
@@ -89,12 +103,8 @@ public class newExaminationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ExaminationDAO examinationDao;
-        try {
-            examinationDao = daoFactory.getDAO(ExaminationDAO.class);
-        } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
-        }
+        
+        User userPatient = null;
         
         String prescriptor = request.getParameter("prescriptor");
         String type = request.getParameter("type");
@@ -104,6 +114,21 @@ public class newExaminationServlet extends HttpServlet {
         String idpatient = request.getParameter("patient");
         //System.out.println(analysis);
         String iddoctor = request.getParameter("doctor");
+        
+        idpatient = idpatient.replaceAll("\\s+$", "");
+        try {
+            userPatient = userDao.getByCode(idpatient);
+        } catch (DAOException ex) {
+            Logger.getLogger(newExamServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String subject= new String("New examination\n");
+        String patientName = userPatient.getName().replaceAll("\\s+$", "");
+        String patientSurname = userPatient.getSurname().replaceAll("\\s+$", "");
+        String msg= new String("Ciao "+ patientName + " " + patientSurname + " ti è stata prescritta una nuova visita da un medico specialista. Entra nella tua area riservata per visualizzarla.");  
+        //System.out.print(password);
+          
+        Mailer.send(userPatient.getEmail(), subject, msg);
         
         String contextPath = getServletContext().getContextPath();
         if (!contextPath.endsWith("/")) {

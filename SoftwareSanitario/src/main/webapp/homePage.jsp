@@ -33,6 +33,10 @@
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
         <style>
             body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
             #myInput {
@@ -44,6 +48,28 @@
                 border: 1px solid #ddd;
                 margin-bottom: 12px;
             }
+            .upload-btn-wrapper {
+                position: relative;
+                overflow: hidden;
+                display: inline-block;
+            }
+
+            .btnfile {
+                border: 2px solid gray;
+                color: gray;
+                background-color: white;
+                padding: 8px 20px;
+                border-radius: 8px;
+                font-size: 15px;
+            }
+
+            .upload-btn-wrapper input[type=file] {
+                font-size: 100px;
+                position: absolute;
+                left: 0;
+                top: 0;
+                opacity: 0;
+              }
         </style>
     </head>
     <body>
@@ -81,8 +107,6 @@
                 <div class="w3-section w3-padding-16">
                     <a href="cambioPassword.html" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-refresh w3-margin-right"></i>Cambia password</button></a>
                     <a href="logout.handler" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-close w3-margin-right"></i>Esci</button></a>
-                    <!--<button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Photos</button>
-                    <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Art</button>-->
                 </div> 
             </div>
         </nav>
@@ -95,6 +119,7 @@
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExams')">Exams</button></h2>
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExaminations')">Examinations</button></h2>
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamTickets')">Tickets</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('allRecipes')">Recipes</button></h2>
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamGeneralDoctor')">Your general doctor</button></h2>
                 <h2><button class="w3-bar-item w3-button" onclick="openDash('screamUsers')">Personal information</button></h2>
             </div>
@@ -115,6 +140,7 @@
                                              <th>Exam Code</th>
                                              <th>Exam Date</th>
                                              <th>Done</th>
+                                             <th>Get the pdf</th>
                                         </tr>
                                     <c:forEach var="exam" items="${screamExams}">
                                         <tr>
@@ -191,9 +217,9 @@
                                         </tr>
                                     <c:forEach var="examination" items="${screamExaminations}">
                                         <tr>
-                                            <td>${exam.getCode()}</td>
-                                            <td>${exam.getExaminationDate()}</td>
-                                            <td>${exam.getIsDone()}</td>
+                                            <td>${examination.getSSD()}</td>
+                                            <td>${examination.getExaminationDate()}</td>
+                                            <td>${examination.getIsDone()}</td>
                                         </tr>          
                                     </c:forEach>
                                 </table>
@@ -231,22 +257,6 @@
                             </c:otherwise>
                 </c:choose>
                 </div>
-                <%--
-                <div id="newExamination" class="w3-container dash" style="display:none">
-                <h4>New examinations:</h4>
-                    <form class="w3-container " method="POST" action="newExamination.handler?idPatient=${user.getCf()}&idDoctor=${generaldoctorpatient.getCf()}">
-                        <label class="w3-text-teal"><b>Giorno:</b></label>
-                        <input class="w3-input w3-border w3-light-grey" type="date" id="date" name="date">
-
-                        <label class="w3-text-teal"><b>Ora:</b></label>
-                        <input class="w3-input w3-border w3-light-grey" type="time" name="time" id="time">
-                        <br>
-                        <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
-                        <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
-                    </form>
-                </div>
-                --%>
-                
             </div>
 
             <div id="screamTickets" class="w3-container dash" style="display:none">
@@ -333,6 +343,47 @@
                 </c:choose>
                 </div>
                 
+            </div>
+            
+            <div id="allRecipes" class="w3-container dash" style="display:none">
+                <h3>Recipe prescribed:</h3>
+                <c:choose>
+                            <c:when test="${empty prescriptions}">
+                                <div class="card">
+                                    <div class="card-body">
+                                        You don't have prescriptions.
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <table class="w3-table w3-bordered" id="ticketTable">
+                                        <tr>
+                                             <th>Prescription Code</th>
+                                             <th>Analisys</th>
+                                             <th>Date</th>
+                                             <th>Doctor ssd</th>
+                                             <th>Patient ssd</th>
+                                             <th>Get the pdf</th>
+                                        </tr>
+                                    <c:forEach var="prescription" items="${prescriptions}">
+                                        <tr>
+                                            <td>${prescription.getCode()}</td>
+                                            <td>${prescription.getAnalisys()}</td>
+                                            <td>${prescription.getDate()}</td>
+                                            <td>${prescription.getIddoctor()}</td>
+                                            <td>${prescription.getIdpatient()}</td>
+                                            <td>
+                                                <%--<button class="w3-button w3-round-large w3-blue" data-target="exportToPDF.handler?id=${ticket.getCode()}?type=ticket">--%>
+                                                    <a href="exportToPDF.handler?id=${prescription.getCode()}&type=prescription">
+                                                        <button class="w3-button w3-round-large w3-blue">Go</button>
+                                                    </a>
+                                                <%--</button>--%>
+                                            </td>
+                                        </tr>          
+                                    </c:forEach>
+                                </table>
+                            </c:otherwise>
+                </c:choose>
             </div>
             
             <div id="screamGeneralDoctor" class="w3-container dash" style="display:none">
@@ -533,6 +584,32 @@
                                 </td>
                             </tr>
                         </table>
+                    </div>
+                    <br>
+                    <h3><button type="button" class="btn btn-info" data-toggle="modal" data-target="#uploadphoto">Change your photo</button></h3>
+                    <div class="modal fade" id="uploadphoto" style="display:none" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Change image of ${user.getName()} ${user.getSurname()}:</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="font-weight-normal">Please select the image in your device.</p>
+                                    <form method="POST" action="uploadImage.handler" enctype = "multipart/form-data">
+                                        <div class="upload-btn-wrapper">
+                                            <button class="btnfile">Choose a file</button>
+                                            <input type="file" name="myfile" accept="image/*"/>
+                                        </div>                                        
+                                        <br><br>
+                                        <button type="submit" class="btn btn-success">Upload file</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
             </div>
             

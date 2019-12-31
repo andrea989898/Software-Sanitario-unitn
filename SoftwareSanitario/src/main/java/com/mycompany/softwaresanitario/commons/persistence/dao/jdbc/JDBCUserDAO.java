@@ -15,7 +15,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -213,7 +216,35 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
         
     }
 
-    
+    @Override
+    public boolean updateImage(String code, String data) throws DAOException{
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	Date d = new Date();
+        String dayofchange = dateFormat.format(d);
+	dayofchange = dayofchange.substring(0, 10);
+   
+        try (PreparedStatement stm = CON.prepareStatement("UPDATE images\n" +
+                                                          "   SET data=?, data_photo=TO_DATE(?, 'YYYY/MM/DD')\n" +
+                                                          " WHERE idpatient = ?;")) {
+            //System.out.println(psw);
+            stm.setString(1, data);
+            stm.setString(2, dayofchange);
+            stm.setString(3, code);
+            //System.out.println(code);
+            
+            
+            if(stm.executeUpdate()==1){
+                return true;
+            }else{
+                return false;
+            }
+            
+            
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to change the image", ex);
+        }
+        
+    }
 
 
 }

@@ -7,9 +7,12 @@ package com.mycompany.softwaresanitario.servlet;
 
 import com.mycompany.softwaresanitario.commons.persistence.dao.DrugDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.RecipeDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
+import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import com.mycompany.softwaresanitario.mailer.Mailer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -37,12 +40,32 @@ public class NewRecipeServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     DAOFactory daoFactory;
-    
+    RecipeDAO recipeDao;
+    DrugDAO drugDao;
+    UserDAO userDao;
     
     public void init() throws ServletException {
         daoFactory = (DAOFactory) super.getServletContext().getAttribute("daoFactory");
         if (daoFactory == null) {
             throw new ServletException("Impossible to get dao factory for storage system");
+        }
+        
+        try {
+            recipeDao = daoFactory.getDAO(RecipeDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
+        }
+        
+        try {
+            drugDao = daoFactory.getDAO(DrugDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
+        }
+        
+        try {
+            userDao = daoFactory.getDAO(UserDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get dao factory for user storage system", ex);
         }
     }
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -89,18 +112,8 @@ public class NewRecipeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        RecipeDAO recipeDao;
-        try {
-            recipeDao = daoFactory.getDAO(RecipeDAO.class);
-        } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
-        }
-        DrugDAO drugDao;
-        try {
-            drugDao = daoFactory.getDAO(DrugDAO.class);
-        } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
-        }
+        User userPatient = null;
+        
         String[] drugs;
         drugs = new String[5];
         int y = 0;
@@ -128,6 +141,21 @@ public class NewRecipeServlet extends HttpServlet {
             drugs[4] = request.getParameter("drug-5");
             y++;
         }
+        
+        idpatient = idpatient.replaceAll("\\s+$", "");
+        try {
+            userPatient = userDao.getByCode(idpatient);
+        } catch (DAOException ex) {
+            Logger.getLogger(newExamServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        String subject= new String("New recipe\n");
+        String patientName = userPatient.getName().replaceAll("\\s+$", "");
+        String patientSurname = userPatient.getSurname().replaceAll("\\s+$", "");
+        String msg= new String("Ciao "+ patientName + " " + patientSurname + " ti sono stati prescritti nuovi farmaci. Entra nella tua area riservata per visualizzarli.");  
+        //System.out.print(password);
+          
+        Mailer.send(userPatient.getEmail(), subject, msg);
         
         String contextPath = getServletContext().getContextPath();
         if (!contextPath.endsWith("/")) {

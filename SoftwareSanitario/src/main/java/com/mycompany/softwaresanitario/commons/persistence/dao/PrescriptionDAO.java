@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @author PC Andrea
  */
-public interface PrescriptionDAO extends DAO<Prescription, String>{
+public interface PrescriptionDAO extends DAO<Prescription, Integer>{
     public ArrayList <Prescription> getPrescriptions(String patient) throws DAOException;
     public Prescription getPrescriptionByExamCode(int idExam) throws DAOException;
     public List<String> getAllDateOfRecipe(int idprovince) throws DAOException;

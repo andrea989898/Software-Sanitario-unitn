@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author PC Andrea
  */
-public class JDBCPrescriptionDAO extends JDBCDAO<Prescription, String> implements PrescriptionDAO{
+public class JDBCPrescriptionDAO extends JDBCDAO<Prescription, Integer> implements PrescriptionDAO{
 
     public JDBCPrescriptionDAO(Connection con) {
         super(con);
@@ -27,11 +27,6 @@ public class JDBCPrescriptionDAO extends JDBCDAO<Prescription, String> implement
 
     @Override
     public Long getCount() throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Prescription getByPrimaryKey(String primaryKey) throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -44,11 +39,7 @@ public class JDBCPrescriptionDAO extends JDBCDAO<Prescription, String> implement
     public ArrayList <Prescription> getPrescriptions(String patient) throws DAOException{
         String myGet = "select *\n" +
 "                                from prescriptions pr\n" +
-"                                inner join examinations ex\n" +
-"                                on ex.idexamination = pr.idexamination\n" +
-"                                inner join patients pat\n" +
-"                                on ex.idpatient=pat.ssd\n" +
-"                                where pat.ssd = ?";
+"                                where pr.idpatient = ? AND pr.idrecipe IS NOT NULL ";
 
         try (PreparedStatement stm = CON.prepareStatement(myGet)){
             stm.setString(1, patient);
@@ -57,6 +48,11 @@ public class JDBCPrescriptionDAO extends JDBCDAO<Prescription, String> implement
                 while (rst.next()) {
                     Prescription prescription = new Prescription();
                     prescription.setCode(rst.getInt("code"));
+                    prescription.setAnalisys(rst.getString("analysis"));
+                    prescription.setDate(rst.getDate("date"));
+                    prescription.setIddoctor(rst.getString("iddoctor"));
+                    prescription.setIdpatient(rst.getString("idpatient"));
+                    prescription.setIdrecipe(rst.getInt("idrecipe"));
                     prescriptions.add(prescription); 
                     //System.out.println(prescription.code + " " + prescription.examType + prescription.idPatient);
                 }
@@ -138,6 +134,33 @@ public class JDBCPrescriptionDAO extends JDBCDAO<Prescription, String> implement
                 }
                 stm.close();
                 return prescriptions;
+            }
+        } catch (SQLException ex) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
+
+    @Override
+    public Prescription getByPrimaryKey(Integer primaryKey) throws DAOException {
+        Prescription prescription = new Prescription();
+        String myGet = "select *\n" +
+"                                from prescriptions pr\n" +
+"                                where pr.code = ?";
+
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setInt(1, primaryKey);
+            try(ResultSet rst = stm.executeQuery()){
+                while (rst.next()) {
+                    prescription.setCode(rst.getInt("code"));
+                    prescription.setAnalisys(rst.getString("analysis"));
+                    prescription.setDate(rst.getDate("date"));
+                    prescription.setIddoctor(rst.getString("iddoctor"));
+                    prescription.setIdpatient(rst.getString("idpatient"));
+                    prescription.setIdrecipe(rst.getInt("idrecipe"));
+                    //System.out.println(prescription.code + " " + prescription.examType + prescription.idPatient);
+                }
+                stm.close();
+                return prescription;
             }
         } catch (SQLException ex) {
             throw new UnsupportedOperationException("Not supported yet.");

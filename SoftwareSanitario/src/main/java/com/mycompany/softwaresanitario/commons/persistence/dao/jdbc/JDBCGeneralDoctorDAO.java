@@ -39,13 +39,14 @@ public class JDBCGeneralDoctorDAO extends JDBCDAO<GeneralDoctor, String> impleme
     }
 
     @Override
-    public List<User> getAllGeneralDoctors(String ssd, String ssd2) throws DAOException {
+    public List<User> getAllGeneralDoctors(String ssd, String ssd2, int city_id) throws DAOException {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         
         ArrayList<User> users = new ArrayList<User>();
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM generaldoctors g, users u, alldoctors a WHERE u.code = g.ssd AND u.code = a.ssd and u.code <> ? and u.code <> ?" )){
+        try (PreparedStatement stm = CON.prepareStatement("SELECT DISTINCT * FROM generaldoctors g, users u, alldoctors a, cities c WHERE u.code = g.ssd AND u.code = a.ssd AND u.code <> ? AND u.code <> ? AND u.city_id = c.code AND c.idprovince IN (SELECT idprovince FROM cities WHERE code = ?);" )){
             stm.setString(1, ssd);
             stm.setString(2, ssd2);
+            stm.setInt(3, city_id);
             try(ResultSet rst = stm.executeQuery()){
                 while (rst.next()) {
                     User user = new User();
@@ -61,7 +62,7 @@ public class JDBCGeneralDoctorDAO extends JDBCDAO<GeneralDoctor, String> impleme
                 return users;
             }
         } catch (SQLException ex) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            throw new DAOException("Impossible to find the user", ex);
         }
     }
     

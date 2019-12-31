@@ -14,6 +14,11 @@
         <param-name>xlsFolder</param-name>
         <param-value>xls</param-value>
     </context-param>
+    <context-param>
+        <description>The folder where the images of the users are saved</description>
+        <param-name>file-upload</param-name>
+        <param-value>images</param-value>
+    </context-param>
     <filter>
         <filter-name>SspFilter</filter-name>
         <filter-class>com.mycompany.softwaresanitario.filters.SspFilter</filter-class>
@@ -255,6 +260,10 @@
         <servlet-name>XlsServlet</servlet-name>
         <servlet-class>com.mycompany.softwaresanitario.servlet.XlsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>uploadImageServlet</servlet-name>
+        <servlet-class>com.mycompany.softwaresanitario.servlet.uploadImageServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CambioPasswordPage</servlet-name>
         <url-pattern>/restricted/cambioPassword.html</url-pattern>
@@ -330,6 +339,10 @@
     <servlet-mapping>
         <servlet-name>XlsServlet</servlet-name>
         <url-pattern>/restricted/exportToXLS.handler</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>uploadImageServlet</servlet-name>
+        <url-pattern>/restricted/uploadImage.handler</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>

@@ -104,7 +104,7 @@ public class PatientFilterByUser implements Filter {
             Patient patient = patientDao.getByCode(user.getCf());
             if(patient != null){
                 User generaldoctorpatient = userDao.getByCode(patient.getGeneralDoctorCf());
-                System.out.println(user.getBirth_city_id() + " " + user.getCity_id());
+                //System.out.println(user.getBirth_city_id() + " " + user.getCity_id());
                 City birth_city_Patient = cityDao.getByCode(user.getBirth_city_id());
                 City city_Patient = cityDao.getByCode(user.getCity_id());
                 request.setAttribute("patient", patient);

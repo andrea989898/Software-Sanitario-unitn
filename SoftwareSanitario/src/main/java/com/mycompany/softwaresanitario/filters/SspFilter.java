@@ -109,7 +109,7 @@ public class SspFilter implements Filter {
         }
         
         if (ssp == null) {
-            ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "index.html"));
+            ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "/index.html"));
             return;
         }
         

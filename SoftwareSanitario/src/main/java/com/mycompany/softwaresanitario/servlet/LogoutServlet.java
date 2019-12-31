@@ -49,13 +49,13 @@ public class LogoutServlet extends HttpServlet {
             response.addCookie(cEmail);
             response.addCookie(cPassword);
             response.addCookie(cRemember);
-            if (user != null) {
+            if (user != null && request.isRequestedSessionIdValid()) {
                 session.setAttribute("user", null);
                 session.invalidate();
                 //response.getWriter().println(session);
                 user = null;
             }
-            if (ssp != null) {
+            if (ssp != null && request.isRequestedSessionIdValid()) {
                 session.setAttribute("ssp", null);
                 session.invalidate();
                 //response.getWriter().println(session);

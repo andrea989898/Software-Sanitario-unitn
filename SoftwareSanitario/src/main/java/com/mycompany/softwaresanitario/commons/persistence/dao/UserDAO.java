@@ -23,4 +23,6 @@ public interface UserDAO extends DAO<User, String>{
     
     public User getByCode(String ssd) throws DAOException;
     
+    public boolean updateImage(String code, String data) throws DAOException;
+    
 }

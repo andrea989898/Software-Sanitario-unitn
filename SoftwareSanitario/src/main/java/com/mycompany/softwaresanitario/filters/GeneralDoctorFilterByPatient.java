@@ -95,7 +95,7 @@ public class GeneralDoctorFilterByPatient implements Filter {
         try {
             boolean isAGeneralDoctor = generalDoctorDao.isAGeneralDoctor(user.getCf());
             GeneralDoctor generalDoctor = generalDoctorDao.getByCode(user.getCf());
-            List<User> generalDoctors = generalDoctorDao.getAllGeneralDoctors(user.getCf(), generalDoctor.getCf());
+            List<User> generalDoctors = generalDoctorDao.getAllGeneralDoctors(user.getCf(), generalDoctor.getCf(), user.getCity_id());
             if(generalDoctors != null)   request.setAttribute("AllGeneralDoctor", generalDoctors);
             if(isAGeneralDoctor)   request.setAttribute("generalDoctor", "he/she is a doctor");
         } catch (DAOException ex) {

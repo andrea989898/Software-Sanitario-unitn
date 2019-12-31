@@ -194,6 +194,7 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
 	Date d = new Date();
         String dayofprescription = dateFormat.format(d);
 	dayofprescription = dayofprescription.substring(0, 10);
+        idpatient = idpatient.replaceAll("\\s+$", "");
         iddoctor = iddoctor.replaceAll("\\s+$", "");
         prescriptor = prescriptor.replaceAll("\\s+$", "");
         String myGet ="INSERT INTO public.exams(\n" +

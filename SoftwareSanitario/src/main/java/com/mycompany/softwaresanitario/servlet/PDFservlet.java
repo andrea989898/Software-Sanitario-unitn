@@ -7,6 +7,7 @@ package com.mycompany.softwaresanitario.servlet;
 
 import com.mycompany.softwaresanitario.PDFmanagement.ExamPDF;
 import com.mycompany.softwaresanitario.PDFmanagement.TicketPDF;
+import com.mycompany.softwaresanitario.PDFmanagement.RecipePDF;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.image.ImageUtil;
 import java.io.File;
@@ -93,6 +94,10 @@ public class PDFservlet extends HttpServlet {
         
         if(type.equals("exam")){
             ExamPDF.generateExamPDF(request.getParameter("id"), daoFactory, request, response, pdfFolder);
+        }
+        
+        if(type.equals("prescription")){
+            RecipePDF.generateRecipePDF(request.getParameter("id"), daoFactory, request, response, pdfFolder);
         }
         
         if (!contextPath.endsWith("/")) {
