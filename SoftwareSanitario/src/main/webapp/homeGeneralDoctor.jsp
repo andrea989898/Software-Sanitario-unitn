@@ -191,6 +191,9 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="openDash('screamExPrescriptions')">Prescibe an examination</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="openDash('screamExamPrescriptions')">Prescibe an exam</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="openDash('screamRePrescriptions')">Prescribe a recipe</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
