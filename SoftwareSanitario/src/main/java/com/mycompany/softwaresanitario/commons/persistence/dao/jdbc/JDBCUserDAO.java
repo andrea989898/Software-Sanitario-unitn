@@ -241,6 +241,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
             
             
         } catch (SQLException ex) {
+            System.out.println(ex);
             throw new DAOException("Impossible to change the image", ex);
         }
         

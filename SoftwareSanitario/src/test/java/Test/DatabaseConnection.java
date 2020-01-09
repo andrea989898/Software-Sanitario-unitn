@@ -17,7 +17,7 @@ public class DatabaseConnection{
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
 
-    private final String password = "61223180";
+    private final String password = "0000";
 
  
     /**
@@ -134,7 +134,7 @@ public class DatabaseConnection{
             "FOREIGN KEY(SSD) REFERENCES Users(Code));";
              
             String myImage = "CREATE TABLE Images("
-                    + "data CHAR(30) NOT NULL,\n"
+                    + "data CHAR(255) NOT NULL,\n"
                     + "IDPatient CHAR(16)NOT NULL,\n"
                     + "Data_photo CHAR(16),\n"
                     + "photo_num INT NOT NULL,\n"

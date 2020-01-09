@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 
-public class DatabaseConnection {
+public class  DatabaseConnection {
     Connection connection;
     String url = "jdbc:postgresql://localhost:5432/SoftwareSanitario";
     String user = "postgres";
