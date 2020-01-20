@@ -23,12 +23,12 @@
 61;Caserta;15
 87;Catania;19
 79;Catanzaro;18
-69;Chieti;13
+1;Chieti;13
 13;Como;3
 78;Cosenza;18
 19;Cremona;3
 101;Crotone;18
-4;Cuneo;1
+67;Cuneo;1
 86;Enna;19
 106;Fermo;11
 38;Ferrara;8
@@ -42,7 +42,7 @@
 8;Imperia;7
 94;Isernia;14
 11;La Spezia;7
-66;L'Aquila;13
+2;L'Aquila;13
 59;Latina;12
 75;Lecce;16
 97;Lecco;3
@@ -59,7 +59,7 @@
 36;Modena;8
 108;Monza e Brianza;3
 63;Napoli;15
-3;Novara;1
+68;Novara;1
 91;Nuoro;20
 109;Ogliastra;20
 110;Olbia-Tempio;20
@@ -70,7 +70,7 @@
 18;Pavia;3
 54;Perugia;10
 41;Pesaro e Urbino;11
-68;Pescara;13
+3;Pescara;13
 33;Piacenza;8
 50;Pisa;9
 47;Pistoia;9
@@ -92,9 +92,9 @@
 89;Siracusa;19
 14;Sondrio;3
 73;Taranto;16
-67;Teramo;13
+4;Teramo;13
 55;Terni;10
-1;Torino;1
+69;Torino;1
 81;Trapani;19
 22;Trento;4
 26;Treviso;5
@@ -103,7 +103,7 @@
 12;Varese;3
 27;Venezia;5
 103;Verbano-Cusio-Ossola;1
-2;Vercelli;1
+66;Vercelli;1
 23;Verona;5
 102;Vibo Valentia;18
 24;Vicenza;5
