@@ -56,13 +56,17 @@
                 border: 1px solid #ddd;
                 margin-bottom: 12px;
             }
+            
+            #bottom {background-color: lightgray; color: white; margin-left: 300px; margin-bottom: 15px;}
+            div.img {border: 2px solid white; float: left; margin: 10px; width: 100px; height: 100px;}
+
         </style>
     </head>
     <body>
         <jsp:scriptlet>
              response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
         </jsp:scriptlet>
-        <header class="w3-container w3-teal">
+        <header class="w3-container w3-blue">
             <h2>Software sanitario</h2>
         </header>
         <!-- Sidebar/menu -->
@@ -84,14 +88,39 @@
             </div>
             <div class="w3-container">
                 <div class="w3-section w3-padding-16">
-                    <a href="cambioPassword.html" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-refresh w3-margin-right"></i>Cambia password</button></a>
+                    <button data-toggle="modal" data-target="#changePassword" class="w3-button w3-black"><i class="fa fa-refresh w3-margin-right"></i>Cambia password</button>
+                    <br>
                     <a href="logout.handler" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-close w3-margin-right"></i>Esci</button></a>
-                    <!--<button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Photos</button>
-                    <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Art</button>-->
-                </div> 
+                </div>
             </div>
         </nav>
         <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+        
+        <div class="modal fade" id="changePassword" style="display:none" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change password:</h4>
+                    </div>
+                    <div class="modal-body">
+                        <jsp:scriptlet>
+                            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+                       </jsp:scriptlet>
+                       <form class="w3-container " method="POST" action="changePassoword.handler">
+                           <label class="w3-text-teal"><b>New password:</b></label>
+                           <input class="w3-input w3-border w3-light-grey" type="password" name="password" id="password" placeholder="password">
+                           <br>
+                           <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
+                           <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+                       </form>
+                    </div>
+                    <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <div class="w3-main" style="margin-left:300px">
         
@@ -191,10 +220,10 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="openDash('screamExPrescriptions')">Prescibe an examination</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="openDash('screamExamPrescriptions')">Prescibe an exam</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="openDash('screamRePrescriptions')">Prescribe a recipe</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-default w3-blue" data-dismiss="modal" onclick="openDash('screamExPrescriptions')">Prescibe an examination</button>
+                                    <button type="button" class="btn btn-default w3-blue" data-dismiss="modal" onclick="openDash('screamExamPrescriptions')">Prescibe an exam</button>
+                                    <button type="button" class="btn btn-default w3-blue" data-dismiss="modal" onclick="openDash('screamRePrescriptions')">Prescribe a recipe</button>
+                                    <button type="button" class="btn btn-default w3-blue" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
@@ -349,7 +378,48 @@
                 </form>
             </div>
         </div>
-        <br>
+        <br><br><br><br><br>
+        
+
+    <footer id="bottom" class="row text-left p-4">
+    <div class="col-12 col-md-4">
+    <h2>Copyright &copy; The Author</h2>
+    <form>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email</label>
+      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Inserisci email">
+      <small id="emailHelp" class="form-text text-white">L'indirizzo e-mail non verrà condiviso.</small>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    </div>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="exampleCheck1">
+      <label class="form-check-label" for="exampleCheck1">Approva</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    </div>
+    <div class="col-12 col-md-8">
+    <h2>Informazioni</h2>
+    <div class="row">
+      <div class="col-12 col-md-4">
+        Lorem ipsum ...
+      </div>
+      <div class="col-12 col-md-4">
+        Lorem ipsum ...
+      </div>
+      <div class="col-12 col-md-4">
+        <h2>Immagini</h2>
+        <div class="img"></div>
+        <div class="img"></div>
+        <div class="img"></div>
+        <div class="img"></div>
+      </div>
+    </div>
+    </div>
+    </footer>
     <script type="text/javascript" src="<%=request.getContextPath()%>/linkers/connector.js"></script>
     
 </body>    

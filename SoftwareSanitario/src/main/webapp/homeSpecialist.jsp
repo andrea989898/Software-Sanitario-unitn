@@ -90,7 +90,7 @@
         </style>
     </head>
     <body>
-        <header class="w3-container w3-teal">
+        <header class="w3-container w3-blue">
             <h2>Software sanitario</h2>
         </header>
         <jsp:scriptlet>
@@ -115,13 +115,38 @@
             </div>
             <div class="w3-container">
                 <div class="w3-section w3-padding-16">
-                    <a href="cambioPassword.html" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-refresh w3-margin-right"></i>Cambia password</button></a>
+                    <button data-toggle="modal" data-target="#changePassword" class="w3-button w3-black"><i class="fa fa-refresh w3-margin-right"></i>Cambia password</button>
+                    <br>
                     <a href="logout.handler" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-close w3-margin-right"></i>Esci</button></a>
-                    <!--<button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Photos</button>
-                    <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Art</button>-->
                 </div> 
             </div>
         </nav>
+        
+        <div class="modal fade" id="changePassword" style="display:none" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change password:</h4>
+                    </div>
+                    <div class="modal-body">
+                        <jsp:scriptlet>
+                            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+                       </jsp:scriptlet>
+                       <form class="w3-container " method="POST" action="changePassoword.handler">
+                           <label class="w3-text-teal"><b>New password:</b></label>
+                           <input class="w3-input w3-border w3-light-grey" type="password" name="password" id="password" placeholder="password">
+                           <br>
+                           <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
+                           <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+                       </form>
+                    </div>
+                    <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
         
@@ -308,9 +333,9 @@
                             </c:when>
                             <c:otherwise>
                                 <h3>Exams:</h3>
-                                <input class="w3-bordered" type="text" id="myInputExams" onkeyup="search('myInputPassed', 'myTablePassed')" placeholder="Search for dates..">
+                                <input class="w3-bordered" type="text" id="myInputExams" onkeyup="search('myInputExams', 'myTablePassed2')" placeholder="Search for dates..">
                                 
-                                <table class="w3-table w3-bordered" id="myTablePassed">
+                                <table class="w3-table w3-bordered" id="myTablePassed2">
                                         <tr>
                                             <th>Code</th>
                                             <th>Patient</th>
@@ -348,8 +373,8 @@
                             <c:otherwise>
                                 <h3>Exams that have to be confirmed:</h3>
 
-                                <input class="w3-bordered" type="text" id="myInputConfirmedExams" onkeyup="search('myInputConfirmed', 'myTableConfirmed')" placeholder="Search for dates..">
-                                <table class="w3-table w3-bordered" id="myTableConfirmed">
+                                <input class="w3-bordered" type="text" id="myInputConfirmedExams" onkeyup="search('myInputConfirmedExams', 'myTableConfirmed2')" placeholder="Search for dates..">
+                                <table class="w3-table w3-bordered" id="myTableConfirmed2">
                                         <tr>
                                             <th>Code</th>
                                              <th>Patient</th>
@@ -402,6 +427,7 @@
             </div>
         </div>
         <br>
+        
     <script type="text/javascript" src="<%=request.getContextPath()%>/linkers/connector.js"></script>
     </body>
 </html>
