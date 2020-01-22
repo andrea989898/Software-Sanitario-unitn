@@ -11,11 +11,12 @@ function closeModal(id) {
 
 function openDash(dashName) {
     var i;
-    var x = document.getElementsByClassName("dash");
+    var x = document.getElementsByClassName("container-fluid");
     for (i = 0; i < x.length; i++) {
-        x[i].style.display = "none";  
+        if(x[i].id != "foot")   x[i].style.display = "none";  
     }
-    document.getElementById(dashName).style.display = "block";  
+    var dash = document.getElementById(dashName);
+    dash.style.display = "block";  
 }
 
 // Script to open and close sidebar
@@ -61,9 +62,10 @@ function sortTable(myTable) {
     //start by saying: no switching is done:
     switching = false;
     rows = table.rows;
+    console.log(rows);
     /*Loop through all table rows (except the
     first, which contains table headers):*/
-    for (i = 1; i < (rows.length - 1); i++) {
+    for (i = 0; i < (rows.length - 1); i++) {
       //start by saying there should be no switching:
       shouldSwitch = false;
       /*Get the two elements you want to compare,
@@ -134,6 +136,25 @@ function openExaminations(){
 
 function openExams(){
     document.getElementById("Exams").style.display = "block";  
+}
+
+function testpass(modulo){
+  // Verifico che il campo password sia valorizzato in caso contrario
+  // avverto dell'errore tramite un Alert
+  if (modulo.password.value == ""){
+    alert("Errore: inserire una password!");
+    modulo.password.focus();
+    return false;
+  }
+  // Verifico che le due password siano uguali, in caso contrario avverto
+  // dell'errore con un Alert
+  if (modulo.password.value !== modulo.password_2.value) {
+    alert("La password inserita non coincide con la prima!");
+    modulo.password.focus();
+    modulo.password.select();
+    return false;
+  }
+  return true;
 }
 
                 
