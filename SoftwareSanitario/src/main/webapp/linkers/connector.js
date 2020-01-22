@@ -1,4 +1,3 @@
-
 function showModal(id){
     console.log(id);
     document.getElementById(id).style.display='block';
