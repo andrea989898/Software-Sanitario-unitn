@@ -99,6 +99,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
         String email = request.getParameter("username");
         String password = request.getParameter("password");
         
@@ -114,7 +115,14 @@ public class LoginServlet extends HttpServlet {
             if (user == null) {
                 Ssp ssp = sspDao.getByEmailAndPassword(email, password);
                 if(ssp == null){
+                    //out.println("<script type=\"text/javascript\">");
+                    //out.println("alert('User or password incorrect');");
+                    //out.println("location='" + contextPath + "index.html';");
+                    //out.println("</script>"); 
+                    
+                    request.getSession().setAttribute("error", "yes");
                     response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
+
                 }else{
                     if(request.getParameter("remember")!=null){
                         String remember = request.getParameter("remember");
@@ -128,7 +136,9 @@ public class LoginServlet extends HttpServlet {
                         response.addCookie(cPassword);
                         response.addCookie(cRemember);
                     }
-
+                    
+                    //request.getSession().setAttribute("error", '0');
+                    request.getSession().setAttribute("error", "nope");
                     request.getSession().setAttribute("ssp", ssp);
                     response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePageSsp.html"));
                 }
@@ -149,6 +159,8 @@ public class LoginServlet extends HttpServlet {
                     response.addCookie(cRemember);
                 }
                 
+                //request.getSession().setAttribute("error", '0');
+                request.getSession().setAttribute("error", "nope");
                 request.getSession().setAttribute("user", user);
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
 

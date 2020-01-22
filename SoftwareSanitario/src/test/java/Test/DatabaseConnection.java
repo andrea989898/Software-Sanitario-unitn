@@ -18,7 +18,7 @@ public class DatabaseConnection{
     private final String user = "postgres";
 
 
-    private final String password = "0000";
+    private final String password = "chiaravise";
 
 
  
