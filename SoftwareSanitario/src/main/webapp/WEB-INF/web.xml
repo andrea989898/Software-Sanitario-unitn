@@ -217,6 +217,10 @@
         <jsp-file>/homePageSsp.jsp</jsp-file>
     </servlet>
     <servlet>
+        <servlet-name>ErrorPage</servlet-name>
+        <jsp-file>/errorPage.jsp</jsp-file>
+    </servlet>
+    <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>com.mycompany.softwaresanitario.servlet.LoginServlet</servlet-class>
     </servlet>
@@ -271,6 +275,10 @@
     <servlet-mapping>
         <servlet-name>homeSpecialistPage</servlet-name>
         <url-pattern>/restricted/homeSpecialist.html</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ErrorPage</servlet-name>
+        <url-pattern>/errorPage.html</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>homeGeneralDoctorPage</servlet-name>
