@@ -12,7 +12,7 @@ function openDash(dashName) {
     var i;
     var x = document.getElementsByClassName("container-fluid");
     for (i = 0; i < x.length; i++) {
-        if(x[i].id != "foot")   x[i].style.display = "none";  
+        if(x[i].id != "foot" && x[i].id != "modal")   x[i].style.display = "none";  
     }
     var dash = document.getElementById(dashName);
     dash.style.display = "block";  

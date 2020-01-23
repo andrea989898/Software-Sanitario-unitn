@@ -169,8 +169,7 @@ public class NewRecipeServlet extends HttpServlet {
             
             if (recipe) {
                 for(int j=0;j<5;j++){
-                if(drugs[j] != null){ 
-                    drug = drugDao.newdrugforrecipe(drugs[j]);}
+                    if(drugs[j] != null){drug = drugDao.newdrugforrecipe(drugs[j]);}
                     if (drug) x++;
                     drug = false;
                 }
