@@ -69,7 +69,7 @@
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" name="remember" value="1" /><label class="custom-control-label" for="rememberPasswordCheck">Remember password</label></div>
                                 </div>
-                                <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="small" data-toggle="modal" data-dismiss="modal" data-target="#forgotpassword">Forgot Password?</button><button class="btn btn-secondary" type="submit">Login</button></div>
+                                <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="btn btn-secondary" type="submit">Login</button><button class="small" data-toggle="modal" data-dismiss="modal" data-target="#forgotpassword">Forgot Password?</button></div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -95,7 +95,7 @@
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" name="remember" value="1" /><label class="custom-control-label" for="rememberPasswordCheck">Remember password</label></div>
                                 </div>
-                                <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="small" data-toggle="modal" data-dismiss="modal" data-target="#forgotpassword">Forgot Password?</button><button class="btn btn-secondary" type="submit">Login</button></div>
+                                <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="btn btn-secondary" type="submit">Login</button><button class="small" data-toggle="modal" data-dismiss="modal" data-target="#forgotpassword">Forgot Password?</button></div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -120,7 +120,7 @@
                               <div class="form-group">
                                   <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" name="remember" value="1" /><label class="custom-control-label" for="rememberPasswordCheck">Remember password</label></div>
                               </div>
-                              <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="small" data-toggle="modal" data-dismiss="modal" data-target="#forgotpassword">Forgot Password?</button><button class="btn btn-secondary" type="submit">Login</button></div>
+                              <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="btn btn-secondary" type="submit">Login</button><button class="small" data-toggle="modal" data-dismiss="modal" data-target="#forgotpassword">Forgot Password?</button></div>
                           </form>
                       </div>
                       <div class="modal-footer">
