@@ -112,19 +112,24 @@ public class changePasswordServlet extends HttpServlet {
         if (session != null) {
             user = (User) session.getAttribute("user");
         }else{
+            request.getSession().setAttribute("newpassword", "nope");
+            request.getSession().setAttribute("error", "nope");
             response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
         }
         
         if(password == ""){
-            response.sendRedirect(contextPath + "cambioPassword.html");
+            request.getSession().setAttribute("newpassword", "nope");
+            request.getSession().setAttribute("error", "nope");
+            response.sendRedirect(contextPath + "index.html");
             return;
         }
         
         try {
             User user_ = userDao.updatePassword(user.getEmail(), password);
-           
+            request.getSession().setAttribute("newpassword", "nope");
+            request.getSession().setAttribute("error", "nope");
             if (user_ == null) {
-                response.sendRedirect(response.encodeRedirectURL(contextPath + "cambioPassword.html"));
+                response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
             } else { 
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
             }

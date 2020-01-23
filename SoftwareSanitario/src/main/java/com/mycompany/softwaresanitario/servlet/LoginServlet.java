@@ -121,6 +121,7 @@ public class LoginServlet extends HttpServlet {
                     //out.println("</script>"); 
                     
                     request.getSession().setAttribute("error", "yes");
+                    request.getSession().setAttribute("newpassword", "nope");
                     response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
 
                 }else{
@@ -138,6 +139,7 @@ public class LoginServlet extends HttpServlet {
                     }
                     
                     //request.getSession().setAttribute("error", '0');
+                    request.getSession().setAttribute("newpassword", "nope");
                     request.getSession().setAttribute("error", "nope");
                     request.getSession().setAttribute("ssp", ssp);
                     response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePageSsp.html"));
@@ -160,6 +162,7 @@ public class LoginServlet extends HttpServlet {
                 }
                 
                 //request.getSession().setAttribute("error", '0');
+                request.getSession().setAttribute("newpassword", "nope");
                 request.getSession().setAttribute("error", "nope");
                 request.getSession().setAttribute("user", user);
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
