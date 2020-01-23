@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 /**
  *
@@ -55,6 +56,9 @@ public class TicketPDF {
         if(ticket!=null){
             try (PDDocument doc = new PDDocument()) {
                 PDPage page = new PDPage();
+                PDFont font = PDType1Font.TIMES_ROMAN;
+                PDFont fontBold = PDType1Font.TIMES_BOLD;
+                int fontSize = 12;
                 doc.addPage(page);
 
                 try (PDPageContentStream contents = new PDPageContentStream(doc, page)) {
@@ -75,35 +79,13 @@ public class TicketPDF {
                         675,
                         Color.BLUE);
 
-                    float margin = 30;
-                    float yStartNewPage = page.getMediaBox().getHeight() - (4 * margin);
-                    float tableWidth = page.getMediaBox().getWidth() - (4 * margin);
-                
-                    boolean drawContent = true;
-                    float yStart = yStartNewPage;
-                    float bottomMargin = 70;
-                    float yPosition = 660;
-                
-                    BaseTable table = new BaseTable(yPosition, yStartNewPage, bottomMargin, tableWidth, margin, doc, page, true, drawContent);
-                    Row<PDPage> header = table.createRow(20);
-                    header.createCell(20, "Code");
-                    header.createCell(20, "Cost");
-                    header.createCell(20, "Date of emission");
-                    header.createCell(20, "Expiration date");
-                    header.createCell(20, "Examination Code");
-                    header.createCell(10, "Exam Code");
-                    table.addHeaderRow(header);
-                
-                    
-                    Row<PDPage> row = table.createRow(12);
-                    row.createCell(String.valueOf(ticket.getCode()));
-                    row.createCell(String.valueOf(ticket.getCost()));
-                    row.createCell(String.valueOf(ticket.getDate()));
-                    row.createCell(String.valueOf(ticket.getExpirationDate()));
-                    row.createCell(String.valueOf(ticket.getIdExamination()));
-                    row.createCell(String.valueOf(ticket.getIDExam()));
-                
-                    table.draw();
+                    scriviPdf(doc, contents, 30, 640, Color.BLACK, "Ticket code: ", String.valueOf(ticket.getCode()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 620, Color.BLACK, "Cost: ", String.valueOf(ticket.getCost()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 600, Color.BLACK, "Date of emission: ", String.valueOf(ticket.getDate()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 580, Color.BLACK, "Expiration date: ", String.valueOf(ticket.getExpirationDate()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 560, Color.BLACK, "Examination Code: ", String.valueOf(ticket.getIdExamination()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 540, Color.BLACK, "Exam Code: ", String.valueOf(ticket.getIDExam()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 520, Color.BLACK, "The ticket has been paid: ", String.valueOf(ticket.getIsPaid()), font, fontBold, fontSize);
                 }
                 //"C:\\Users\\franc\\Desktop\\Software-Sanitario-unitn\\SoftwareSanitario\\src\\main\\webapp\\pdfs"
                 doc.save(new File(pdfFolder, "ticket-" + ticket.getCode() + "-" + Calendar.getInstance().getTimeInMillis() + ".pdf"));
@@ -111,7 +93,7 @@ public class TicketPDF {
                 
                 response.setContentType("application/pdf");
                 
-                response.setHeader("Content-disposition", "attachment; filename='ticket.pdf'");
+                response.setHeader("Content-disposition", "attachment; filename=ticket.pdf");
                 System.out.println("ticket-" + ticket.getCode() + "-" + Calendar.getInstance().getTimeInMillis() + ".pdf");
                 doc.save(response.getOutputStream());   
                 
@@ -122,6 +104,21 @@ public class TicketPDF {
         //return null;
     }
         
+    private static void scriviPdf(PDDocument document, PDPageContentStream contentStream, int x, int y, Color color, String stringa1, String stringa2, PDFont font, PDFont fontBold, int fontSize) {
+        try {
+            contentStream.beginText();
+            contentStream.setFont(fontBold, fontSize);
+            contentStream.setNonStrokingColor(color);
+            contentStream.newLineAtOffset(x, y);
+            contentStream.showText(stringa1);
+            contentStream.setFont(font, fontSize);
+            contentStream.setNonStrokingColor(color);
+            contentStream.showText(stringa2);
+            contentStream.endText();
+        } catch (IOException ex) {
+            System.err.println("Unable to generatePDF a Prescription Exam PDF");
+        }
+    }
     
     
     

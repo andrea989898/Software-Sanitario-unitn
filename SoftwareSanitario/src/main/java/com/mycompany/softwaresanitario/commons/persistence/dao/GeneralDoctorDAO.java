@@ -19,7 +19,7 @@ public interface GeneralDoctorDAO extends DAO<GeneralDoctor, String>{
     
     public GeneralDoctor getByCode(String SSD) throws DAOException;
     
-    public List<User> getAllGeneralDoctors(String ssd, String ssd2) throws DAOException;
+    public List<User> getAllGeneralDoctors(String ssd, String ssd2, int city_id) throws DAOException;
     
     public boolean isAGeneralDoctor(String ssd) throws DAOException;
     

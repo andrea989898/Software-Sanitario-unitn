@@ -7,6 +7,7 @@ package com.mycompany.softwaresanitario.filters;
 
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Ssp;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -57,10 +58,12 @@ public class AuthenticationFilter implements Filter {
             ServletContext servletContext = ((HttpServletRequest) request).getServletContext();
             HttpSession session = ((HttpServletRequest) request).getSession(true);
             User user = null;
+            Ssp ssp = null;
             if (session != null) {
                 user = (User) session.getAttribute("user");
+                ssp = (Ssp) session.getAttribute("ssp");
             }
-            if (user == null) {
+            if (user == null && ssp == null) {
                 String contextPath = servletContext.getContextPath();
                 if (!contextPath.endsWith("/")) {
                     contextPath += "/";

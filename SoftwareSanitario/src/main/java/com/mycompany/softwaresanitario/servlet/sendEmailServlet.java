@@ -109,7 +109,9 @@ public class sendEmailServlet extends HttpServlet {
             User user = userDao.getByEmail(to);
            
             if (user == null) {
-                response.sendRedirect(response.encodeRedirectURL(contextPath +"index.html"));
+                request.getSession().setAttribute("newpassword", "nope");
+                request.getSession().setAttribute("error", "nope");
+                response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
                 return;
             } 
         } catch (DAOException ex) {
@@ -138,7 +140,9 @@ public class sendEmailServlet extends HttpServlet {
             User user = userDao.updatePassword(to, password);
             
             if (user != null) {
-                response.sendRedirect(response.encodeRedirectURL(contextPath +"emailInviata.html"));
+                request.getSession().setAttribute("newpassword", "yes");
+                request.getSession().setAttribute("error", "nope");
+                response.sendRedirect(response.encodeRedirectURL(contextPath +"index.html"));
             } 
         } catch (DAOException ex) {
             Logger.getLogger(sendEmailServlet.class.getName()).log(Level.SEVERE, null, ex);

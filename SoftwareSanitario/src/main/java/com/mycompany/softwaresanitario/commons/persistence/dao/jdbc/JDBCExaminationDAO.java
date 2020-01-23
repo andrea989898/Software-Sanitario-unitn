@@ -14,7 +14,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
@@ -110,72 +113,19 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                 return examinations;
             }
         }catch (SQLException ex) {
-            throw new DAOException("Impossible to find the user", ex);
+            throw new DAOException("Impossible to find examinations", ex);
         }
     }
 
     @Override
-    public boolean newExamination(String date, String time, String idpatient, String iddoctor, String type, String analisys) throws DAOException {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        /* (query di partenza)
-        
-            
-            select max(idexamination)
-            from examinations
-            
-            select max(code)
-            from tickets
-        
-            select max(code)
-            from prescriptions
-              
+    public boolean newExamination(String date, String time, String idpatient, String iddoctor, String type, String analisys, String prescriptor) throws DAOException {
         
         
-            INSERT INTO public.examinations(
-              idexamination, idpatient, iddoctor, "time", isdone, examinationdate, 
-              argument)
-                  VALUES ((?+1), ?, ?, ?, false, ?, 
-                          ?);
-
-
-            INSERT INTO public.tickets(
-                        code, cost, date, expirationdate, idexamination, idexam, idpatient, 
-                        ispaid)
-                VALUES ((?+1), 50, CONVERT (date, SYSDATETIME()), ?, "", ?, ?, 
-                        false);
-
-
-            INSERT INTO public.prescriptions(
-                        code, analysis, idexam, idexamination, idrecipe)
-                VALUES ((?+1), ?, "", ?, "");
-            
-            
-                
-            (query che va)
-            INSERT INTO public.examinations(
-                                  idexamination, idpatient, iddoctor, "time", isdone, examinationdate,
-                                  argument)
-                                      VALUES (((select max(idexamination)
-                                from examinations) +1), '0HPRHP7BDZ5K10UH', '0HPRHP7BDZ5K10UH', '10:30', false, '0001/03/03',
-                                              '');
-            
-        INSERT INTO public.tickets(
-                                            code, cost, date, expirationdate, idexamination, idexam, idpatient, 
-                                            ispaid)
-                                    VALUES (((select max(code)
-                                                                    from tickets)
-                            +1), 50, now(), '2001/01/01', (select max(idexamination)
-                                from examinations), null, '0HPRHP7BDZ5K10UH', 
-                                            false);
-        INSERT INTO public.prescriptions(
-                        code, analysis, idexam, idexamination, idrecipe)
-                VALUES (((select max(code)
-            from prescriptions)+1), '', null, (select max(idexamination)
-            from examinations), null);
-        
-        */
-        //System.out.println(analisys);
-        
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	Date d = new Date();
+        String dayofprescription = dateFormat.format(d);
+	dayofprescription = dayofprescription.substring(0, 10);
+        prescriptor = prescriptor.replaceAll("\\s+$", "");
         String temp1 = "1";
         String temp2 = "2";
         String myGet="";
@@ -198,10 +148,10 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     "\n" +
                     "\n" +
                     "            INSERT INTO public.prescriptions(\n" +
-                    "                        code, analysis, idexam, idexamination, idrecipe)\n" +
+                    "                        code, analysis, idexam, idexamination, idrecipe, iddoctor, idpatient, date)\n" +
                     "                VALUES (((select max(code)\n" +
                     "            from prescriptions)+1), ?, null, (select max(idexamination)\n" +
-                    "            from examinations), null);";
+                    "            from examinations), null, ?, ?, TO_DATE(?, 'YYYY/MM/DD'));";
             
         }else if (type.equals(temp2)){
                 //System.out.println("Sono nel type 2");
@@ -222,10 +172,10 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     "\n" +
                     "\n" +
                     "            INSERT INTO public.prescriptions(\n" +
-                    "                        code, analysis, idexam, idexamination, idrecipe)\n" +
+                    "                        code, analysis, idexam, idexamination, idrecipe, iddoctor, idpatient, date)\n" +
                     "                VALUES (((select max(code)\n" +
                     "            from prescriptions)+1), ?, null, (select max(idexamination)\n" +
-                    "            from examinations), null);";
+                    "            from examinations), null, ?, ?, TO_DATE(?, 'YYYY/MM/DD'));";
             }
         
         
@@ -238,6 +188,9 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
             stm.setString(6, date);
             stm.setString(7, idpatient);
             stm.setString(8, analisys);
+            stm.setString(9, prescriptor);
+            stm.setString(10, idpatient);
+            stm.setString(11, dayofprescription);
             
             int c = stm.executeUpdate();
             if(c == 1){
@@ -258,6 +211,64 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
             Logger.getLogger(JDBCPatientDAO.class.getName()).log(Level.SEVERE, null, ex);
         }*/
         return false;
+    }
+
+    @Override
+    public ArrayList<Examination> getExaminationsSpecialist(String specialist) throws DAOException {
+        String myGet = "select *\n" +
+                                "from examinations\n" +
+                                "where iddoctor=?\n" +
+                                "order by examinationdate DESC";
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, specialist);
+            try(ResultSet rst = stm.executeQuery()){
+                ArrayList<Examination> examinations = new ArrayList<Examination>();
+                while (rst.next()) {
+                    Examination examination = new Examination();
+                    examination.setSSD(rst.getInt("idexamination"));
+                    examination.setArgument(rst.getString("argument"));
+                    examination.setIDdoctor(rst.getString("iddoctor"));
+                    examination.setExaminationDate(rst.getDate("examinationdate"));
+                    examination.setIsDone(rst.getBoolean("isdone"));
+                    examination.setTime(rst.getString("time"));
+                    examination.setIDPatient(rst.getString("idpatient"));
+                    //examination.setIDPrescription(rst.getInt("IDPrescription"));
+                    //examination.setIDRecipe(rst.getInt("IDRecipe"));
+                    examinations.add(examination); 
+                    //System.out.println(examination.SSD + examination.doctor + examination.time + examination.examinationDate);
+                }
+                
+                
+                return examinations;
+            }
+        }catch (SQLException ex) {
+            throw new DAOException("Impossible to find the user", ex);
+        }
+    }
+
+    @Override
+    public boolean updateExamination(int ssd, String report) throws DAOException {
+        String myGet = "update examinations\n" +
+                                "set report = ?, isdone = true\n" +
+                                "where idexamination = ?;" +
+                        "update tickets\n" +
+                                "set ispaid = true\n" +
+                                "where idexamination = ?;";
+        try (PreparedStatement stm = CON.prepareStatement(myGet)){
+            stm.setString(1, report);
+            stm.setInt(2, ssd);
+            stm.setInt(3, ssd);
+            int c = stm.executeUpdate();
+            if(c == 1){
+                //System.out.println(c);
+                return true;
+            }
+            return false;
+             
+        }catch (SQLException ex) {
+            throw new DAOException("Impossible to update exam", ex);
+        }
+        
     }
 
     

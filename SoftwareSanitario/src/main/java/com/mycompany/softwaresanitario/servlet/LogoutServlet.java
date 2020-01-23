@@ -5,6 +5,7 @@
  */
 package com.mycompany.softwaresanitario.servlet;
 
+import com.mycompany.softwaresanitario.commons.persistence.entities.Ssp;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -38,6 +39,7 @@ public class LogoutServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null) {
             User user = (User) session.getAttribute("user");
+            Ssp ssp = (Ssp) session.getAttribute("ssp");
             Cookie cEmail = new Cookie("cookemail", null);
             Cookie cPassword = new Cookie("cookpass", null);
             Cookie cRemember = new Cookie("cookrem", null);
@@ -47,11 +49,17 @@ public class LogoutServlet extends HttpServlet {
             response.addCookie(cEmail);
             response.addCookie(cPassword);
             response.addCookie(cRemember);
-            if (user != null) {
+            if (user != null && request.isRequestedSessionIdValid()) {
                 session.setAttribute("user", null);
                 session.invalidate();
                 //response.getWriter().println(session);
                 user = null;
+            }
+            if (ssp != null && request.isRequestedSessionIdValid()) {
+                session.setAttribute("ssp", null);
+                session.invalidate();
+                //response.getWriter().println(session);
+                ssp = null;
             }
         }
 

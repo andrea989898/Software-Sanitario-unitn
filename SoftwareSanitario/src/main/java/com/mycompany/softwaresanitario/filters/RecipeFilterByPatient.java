@@ -69,7 +69,7 @@ public class RecipeFilterByPatient implements Filter {
             recipeDao = daoFactory.getDAO(RecipeDAO.class);
             request.setAttribute("RecipeDao", recipeDao);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for recipes storage system", ex));
         }
         
         String contextPath = request.getServletContext().getContextPath();

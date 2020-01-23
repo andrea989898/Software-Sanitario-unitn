@@ -17,7 +17,9 @@ public class DatabaseConnection{
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
     private final String user = "postgres";
 
+
     private final String password = "chiaravise";
+
 
  
     /**
@@ -64,11 +66,15 @@ public class DatabaseConnection{
                 System.out.println(e.getMessage());
             }
             try{
-                crypt(conn);
+                cryptUsers(conn);
             }catch(SQLException e){
                 System.out.println(e.getMessage());
             }
-            
+            try{
+                cryptSsp(conn);
+            }catch(SQLException e){
+                System.out.println(e.getMessage());
+            }
             
     }
     
@@ -91,9 +97,10 @@ public class DatabaseConnection{
             "IDProvince INT NOT NULL,\n" +
             "FOREIGN KEY(IDProvince) references Provinces(Code));";
             
-            String mySSR = "CREATE TABLE SSR(\n" +
-            "Code CHAR(16) NOT NULL,\n"+
+            String mySSP = "CREATE TABLE SSP(\n" +
+            "Code CHAR(16) NOT NULL PRIMARY KEY,\n"+
             "email CHAR(40) NOT NULL," +
+            "password CHAR(100) NOT NULL," +
             "IDProvince INT NOT NULL," +
             "FOREIGN KEY(IDProvince) references Provinces(Code));";
                     
@@ -129,7 +136,7 @@ public class DatabaseConnection{
             "FOREIGN KEY(SSD) REFERENCES Users(Code));";
              
             String myImage = "CREATE TABLE Images("
-                    + "data CHAR(30) NOT NULL,\n"
+                    + "data CHAR(255) NOT NULL,\n"
                     + "IDPatient CHAR(16)NOT NULL,\n"
                     + "Data_photo CHAR(16),\n"
                     + "photo_num INT NOT NULL,\n"
@@ -148,6 +155,7 @@ public class DatabaseConnection{
             "IsDone BOOLEAN NOT NULL,\n"+
             "ExaminationDate DATE,\n"+
             "Argument CHAR(100),\n" +
+            "Report CHAR(255),\n" + 
             "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD),\n" +
             "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD));";
 
@@ -174,6 +182,11 @@ public class DatabaseConnection{
             "IDExam INT,\n"+
             "IDExamination INT,\n" +
             "IDRecipe INT,\n" +
+            "IDDoctor CHAR(16) NOT NULL,\n"+
+            "IDPatient CHAR(16) NOT NULL,\n"+
+            "Date DATE NOT NULL,\n"+
+            "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD),\n" +
+            "FOREIGN KEY(IDPatient) REFERENCES Patients(SSD),\n" +
             "FOREIGN KEY(IDRecipe) REFERENCES Recipes(Code),\n" +
             "FOREIGN KEY(IDExamination) REFERENCES Examinations(IDExamination),\n" +
             "FOREIGN KEY(IDExam) REFERENCES Exams(Code));";     
@@ -189,7 +202,8 @@ public class DatabaseConnection{
             
             String myExam = "CREATE TABLE Exams( \n"+
             "Code INT PRIMARY KEY NOT NULL, \n" +
-            "IDDoctor CHAR(16)NOT NULL,\n" +
+            "IDDoctor CHAR(16),\n" +
+            "SspCode CHAR(16),\n" +
             "Result char(100),\n" +
             "Time TIME,\n" +
             "IsDone BOOLEAN NOT NULL,\n"+
@@ -197,6 +211,7 @@ public class DatabaseConnection{
             "IDPatient CHAR(16) NOT NULL, \n" +
             "IsRecall BOOLEAN, \n" +
             "FOREIGN KEY(IDDoctor) REFERENCES AllDoctors(SSD), \n" +
+            "FOREIGN KEY(SspCode) REFERENCES SSP(Code), \n" +
             "FOREIGN KEY (IDPatient) REFERENCES Patients(ssd));";
             
             
@@ -206,6 +221,8 @@ public class DatabaseConnection{
             statement.executeUpdate(myRegions);
             statement.executeUpdate(myProvinces);
             statement.executeUpdate(myCities);
+            
+            statement.executeUpdate(mySSP);
 
 
             statement.executeUpdate(myAllUsers);
@@ -223,7 +240,7 @@ public class DatabaseConnection{
             statement.executeUpdate(myTicket); 
             statement.executeUpdate(myPrescription);
             
-            statement.executeUpdate(mySSR);
+            
             statement.close();
        
     }
@@ -246,7 +263,7 @@ public class DatabaseConnection{
        String myDoctor = "DROP TABLE GeneralDoctors CASCADE"; 
        String myAllDoctors = "DROP TABLE AllDoctors CASCADE"; 
        String myAllUsers = "DROP TABLE Users CASCADE"; 
-       String mySsr = "DROP TABLE Ssr CASCADE"; 
+       String mySsp = "DROP TABLE Ssp CASCADE"; 
 
        statement.executeUpdate(myRegions);
        statement.executeUpdate(myProvinces);
@@ -264,7 +281,7 @@ public class DatabaseConnection{
        statement.executeUpdate(myDoctor);
        statement.executeUpdate(myAllDoctors); 
        statement.executeUpdate(myAllUsers); 
-       statement.executeUpdate(mySsr);
+       statement.executeUpdate(mySsp);
              
        statement.close();
     }
@@ -320,6 +337,7 @@ public class DatabaseConnection{
         String copy_drugrecipes = "COPY PUBLIC.DrugsRecipes FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\recipeDrugs_data.csv' DELIMITER ';' CSV;";
         String copy_exams = "COPY PUBLIC.exams FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\exams_data.csv' DELIMITER ';' CSV;";
         String copy_images = "COPY PUBLIC.images FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\images_data.csv' DELIMITER ';' CSV;";
+        String copy_ssp = "COPY PUBLIC.ssp FROM 'C:\\Users\\Public\\Documents\\dbIPW19\\ssp_data.csv' DELIMITER ';' CSV;";
         
         statement.executeUpdate(copy_regions);
         statement.executeUpdate(copy_provinces);
@@ -337,12 +355,13 @@ public class DatabaseConnection{
         statement.executeUpdate(copy_drugrecipes);
         statement.executeUpdate(copy_tickets);
         statement.executeUpdate(copy_images);
+        statement.executeUpdate(copy_ssp);
         
        
         statement.close();
     }
     
-    static public void crypt(Connection con) throws SQLException{
+    static public void cryptUsers(Connection con) throws SQLException{
         ArrayList<String> emails = new ArrayList<String>();
         ArrayList<String> cryptatedPasswords = new ArrayList<String>();
         
@@ -359,6 +378,33 @@ public class DatabaseConnection{
                 
            
         stm = con.prepareStatement("UPDATE Users SET password = ? WHERE email = ?");
+        for(int i=0;i<emails.size();i++){
+            stm.setString(1, cryptatedPasswords.get(i));
+            stm.setString(2, emails.get(i));
+
+            stm.executeUpdate();
+        }
+        
+    }
+    
+    
+    static public void cryptSsp(Connection con) throws SQLException{
+        ArrayList<String> emails = new ArrayList<String>();
+        ArrayList<String> cryptatedPasswords = new ArrayList<String>();
+        
+        PreparedStatement stm = con.prepareStatement("SELECT * FROM ssp ");
+        ResultSet rs = stm.executeQuery();
+               
+        while (rs.next()) {
+
+            emails.add(rs.getString("email"));
+            //System.out.println(rs.getString("password").substring(0, 8));
+            cryptatedPasswords.add(CryptPassword.hashPassword(rs.getString("password").substring(0, 8)));
+        }
+
+                
+           
+        stm = con.prepareStatement("UPDATE ssp SET password = ? WHERE email = ?");
         for(int i=0;i<emails.size();i++){
             stm.setString(1, cryptatedPasswords.get(i));
             stm.setString(2, emails.get(i));

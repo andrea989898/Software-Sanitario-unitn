@@ -7,7 +7,9 @@ package com.mycompany.softwaresanitario.servlet;
 
 import com.mycompany.softwaresanitario.PDFmanagement.ExamPDF;
 import com.mycompany.softwaresanitario.PDFmanagement.TicketPDF;
+import com.mycompany.softwaresanitario.PDFmanagement.RecipePDF;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
+import com.mycompany.softwaresanitario.image.ImageUtil;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -78,8 +80,8 @@ public class PDFservlet extends HttpServlet {
         }
         
         String contextPath = getServletContext().getContextPath();
-        
-        System.out.println(pdfFolder);
+        ImageUtil.configure(getServletContext());
+        //System.out.println(pdfFolder);
         //pdfFolder = contextPath + pdfFolder;
         pdfFolder = getServletContext().getRealPath(pdfFolder);
         pdfFolder = pdfFolder.substring(0, pdfFolder.length() - 42);
@@ -88,19 +90,14 @@ public class PDFservlet extends HttpServlet {
         String type = request.getParameter("type");
         if(type.equals("ticket")){
             TicketPDF.generateTicketPDF(request.getParameter("id"), daoFactory, request, response, pdfFolder);
-            
-                //doc.getDocumentCatalog();
-                //System.out.println(doc);
-                //doc.save(new File("C:\\Users\\franc\\Desktop\\Software-Sanitario-unitn\\SoftwareSanitario\\src\\main\\webapp\\pdfs", "ticket-" + request.getParameter("id") + "-" + Calendar.getInstance().getTimeInMillis() + ".pdf"));
-            
-                /*response.setContentType("application/pdf");
-                //response.setHeader("Content-disposition", "inline; filename='shopping-lists.pdf'");
-                response.setHeader("Content-disposition", "attachment; filename='ticket.pdf'");
-                doc.save(response.getOutputStream());   */  
         }
         
         if(type.equals("exam")){
             ExamPDF.generateExamPDF(request.getParameter("id"), daoFactory, request, response, pdfFolder);
+        }
+        
+        if(type.equals("prescription")){
+            RecipePDF.generateRecipePDF(request.getParameter("id"), daoFactory, request, response, pdfFolder);
         }
         
         if (!contextPath.endsWith("/")) {

@@ -68,7 +68,7 @@ public class PrescriptionFilterByPatient implements Filter {
             prescriptionDao = daoFactory.getDAO(PrescriptionDAO.class);
             request.setAttribute("PrescriptionDao", prescriptionDao);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for prescriptions storage system", ex));
         }
         
         String contextPath = request.getServletContext().getContextPath();
@@ -95,7 +95,7 @@ public class PrescriptionFilterByPatient implements Filter {
         try {
             prescriptions = prescriptionDao.getPrescriptions(user.getCf());
             if(prescriptions.size() > 0)   request.setAttribute("prescriptions", prescriptions);
-        } catch (SQLException ex) {
+        } catch (DAOException ex) {
             throw new RuntimeException(new ServletException("Impossible to get user or prescription", ex));
         }
     }    

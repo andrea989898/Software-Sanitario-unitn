@@ -6,6 +6,7 @@
 package com.mycompany.softwaresanitario.commons.persistence.entities;
 
 import java.sql.Date;
+import java.util.List;
 
 /**
  *
@@ -26,7 +27,25 @@ public class User {
     private String email;
     private String password;
     private String avatarPath;
+    private List<Exam> exams;
+    private List<Examination> examinations;
 
+    public void setExaminations(List<Examination> examinations) {
+        this.examinations = examinations;
+    }
+
+    public List<Examination> getExaminations() {
+        return examinations;
+    }
+
+    public void setExams(List<Exam> exams) {
+        this.exams = exams;
+    }
+
+    public List<Exam> getExams() {
+        return exams;
+    }
+    
     public void setBirth_city(String birth_city) {
         this.birth_city = birth_city;
     }

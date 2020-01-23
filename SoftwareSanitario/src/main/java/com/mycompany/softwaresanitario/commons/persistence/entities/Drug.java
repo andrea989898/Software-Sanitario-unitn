@@ -11,16 +11,14 @@ package com.mycompany.softwaresanitario.commons.persistence.entities;
  */
 public class Drug {
     private int code;
-    private boolean isforprescription;
+
     private String name;
 
     public int getCode() {
         return code;
     }
 
-    public boolean isIsforprescription() {
-        return isforprescription;
-    }
+   
 
     public String getName() {
         return name;
@@ -30,10 +28,7 @@ public class Drug {
         this.code = code;
     }
 
-    public void setIsforprescription(boolean isforprescription) {
-        this.isforprescription = isforprescription;
-    }
-
+ 
     public void setName(String name) {
         this.name = name;
     }

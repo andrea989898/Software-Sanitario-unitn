@@ -20,6 +20,7 @@
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Exam"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.dao.CityDAO"%>
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.City"%>
+<%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.Examination"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -33,6 +34,9 @@
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
         <style>
             body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
             #myInput {
@@ -44,9 +48,51 @@
                 border: 1px solid #ddd;
                 margin-bottom: 12px;
             }
+            #myInputPassed {
+                background-position: 10px 10px;
+                background-repeat: no-repeat;
+                width: 100%;
+                font-size: 16px;
+                padding: 12px 20px 12px 40px;
+                border: 1px solid #ddd;
+                margin-bottom: 12px;
+            }
+            #myInputConfirmed {
+                background-position: 10px 10px;
+                background-repeat: no-repeat;
+                width: 100%;
+                font-size: 16px;
+                padding: 12px 20px 12px 40px;
+                border: 1px solid #ddd;
+                margin-bottom: 12px;
+            }
+            #myInputExams {
+                background-position: 10px 10px;
+                background-repeat: no-repeat;
+                width: 100%;
+                font-size: 16px;
+                padding: 12px 20px 12px 40px;
+                border: 1px solid #ddd;
+                margin-bottom: 12px;
+            }
+            #myInputConfirmedExams {
+                background-position: 10px 10px;
+                background-repeat: no-repeat;
+                width: 100%;
+                font-size: 16px;
+                padding: 12px 20px 12px 40px;
+                border: 1px solid #ddd;
+                margin-bottom: 12px;
+            }
+            textarea {
+                resize: none;
+            }
         </style>
     </head>
     <body>
+        <header class="w3-container w3-blue">
+            <h2>Software sanitario</h2>
+        </header>
         <jsp:scriptlet>
              response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
         </jsp:scriptlet>
@@ -69,39 +115,63 @@
             </div>
             <div class="w3-container">
                 <div class="w3-section w3-padding-16">
-                    <a href="cambioPassword.html" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-refresh w3-margin-right"></i>Cambia password</button></a>
+                    <button data-toggle="modal" data-target="#changePassword" class="w3-button w3-black"><i class="fa fa-refresh w3-margin-right"></i>Cambia password</button>
+                    <br>
                     <a href="logout.handler" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-close w3-margin-right"></i>Esci</button></a>
-                    <!--<button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Photos</button>
-                    <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Art</button>-->
                 </div> 
             </div>
         </nav>
-        <header id="portfolio">
-                <a href="#"><img src="${avatarPath}" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
-                <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
-        </header>
+        
+        <div class="modal fade" id="changePassword" style="display:none" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Change password:</h4>
+                    </div>
+                    <div class="modal-body">
+                        <jsp:scriptlet>
+                            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+                       </jsp:scriptlet>
+                       <form class="w3-container " method="POST" action="changePassoword.handler">
+                           <label class="w3-text-teal"><b>New password:</b></label>
+                           <input class="w3-input w3-border w3-light-grey" type="password" name="password" id="password" placeholder="password">
+                           <br>
+                           <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
+                           <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+                       </form>
+                    </div>
+                    <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
         
         <div class="w3-main" style="margin-left:300px">
         
             <div class="w3-bar w3-white">
-                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamPatients')">Patients</button></h2>
-                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExPrescriptions')">Prescribe an examination</button></h2>
-                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExamPrescriptions')">Prescribe an exam</button></h2>
-                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamRePrescriptions')">Prescribe a recipe</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('allPatients')">All patients</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('allexaminations')">All examinations</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('confirmExaminations')">Confirm an examinations</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('allExams')">All exams</button></h2>
+                <h2><button class="w3-bar-item w3-button" onclick="openDash('confirmExams')">Confirm exams</button></h2>
             </div>
-            <div id="screamPatients" class="w3-container dash">
-                <br>
-                <input class="w3-bordered" type="text" id="myInput" onkeyup="search()" placeholder="Search for names..">
+            <div id="allPatients" class="w3-container dash">
+
+                <h3>All patients:</h3>
+
+                <input class="w3-bordered" type="text" id="myInput" onkeyup="search('myInput', 'myTable')" placeholder="Search for surnames..">
                 <table class="w3-table w3-bordered" id="myTable">
-                        <tr>
-                             <th>Name</th>
-                             <th>Surname</th>
-                             <th>Age</th>
-                        </tr>
-                    <jsp:scriptlet>
-                        int i=0; 
-                    </jsp:scriptlet>       
+                    <tr>
+                        <th>Cf</th>
+                         <th>Name</th>
+                         <th>Surname</th>
+                         <th>Age</th>
+                    </tr>
+
                     <c:forEach var="patient" items="${patients}">
                         <tr>
                             <td>${patient.getCf()}</td>
@@ -109,281 +179,258 @@
                             <td>${patient.getSurname()}</td> 
                             <td>${patient.getAge()}</td>
                             <td>
-                                <div class="container">
-                                    <h2><button class="btn btn-info" data-toggle="collapse" data-target="#collapse<%=(i)%>" aria-expanded="true" aria-controls="collapse${i}"> -> </button></h2>
-                                    <div id="collapse<%=(i)%>" class="collapse" aria-labelledby="heading<%=(i++)%>">
-                                        <table class="w3-table w3-bordered" id="notmyTable">
-                                            <tr>
-                                                <td>
-                                                    Name : 
-                                                </td>
-                                                <td>
-                                                    ${patient.getName()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Surname :
-                                                </td>
-                                                <td>
-                                                    ${patient.getSurname()}
-                                                </td>
-                                            </tr>      
-                                            <tr>
-                                                <td>
-                                                    Age :
-                                                </td>
-                                                <td>
-                                                    ${patient.getAge()}
-                                                </td
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Birthdate :
-                                                </td>
-                                                <td>
-                                                    ${patient.getBirthdate()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Birthplace :
-                                                </td>
-                                                <td>
-                                                    ${patient.getBirth_city()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Address :
-                                                </td>
-                                                <td>
-                                                    ${patient.getAddress()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    City :
-                                                </td>
-                                                <td>
-                                                    ${patient.getCity()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Gender :
-                                                </td>
-                                                <td>
-                                                    ${patient.getGender()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Codice fiscale :
-                                                </td>
-                                                <td>
-                                                    ${patient.getCf()}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Email :
-                                                </td>
-                                                <td>
-                                                    ${patient.getEmail()}
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>   
-                                </div>    
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">-></button>
                             </td>
-                        </tr>          
+                        </tr>
                     </c:forEach>
-                </table>      
-            </div>  
-            <div id="screamExPrescriptions" class="w3-container dash" style="display:none">
-                <form class="w3-container " method="POST" action="newExamination.handler">
-                    <br><br>
-                    <select id="patient" name="patient">
-                        <option value="0">Select patient:</option>
-                        <c:forEach var="patient" items="${patients}">
-                            <option value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
-                        </c:forEach>
-                    </select>
-                    <br><br>
-                    <select id="type" name="type">
-                        <option value="0">Select type of examinations:</option>
-                        <option value="1">Normal examination</option>
-                        <option value="2">Special examination</option>
-                    </select>
-                    <br><br>
-                    <select id="doctor" name="doctor">
-                        <option value="0">Select the doctor:</option>
-                        <c:forEach var="doctor" items="${doctors}">
-                            <option value="${doctor.getCf()}">${doctor.getName()} ${doctor.getSurname()} specialization: ${doctor.getSpecialization()}</option>
-                        </c:forEach>
-                    </select>
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" name="analysis" id="analysis" placeholder="Write what needs to be done in the visit"></textarea>
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" type="date" name="date" id="date">
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" type="time" name="time" id="time">
-                    <br><br>
-                    <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
-                    <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
-                </form>
+                </table>
+                <c:forEach var="patient" items="${patients}">        
+                    <div class="modal fade" id="patientDetail${patient.getCf()}" style="display:none" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Information about ${patient.getName()} ${patient.getSurname()}:</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <nav class="navbar navbar-default">
+                                        <div class="container-fluid">
+                                            <ul class="nav navbar-nav">
+                                              <li class="active"><a href="#informationAbout${patient.getCf()}" data-toggle="tab">Information about</a></li>
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="informationAbout${patient.getCf()}" style="margin:20px">
+                                        <p>Fiscal code: ${patient.getCf()}</p>
+                                        <p>Name: ${patient.getName()}</p>
+                                        <p>Surname: ${patient.getSurname()}</p>
+                                        <p>Age: ${patient.getAge()}</p>
+                                        <p>Place of birth: ${patient.getBirth_city()}</p>
+                                        <p>Place: ${patient.getCity()}</p>
+                                        <p>Date of birth: ${patient.getBirthdate()}</p>
+                                        <p>Gender: ${patient.getBirthdate()}</p>
+                                        <p>Email: ${patient.getEmail()}</p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>    
             </div>
-            <div id="screamExamPrescriptions" class="w3-container dash">
-                <form class="w3-container " method="POST" action="newExam.handler">
-                    <br><br>
-                    <select id="patient" name="patient">
-                        <option value="0">Select patient:</option>
-                        <c:forEach var="patient" items="${patients}">
-                            <option value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
-                        </c:forEach>
-                    </select>
-                    <br><br>
-                    <select id="doctor" name="doctor">
-                        <option value="0">Select the doctor:</option>
-                        <c:forEach var="doctor" items="${doctors}">
-                            <option value="${doctor.getCf()}">${doctor.getName()} ${doctor.getSurname()} specialization: ${doctor.getSpecialization()}</option>
-                        </c:forEach>
-                    </select>
-                    <br><br>
-                    <select id="recall" name="recall">
-                        <option value="0">Select if is a recall:</option>
-                        <option value="true">This exam is a recall</option>
-                        <option value="false">This exam isn't a recall</option>
-                    </select>
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" name="analysis" id="analysis" placeholder="Write what needs to be done in the visit"></textarea>
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" type="date" name="date" id="date">
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" type="time" name="time" id="time">
-                    <br><br>                  
-                    <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
-                    <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
-                </form>
-            </div>
-            <div id="screamRePrescriptions" class="w3-container dash">
+            <div id="allexaminations" class="w3-container dash" style="display:none">
+                <c:choose>
+                            <c:when test="${empty examinations}">
+                                <div class="card">
+                                    <div class="card-body">
+                                        You haven't already done any examination.
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <h3>Examinations:</h3>
+                                <input class="w3-bordered" type="text" id="myInputPassed" onkeyup="search('myInputPassed', 'myTablePassed')" placeholder="Search for dates..">
+                                
+                                <table class="w3-table w3-bordered" id="myTablePassed">
+                                        <tr>
+                                            <th>Code</th>
+                                             <th>Patient</th>
+                                             <th>Date</th>
+                                             <th>Time</th>
+                                             <th>Done</th>
+                                             <th>Argument</th>
+                                        </tr>   
+                                    <c:forEach var="examination" items="${examinations}">
+                                        <tr>
+                                            <td>${examination.getSSD()}</td>
+                                            <td>${examination.getIDPatient()}</td>
+                                            <td>${examination.getExaminationDate()}</td> 
+                                            <td>${examination.getTime()}</td>
+                                            <td>${examination.getIsDone()}</td>
+                                            <td>${examination.getArgument()}</td>
+                                        </tr>          
+                                    </c:forEach>
+                                </table>
+                            </c:otherwise>
+                </c:choose>
+            </div>              
+            <div id="confirmExaminations" class="w3-container dash" style="display:none">
                 
+                <c:choose>
+                            <c:when test="${empty screamExaminationsByDone}">
+                                <div class="card">
+                                    <div class="card-body">
+                                        You don't have examinations to confirm.
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <h3>Examinations that have to be confirmed:</h3>
+
+                                <input class="w3-bordered" type="text" id="myInputConfirmed" onkeyup="search('myInputConfirmed', 'myTableConfirmed')" placeholder="Search for dates..">
+                                <table class="w3-table w3-bordered" id="myTableConfirmed">
+                                        <tr>
+                                            <th>Code</th>
+                                             <th>Patient</th>
+                                             <th>Date</th>
+                                             <th>Time</th>
+                                             <th>Done</th>
+                                             <th>Argument</th>
+                                             <th>Confirm examination</th>
+                                        </tr>  
+                                        <c:forEach var="examination" items="${screamExaminationsByDone}">
+                                            <tr>
+                                                <td>${examination.getSSD()}</td>
+                                                <td>${examination.getIDPatient()}</td>
+                                                <td>${examination.getExaminationDate()}</td> 
+                                                <td>${examination.getTime()}</td>
+                                                <td>${examination.getIsDone()}</td>
+                                                <td>${examination.getArgument()}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#examinationToConfirm${examination.getSSD()}">-></button>
+                                                </td>
+                                            </tr>    
+                                            <div class="modal fade" id="examinationToConfirm${examination.getSSD()}" style="display:none" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            <h4 class="modal-title">Examination ${examination.getSSD()}. <br> Confirm examination and write the report. When you confirm the examination, this means that the ticket has been payed.</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form method="POST" action="confirmExamination.handler">
+                                                                <div class="form-group">
+                                                                  <label for="comment">Report:</label>
+                                                                  <input name="id" id="id" type="text" class="form-control" value="${examination.getSSD()}" style="display:none">
+                                                                  <textarea class="form-control noresize" rows="5" id="report" name="report"></textarea>
+                                                                </div>
+                                                                <button type="submit" class="btn btn-default">Conferma</button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </c:forEach>
+                                </table>
+                            </c:otherwise>
+                </c:choose>
+            </div>
+            <div id="allExams" class="w3-container dash" style="display:none">
+                <c:choose>
+                            <c:when test="${empty exams}">
+                                <div class="card">
+                                    <div class="card-body">
+                                        You don't have exams to do or already done.
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <h3>Exams:</h3>
+                                <input class="w3-bordered" type="text" id="myInputExams" onkeyup="search('myInputExams', 'myTablePassed2')" placeholder="Search for dates..">
+                                
+                                <table class="w3-table w3-bordered" id="myTablePassed2">
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Patient</th>
+                                            <th>Date</th>
+                                            <th>Result</th>
+                                            <th>Done</th>
+                                            <th>Recall</th>
+                                        </tr>   
+                                    <c:forEach var="exam" items="${exams}">
+                                        <tr>
+                                            <td>${exam.getCode()}</td>
+                                            <td>${exam.getIDPatient()}</td>
+                                            <td>${exam.getExaminationDate()}</td> 
+                                            <td>${exam.getResult()}</td>
+                                            <td>${exam.getIsDone()}</td>
+                                            <td>${exam.getIsRecall()}</td>
+                                        </tr>          
+                                    </c:forEach>
+                                </table>
+                            </c:otherwise>
+                </c:choose>
+            </div>       
+            
+            
+            <div id="confirmExams" class="w3-container dash" style="display:none">
+                
+                <c:choose>
+                            <c:when test="${empty screamExamsByDone}">
+                                <div class="card">
+                                    <div class="card-body">
+                                        You don't have exams to confirm.
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <h3>Exams that have to be confirmed:</h3>
+
+                                <input class="w3-bordered" type="text" id="myInputConfirmedExams" onkeyup="search('myInputConfirmedExams', 'myTableConfirmed2')" placeholder="Search for dates..">
+                                <table class="w3-table w3-bordered" id="myTableConfirmed2">
+                                        <tr>
+                                            <th>Code</th>
+                                             <th>Patient</th>
+                                             <th>Date</th>
+                                             <th>Result</th>
+                                             <th>Done</th>
+                                             <th>Recall</th>
+                                             <th>Confirm exam</th>
+                                        </tr>  
+                                        <c:forEach var="exam" items="${screamExamsByDone}">
+                                            <tr>
+                                                <td>${exam.getCode()}</td>
+                                                <td>${exam.getIDPatient()}</td>
+                                                <td>${exam.getExaminationDate()}</td> 
+                                                <td>${exam.getResult()}</td>
+                                                <td>${exam.getIsDone()}</td>
+                                                <td>${exam.getIsRecall()}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#examinationToConfirm${exam.getCode()}">-></button>
+                                                </td>
+                                            </tr>    
+                                            <div class="modal fade" id="examinationToConfirm${exam.getCode()}" style="display:none" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                            <h4 class="modal-title">Exam: ${exam.getCode()}.<br>Confirm exam and write the result. When you confirm the exam, this means that the ticket has been payed.</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form method="POST" action="confirmExam.handler">
+                                                                <div class="form-group">
+                                                                  <label for="comment">Result:</label>
+                                                                  <input name="id" id="id" type="text" class="form-control" value="${exam.getCode()}" style="display:none">
+                                                                  <input name="type" value="specialist" style="display:none">
+                                                                  <textarea class="form-control noresize" rows="5" id="result" name="result"></textarea>
+                                                                </div>
+                                                                <button type="submit" class="btn btn-default">Confirm</button>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </c:forEach>
+                                </table>
+                            </c:otherwise>
+                </c:choose>
             </div>
         </div>
         <br>
-    <script>
         
-        function openDash(dashName) {
-            var i;
-            var x = document.getElementsByClassName("dash");
-            for (i = 0; i < x.length; i++) {
-                x[i].style.display = "none";  
-            }
-            document.getElementById(dashName).style.display = "block";  
-        }
-
-        // Script to open and close sidebar
-        function w3_open() {
-            document.getElementById("mySidebar").style.display = "block";
-            document.getElementById("myOverlay").style.display = "block";
-        }
- 
-        function w3_close() {
-            document.getElementById("mySidebar").style.display = "none";
-            document.getElementById("myOverlay").style.display = "none";
-        }
-        function search() {
-            // Declare variables 
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("myInput");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("myTable");
-            tr = table.getElementsByTagName("tr");
-
-            // Loop through all table rows, and hide those who don't match the search query
-            for (i = 0; i < tr.length; i++) {
-              td = tr[i].getElementsByTagName("td")[2];
-              if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                  tr[i].style.display = "";
-                } else {
-                  tr[i].style.display = "none";
-                }
-              } 
-            }
-        }
-        function sortTable(myTable) {
-          var table, rows, switching, i, x, y, shouldSwitch, count;
-          count = 0;
-          table = document.getElementById(myTable);
-          switching = true;
-          /*Make a loop that will continue until
-          no switching has been done:*/
-          while (switching) {
-            //start by saying: no switching is done:
-            switching = false;
-            rows = table.rows;
-            /*Loop through all table rows (except the
-            first, which contains table headers):*/
-            for (i = 1; i < (rows.length - 1); i++) {
-              //start by saying there should be no switching:
-              shouldSwitch = false;
-              /*Get the two elements you want to compare,
-              one from current row and one from the next:*/
-              x = rows[i].getElementsByTagName("TD")[1];
-              y = rows[i + 1].getElementsByTagName("TD")[1];
-              //check if the two rows should switch place:
-              if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                //if so, mark as a switch and break the loop:
-                count++;
-                shouldSwitch = true;
-                break;
-              }
-            }
-            if (shouldSwitch) {
-              /*If a switch has been marked, make the switch
-              and mark that a switch has been done:*/
-              rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-              switching = true;
-            }
-          }
-          if(count == 0){
-            switching = true;
-            /*Make a loop that will continue until
-            no switching has been done:*/
-            while (switching) {
-              //start by saying: no switching is done:
-              switching = false;
-              rows = table.rows;
-              /*Loop through all table rows (except the
-              first, which contains table headers):*/
-              for (i = 1; i < (rows.length - 1); i++) {
-                //start by saying there should be no switching:
-                shouldSwitch = false;
-                /*Get the two elements you want to compare,
-                one from current row and one from the next:*/
-                x = rows[i].getElementsByTagName("TD")[1];
-                y = rows[i + 1].getElementsByTagName("TD")[1];
-                //check if the two rows should switch place:
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                  //if so, mark as a switch and break the loop:
-                  //count++;
-                  shouldSwitch = true;
-                  break;
-                }
-              }
-              if (shouldSwitch) {
-                /*If a switch has been marked, make the switch
-                and mark that a switch has been done:*/
-                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                switching = true;
-              }
-            }
-          }
-        }
-    </script>    
-    
+    <script type="text/javascript" src="<%=request.getContextPath()%>/linkers/connector.js"></script>
     </body>
 </html>
+
+
+                

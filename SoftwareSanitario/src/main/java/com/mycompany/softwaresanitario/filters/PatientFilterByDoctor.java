@@ -6,12 +6,16 @@
 package com.mycompany.softwaresanitario.filters;
 
 import com.mycompany.softwaresanitario.commons.persistence.dao.CityDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.ExamDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.ExaminationDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.PatientDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.commons.persistence.entities.City;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Exam;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Examination;
 import com.mycompany.softwaresanitario.commons.persistence.entities.Patient;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
@@ -19,6 +23,8 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -46,7 +52,7 @@ public class PatientFilterByDoctor implements Filter {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
+            throws IOException, ServletException{
         if (debug) {
             log("PatientFilterByGd:DoBeforeProcessing");
         }
@@ -68,7 +74,7 @@ public class PatientFilterByDoctor implements Filter {
             patientDao = daoFactory.getDAO(PatientDAO.class);
             request.setAttribute("patientDao", patientDao);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for shopping list storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for patients storage system", ex));
         }
         
         CityDAO cityDao = null;
@@ -76,7 +82,21 @@ public class PatientFilterByDoctor implements Filter {
             cityDao = daoFactory.getDAO(CityDAO.class);
             request.setAttribute("cityDao", cityDao);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for shopping list storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for cities storage system", ex));
+        }
+        
+        ExamDAO examDao = null;
+        try {
+            examDao = daoFactory.getDAO(ExamDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for exams storage system", ex));
+        }
+        
+        ExaminationDAO examinationDao = null;
+        try {
+            examinationDao = daoFactory.getDAO(ExaminationDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for examinations storage system", ex));
         }
         
         String contextPath = request.getServletContext().getContextPath();
@@ -99,8 +119,32 @@ public class PatientFilterByDoctor implements Filter {
         }
         
         List<User> patients = patientDao.getAllByDoctor(user.getCf());
-        if(patients != null)
+        List<Examination> examinations = null;
+        List<Exam> exams = null;
+        if(patients != null){
+            for(User p:patients){
+                
+                try {
+                    examinations = examinationDao.getExaminations(p.getCf());
+                } catch (DAOException ex) {
+                    throw new RuntimeException(new ServletException("Impossible to get examinations", ex));
+                }
+               
+                p.setExaminations(examinations);
+                
+                try {
+                    exams = examDao.getExams(p.getCf());
+                } catch (DAOException ex) {
+                    throw new RuntimeException(new ServletException("Impossible to get exams", ex));
+                }
+                
+                p.setExams(exams);
+                
+            }
+            
             request.setAttribute("patients", patients);
+        }
+            
         
         
     }    
