@@ -49,61 +49,87 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
       <a class="navbar-brand" href="#">Healthcare software</a>
-      <button data-toggle="modal" data-target="#login" class="btn btn-primary"><i class="fa fa-refresh w3-margin-right"></i>Login</button>
+      <button data-toggle="modal" data-target="#login" class="btn btn-secondary"><i class="fa fa-refresh w3-margin-right"></i>Login</button>
     </div>
   </nav>
   <c:choose>
         <c:when test="${error.equals('yes')}">
             <div class="modal fade" id="login" style="display:none" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Login</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST" action="login.handler">
-                            <div class="form-group"><h6>Login sbagliato precedentemente, email o password errati! Riprova...</h6></div>
-                            <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" type="email" id="username" name="username" placeholder="mariorossi@email.it" value="<%=email%>" /></div>
-                            <div class="form-group"><label class="small mb-1" for="inputPassword">Password</label><input class="form-control py-4" type="password" name="password" id="password" placeholder="password" value="<%=password%>" /></div>
-                            <div class="form-group">
-                                <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" name="remember" value="1" /><label class="custom-control-label" for="rememberPasswordCheck">Remember password</label></div>
-                            </div>
-                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="small" data-toggle="modal" data-dismiss="modal" data-target="#forgotpassword">Forgot Password?</button><button class="btn btn-primary" type="submit">Login</button></div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Login</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="login.handler">
+                                <div class="form-group"><h6>Wrong login previously, wrong email or password! Try again...</h6></div>
+                                <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" type="email" id="username" name="username" placeholder="mariorossi@email.it" value="<%=email%>" /></div>
+                                <div class="form-group"><label class="small mb-1" for="inputPassword">Password</label><input class="form-control py-4" type="password" name="password" id="password" placeholder="password" value="<%=password%>" /></div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" name="remember" value="1" /><label class="custom-control-label" for="rememberPasswordCheck">Remember password</label></div>
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="small" data-toggle="modal" data-dismiss="modal" data-target="#forgotpassword">Forgot Password?</button><button class="btn btn-secondary" type="submit">Login</button></div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </c:when>
-      <c:otherwise>
-          <div class="modal fade" id="login" style="display:none" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Login</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST" action="login.handler">
-                            <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" type="email" id="username" name="username" placeholder="mariorossi@email.it" value="<%=email%>" /></div>
-                            <div class="form-group"><label class="small mb-1" for="inputPassword">Password</label><input class="form-control py-4" type="password" name="password" id="password" placeholder="password" value="<%=password%>" /></div>
-                            <div class="form-group">
-                                <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" name="remember" value="1" /><label class="custom-control-label" for="rememberPasswordCheck">Remember password</label></div>
-                            </div>
-                            <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="small" data-toggle="modal" data-dismiss="modal" data-target="#forgotpassword">Forgot Password?</button><button class="btn btn-primary" type="submit">Login</button></div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <c:when test="${newpassword.equals('yes')}">
+            <div class="modal fade" id="login" style="display:none" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Login</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="POST" action="login.handler">
+                                <div class="form-group"><h6>New password sent to your email!</h6></div>
+                                <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" type="email" id="username" name="username" placeholder="mariorossi@email.it" value="<%=email%>" /></div>
+                                <div class="form-group"><label class="small mb-1" for="inputPassword">Password</label><input class="form-control py-4" type="password" name="password" id="password" placeholder="password" value="<%=password%>" /></div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" name="remember" value="1" /><label class="custom-control-label" for="rememberPasswordCheck">Remember password</label></div>
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="small" data-toggle="modal" data-dismiss="modal" data-target="#forgotpassword">Forgot Password?</button><button class="btn btn-secondary" type="submit">Login</button></div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-      </c:otherwise>
+        </c:when>
+        <c:otherwise>
+            <div class="modal fade" id="login" style="display:none" role="dialog">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h4 class="modal-title">Login</h4>
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      <div class="modal-body">
+                          <form method="POST" action="login.handler">
+                              <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" type="email" id="username" name="username" placeholder="mariorossi@email.it" value="<%=email%>" /></div>
+                              <div class="form-group"><label class="small mb-1" for="inputPassword">Password</label><input class="form-control py-4" type="password" name="password" id="password" placeholder="password" value="<%=password%>" /></div>
+                              <div class="form-group">
+                                  <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" name="remember" value="1" /><label class="custom-control-label" for="rememberPasswordCheck">Remember password</label></div>
+                              </div>
+                              <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="small" data-toggle="modal" data-dismiss="modal" data-target="#forgotpassword">Forgot Password?</button><button class="btn btn-secondary" type="submit">Login</button></div>
+                          </form>
+                      </div>
+                      <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </c:otherwise>
     </c:choose>
   
                         
@@ -117,7 +143,7 @@
                 <div class="modal-body">
                     <form method="POST" action="sendEmail.handler">
                         <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" type="email" id="email" name="email" placeholder="mariorossi@email.it" /></div>
-                        <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="btn btn-primary" type="submit">Submit</button></div>
+                        <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0"><button class="btn btn-secondary" type="submit">Submit</button></div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -222,7 +248,7 @@
         <div class="col-lg-4">
           <div class="testimonial-item mx-auto mb-5 mb-lg-0">
             <img class="img-fluid rounded-circle mb-3" src="<%=request.getContextPath()%>/img/frahtml.png" alt="">
-            <h5>Fracesco Pozzobon</h5>
+            <h5>Francesco Pozzobon</h5>
           </div>
         </div>
       </div>

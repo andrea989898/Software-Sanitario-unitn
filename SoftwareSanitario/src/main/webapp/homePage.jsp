@@ -623,6 +623,7 @@
                                                             <th>Surname</th>
                                                             <th>Age</th>
                                                             <th>Studio address</th>
+                                                            <th>Make change</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="doctorTable">
