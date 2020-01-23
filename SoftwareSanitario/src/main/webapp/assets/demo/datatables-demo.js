@@ -9,6 +9,10 @@ $(document).ready(function() {
   $('#dataTableRecipes').DataTable();
   $('#dataTableDoctors').DataTable();
   $('#dataTablePatients').DataTable();
+  $('#dataTablePatientsSpecialist').DataTable();
+  $('#dataTableConfirmExaminations').DataTable();
+  $('#dataTableConfirmExams').DataTable();
+  $('#dataTableRecipesSsp').DataTable();
   var tablesEx = document.getElementsByName('dataTablePatientsExams');
   for(i=0;i<tablesEx.length; i++){
       $('#'+tablesEx[i].id).DataTable();
