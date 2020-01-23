@@ -198,66 +198,77 @@
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="list-group list-group-horizontal" id="navModalPatient">
-                                            <a href="#informationAbout${patient.getCf()}"  class="list-group-item active list-group-item-action" data-toggle="tab">Information about</a>
-                                            <a href="#examsModal${patient.getCf()}"  class="list-group-item list-group-item-action" data-toggle="tab">Exams</a>
-                                            <a href="#examinationsModal${patient.getCf()}"  class="list-group-item list-group-item-action" data-toggle="tab">Examinations</a>
-                                        </div>
-                                    </div>
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="informationAbout${patient.getCf()}" style="margin:20px">
-                                            <p>Fiscal code: ${patient.getCf()}</p>
-                                            <p>Name: ${patient.getName()}</p>
-                                            <p>Surname: ${patient.getSurname()}</p>
-                                            <p>Age: ${patient.getAge()}</p>
-                                            <p>Place of birth: ${patient.getBirth_city()}</p>
-                                            <p>Place: ${patient.getCity()}</p>
-                                            <p>Date of birth: ${patient.getBirthdate()}</p>
-                                            <p>Gender: ${patient.getBirthdate()}</p>
-                                            <p>Email: ${patient.getEmail()}</p>
-                                        </div>
-                                        <div class="tab-pane" id="examsModal${patient.getCf()}" style="margin:20px">
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered" name="dataTablePatientsExams" id="dataTableEx${patient.getCf()}">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Code</th>
-                                                            <th>Date</th>
-                                                            <th>Result</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach var="exam" items="${patient.getExams()}">
+                                        <div class="container mt-3">
+                                            <!-- Nav tabs -->
+                                            <ul class="nav nav-tabs">
+                                              <li class="nav-item">
+                                                <a class="nav-link active" data-toggle="tab" href="#informationAbout${patient.getCf()}">Informations</a>
+                                              </li>
+                                              <li class="nav-item">
+                                                <a class="nav-link" data-toggle="tab" href="#examsModal${patient.getCf()}">Exams</a>
+                                              </li>
+                                              <li class="nav-item">
+                                                <a class="nav-link" data-toggle="tab" href="#examinationsModal${patient.getCf()}">Examinations</a>
+                                              </li>
+                                            </ul>
+
+                                            <!-- Tab panes -->
+                                            <div class="tab-content">
+                                              <div id="informationAbout${patient.getCf()}" class="container tab-pane active"><br>
+                                                <p>Fiscal code: ${patient.getCf()}</p>
+                                                <p>Name: ${patient.getName()}</p>
+                                                <p>Surname: ${patient.getSurname()}</p>
+                                                <p>Age: ${patient.getAge()}</p>
+                                                <p>Place of birth: ${patient.getBirth_city()}</p>
+                                                <p>Place: ${patient.getCity()}</p>
+                                                <p>Date of birth: ${patient.getBirthdate()}</p>
+                                                <p>Gender: ${patient.getBirthdate()}</p>
+                                                <p>Email: ${patient.getEmail()}</p>
+                                              </div>
+                                              <div id="examsModal${patient.getCf()}" class="container tab-pane fade"><br>
+                                                  <div class="table-responsive">
+                                                    <table class="table table-bordered" name="dataTablePatientsExams" id="dataTableEx${patient.getCf()}">
+                                                        <thead>
                                                             <tr>
-                                                                <td>${exam.getCode()}</td>
-                                                                <td>${exam.getExaminationDate()}</td>
-                                                                <td>${exam.getResult()}</td>
+                                                                <th>Code</th>
+                                                                <th>Date</th>
+                                                                <th>Result</th>
                                                             </tr>
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane" id="examinationsModal${patient.getCf()}" style="margin:20px">
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered" name="dataTablePatientsExaminations" id="dataTableExm${patient.getCf()}">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Code</th>
-                                                            <th>Date</th>
-                                                            <th>Argument</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach var="examination" items="${patient.getExaminations()}">
+                                                        </thead>
+                                                        <tbody>
+                                                            <c:forEach var="exam" items="${patient.getExams()}">
+                                                                <tr>
+                                                                    <td>${exam.getCode()}</td>
+                                                                    <td>${exam.getExaminationDate()}</td>
+                                                                    <td>${exam.getResult()}</td>
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </tbody>
+                                                    </table>
+                                                  </div>
+                                              </div>
+                                              <div id="examinationsModal${patient.getCf()}" class="container tab-pane fade"><br>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" name="dataTablePatientsExaminations" id="dataTableExm${patient.getCf()}">
+                                                        <thead>
                                                             <tr>
-                                                                <td>${examination.getSSD()}</td>
-                                                                <td>${examination.getExaminationDate()}</td>
-                                                                <td>${examination.getArgument()}</td>
+                                                                <th>Code</th>
+                                                                <th>Date</th>
+                                                                <th>Argument</th>
                                                             </tr>
-                                                        </c:forEach>
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                            <c:forEach var="examination" items="${patient.getExaminations()}">
+                                                                <tr>
+                                                                    <td>${examination.getSSD()}</td>
+                                                                    <td>${examination.getExaminationDate()}</td>
+                                                                    <td>${examination.getArgument()}</td>
+                                                                </tr>
+                                                            </c:forEach>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                              </div>
                                             </div>
                                         </div>
                                     </div>
@@ -401,7 +412,7 @@
                                 <select id="drug-2" name="drug-2" class="form-control selectpicker">
                                     <option value="false" disabled selected hidden>Select drug 2:</option>
                                     <c:forEach var="drug" items="${drugs}">
-                                        <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
+                                        <option data-tokens="${drug.getName()}" value="<%=(++j)%>">${drug.getName()}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -412,7 +423,7 @@
                                 <select id="drug-3" name="drug-3" class="form-control selectpicker">
                                     <option value="false" disabled selected hidden>Select drug 3:</option>
                                     <c:forEach var="drug" items="${drugs}">
-                                        <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
+                                        <option data-tokens="${drug.getName()}" value="<%=(++j)%>">${drug.getName()}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -423,7 +434,7 @@
                                 <select id="drug-4" name="drug-4" class="form-control selectpicker">
                                     <option value="false" disabled selected hidden>Select drug 4:</option>
                                     <c:forEach var="drug" items="${drugs}">
-                                        <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
+                                        <option data-tokens="${drug.getName()}" value="<%=(++j)%>">${drug.getName()}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -434,7 +445,7 @@
                                 <select id="drug-5" name="drug-5" class="form-control selectpicker">
                                     <option value="false" disabled selected hidden>Select drug 5:</option>
                                     <c:forEach var="drug" items="${drugs}">
-                                        <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
+                                        <option data-tokens="${drug.getName()}" value="<%=(++j)%>">${drug.getName()}</option>
                                     </c:forEach>
                                 </select>
                             </div>

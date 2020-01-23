@@ -84,7 +84,7 @@ public class JDBCDrugDAO extends JDBCDAO<Drug, String> implements DrugDAO{
 
     @Override
     public ArrayList<Drug> getAllDrugsByRecipe(int idrecipe) throws DAOException {
-        String myGet = "select distinct dr.code, dr.name\n" +
+        String myGet = "select dr.code, dr.name\n" +
                        "from drugs dr, drugsrecipes drec\n" +
                        "where drec.idrecipe = ? AND dr.code = drec.iddrug\n" +
                        "order by code;" ;
