@@ -22,405 +22,582 @@
 <%@page import="com.mycompany.softwaresanitario.commons.persistence.entities.City"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
+<jsp:scriptlet>
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
+</jsp:scriptlet>
+<html lang="en">
     <head>
-        <title>Software sanitario: Private Area</title>
-
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-        <style>
-            body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
-            #myInput {
-                background-position: 10px 10px;
-                background-repeat: no-repeat;
-                width: 100%;
-                font-size: 16px;
-                padding: 12px 20px 12px 40px;
-                border: 1px solid #ddd;
-                margin-bottom: 12px;
-            }
-            #myInputPatient{
-                background-position: 10px 10px;
-                background-repeat: no-repeat;
-                width: 100%;
-                font-size: 16px;
-                padding: 12px 20px 12px 40px;
-                border: 1px solid #ddd;
-                margin-bottom: 12px;
-            }
-            
-            #bottom {background-color: lightgray; color: white; margin-left: 300px; margin-bottom: 15px;}
-            div.img {border: 2px solid white; float: left; margin: 10px; width: 100px; height: 100px;}
-
-        </style>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="SoftwareSanitarioUnitn" />
+        <meta name="author" content="I magici ragazzi" />
+        <title>Healthcare software</title>
+        <link href="<%=request.getContextPath()%>/css/styles.css" rel="stylesheet" />
+        <link href="<%=request.getContextPath()%>/css/ourStyle.css" rel="stylesheet" />
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     </head>
-    <body>
-        <jsp:scriptlet>
-             response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
-        </jsp:scriptlet>
-        <header class="w3-container w3-blue">
-            <h2>Software sanitario</h2>
-        </header>
-        <!-- Sidebar/menu -->
-        <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
-            <div class="w3-container">
-                <a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
-                  <i class="fa fa-remove"></i>
-                </a>
-                <img src="${avatarPath}" style="width:45%;" class="w3-round"><br><br>
-                <h4><b>${user.getName()} ${user.getSurname()}</b></h4>
-            </div>
-            <div class="w3-bar-block">
-                <a href="homePage.html" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard patient</a> 
-                <c:choose>
-                    <c:when test="${!empty specialist}">
-                        <a href="homeSpecialist.html" onclick="w3_close()" class="w3-bar-item w3-button w3-padding "><i class="fa fa-user fa-fw w3-margin-right"></i>Dashboard specialist</a> 
-                    </c:when>   
-                </c:choose>
-            </div>
-            <div class="w3-container">
-                <div class="w3-section w3-padding-16">
-                    <button data-toggle="modal" data-target="#changePassword" class="w3-button w3-black"><i class="fa fa-refresh w3-margin-right"></i>Cambia password</button>
-                    <br>
-                    <a href="logout.handler" class="w3-container"><button class="w3-button w3-black"><i class="fa fa-close w3-margin-right"></i>Esci</button></a>
+    <body class="sb-nav-fixed">
+        <script type="text/javascript" src="<%=request.getContextPath()%>/linkers/connector.js"></script>
+        
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <a class="navbar-brand" href="homePage.html">Healthcare software</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0" >
+                <div class="input-group" style="display:none">
+                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+                    </div>
                 </div>
-            </div>
+            </form>
+            <!-- Navbar-->
+            <ul class="navbar-nav ml-auto ml-md-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                        <a class="dropdown-item" data-toggle="modal" data-target="#changePassword">Change password</a>
+                        <a class="dropdown-item" onclick="openDash('personalInformation')">Personal information</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="logout.handler">Logout</a>
+                    </div>
+                </li>
+            </ul>
         </nav>
-        <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
         
         <div class="modal fade" id="changePassword" style="display:none" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
+                        <h4 class="modal-title">Change password</h4><br>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Change password:</h4>
                     </div>
                     <div class="modal-body">
-                        <jsp:scriptlet>
-                            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
-                       </jsp:scriptlet>
-                       <form class="w3-container " method="POST" action="changePassoword.handler">
-                           <label class="w3-text-teal"><b>New password:</b></label>
-                           <input class="w3-input w3-border w3-light-grey" type="password" name="password" id="password" placeholder="password">
-                           <br>
-                           <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
-                           <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
+                        <form method="POST" action="changePassoword.handler" onsubmit="return testpass(this)">
+                           <div class="form-group">
+                                <label class="font-weight-normal"><b>New password:</b></label>
+                                <input class="form-control" type="password" name="password_2" placeholder="password">
+                                <label class="font-weight-normal"><b>Confirm password:</b></label>
+                                <input class="form-control" type="password" name="password" placeholder="password">
+                                <br>
+                                <input class="btn btn-secondary" type="submit" value="Submit">
+                                <input class="btn btn-secondary" type="reset" value="Reset">
+                           </div>
                        </form>
                     </div>
                     <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="w3-main" style="margin-left:300px">
         
-            <div class="w3-bar w3-white">
-                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamPatients')">Patients</button></h2>
-                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExPrescriptions')">Prescribe an examination</button></h2>
-                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamExamPrescriptions')">Prescribe an exam</button></h2>
-                <h2><button class="w3-bar-item w3-button" onclick="openDash('screamRePrescriptions')">Prescribe a recipe</button></h2>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">
+                                <img src="${avatarPath}" style="width:85%;" class="rounded"/><br>
+                            </div>
+                            <div class="sb-sidenav-menu-heading">Your dashboard</div>
+                            <a class="nav-link" href="homePage.html"
+                                ><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Dashboard patient</a>
+                            <a class="nav-link" href="homeGeneralDoctor.html"
+                                            ><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                            Dashboard general doctor</a>
+                            <c:choose>
+                                <c:when test="${!empty specialist}">
+                                        <a class="nav-link" href="homeSpecialist.html"
+                                            ><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                            Dashboard specialist</a>
+                                </c:when>   
+                            </c:choose> 
+                            <div class="sb-sidenav-menu-heading">Action</div>
+                            <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsePatients" onclick="openDash('patients')" aria-expanded="false" aria-controls="collapseLayouts"
+                               ><div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Patients
+                            </a>
+                            <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapsePrescriptions" aria-expanded="false" aria-controls="collapsePages"
+                                ><div class="sb-nav-link-icon"><i class="fas fa-edit"></i></div>
+                                Prescriptions
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div
+                            ></a>
+                            <div class="collapse" id="collapsePrescriptions" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav"><a class="nav-link" onclick="openDash('prescribeExaminations')">Prescribe examinations</a><a class="nav-link" onclick="openDash('prescribeExams')">Prescribe exams</a><a class="nav-link" onclick="openDash('prescribeDrugs')">Prescribe some drugs</a></nav>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        ${user.getName()} ${user.getSurname()}
+                    </div>
+                </nav>
             </div>
-            <div id="screamPatients" class="w3-container dash">
-
-                <h3>All your patients:</h3>
-
-                <input class="w3-bordered" type="text" id="myInputPatient" onkeyup="search('myInputPatient','myTablePatient')" placeholder="Search for surnames..">
-                <table class="w3-table w3-bordered" id="myTablePatient">
-                    <tr>
-                        <th>Cf</th>
-                         <th>Name</th>
-                         <th>Surname</th>
-                         <th>Age</th>
-                    </tr>
-
-                    <c:forEach var="patient" items="${patients}">
-                        <tr>
-                            <td>${patient.getCf()}</td>
-                            <td>${patient.getName()}</td>
-                            <td>${patient.getSurname()}</td> 
-                            <td>${patient.getAge()}</td>
-                            <td>
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">-></button>
-                            </td>
-                        </tr>
+            
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid" id="patients">
+                        <h1 class="mt-4">Patients</h1>
+                        <div class="card mb-4">
+                            <div class="card-body">Here you can see all your patients.</div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header"><i class="fas fa-table mr-1"></i>Patients</div>
+                            <c:choose>
+                                        <c:when test="${empty patients}">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    You don't have patients.
+                                                </div>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                <table class="table table-bordered" id="dataTablePatients" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Cf</th>
+                                                             <th>Name</th>
+                                                             <th>Surname</th>
+                                                             <th>Age</th>
+                                                             <th>About</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="patientsTable">
+                                                    <c:forEach var="patient" items="${patients}">
+                                                        <tr>
+                                                            <td>${patient.getCf()}</td>
+                                                            <td>${patient.getName()}</td>
+                                                            <td>${patient.getSurname()}</td> 
+                                                            <td>${patient.getAge()}</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">-></button>
+                                                            </td>
+                                                        </tr> 
+                                                    </c:forEach>
+                                                    </tbody>
+                                                </table>
+                                                </div>
+                                            </div>
+                                        </c:otherwise>
+                            </c:choose>
+                        </div>
+                    </div>
+                    
+                    <c:forEach var="patient" items="${patients}">        
+                        <div class="modal fade" id="patientDetail${patient.getCf()}" style="display:none" role="dialog">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Information about ${patient.getName()} ${patient.getSurname()}:</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="list-group list-group-horizontal" id="navModalPatient">
+                                            <a href="#informationAbout${patient.getCf()}"  class="list-group-item active list-group-item-action" data-toggle="tab">Information about</a>
+                                            <a href="#examsModal${patient.getCf()}"  class="list-group-item list-group-item-action" data-toggle="tab">Exams</a>
+                                            <a href="#examinationsModal${patient.getCf()}"  class="list-group-item list-group-item-action" data-toggle="tab">Examinations</a>
+                                        </div>
+                                    </div>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="informationAbout${patient.getCf()}" style="margin:20px">
+                                            <p>Fiscal code: ${patient.getCf()}</p>
+                                            <p>Name: ${patient.getName()}</p>
+                                            <p>Surname: ${patient.getSurname()}</p>
+                                            <p>Age: ${patient.getAge()}</p>
+                                            <p>Place of birth: ${patient.getBirth_city()}</p>
+                                            <p>Place: ${patient.getCity()}</p>
+                                            <p>Date of birth: ${patient.getBirthdate()}</p>
+                                            <p>Gender: ${patient.getBirthdate()}</p>
+                                            <p>Email: ${patient.getEmail()}</p>
+                                        </div>
+                                        <div class="tab-pane" id="examsModal${patient.getCf()}" style="margin:20px">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" name="dataTablePatientsExams" id="dataTableEx${patient.getCf()}">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Code</th>
+                                                            <th>Date</th>
+                                                            <th>Result</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach var="exam" items="${patient.getExams()}">
+                                                            <tr>
+                                                                <td>${exam.getCode()}</td>
+                                                                <td>${exam.getExaminationDate()}</td>
+                                                                <td>${exam.getResult()}</td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="examinationsModal${patient.getCf()}" style="margin:20px">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" name="dataTablePatientsExaminations" id="dataTableExm${patient.getCf()}">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Code</th>
+                                                            <th>Date</th>
+                                                            <th>Argument</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach var="examination" items="${patient.getExaminations()}">
+                                                            <tr>
+                                                                <td>${examination.getSSD()}</td>
+                                                                <td>${examination.getExaminationDate()}</td>
+                                                                <td>${examination.getArgument()}</td>
+                                                            </tr>
+                                                        </c:forEach>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="openDash('prescribeExaminations')">Prescibe an examination</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="openDash('prescribeExams')">Prescibe an exam</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="openDash('prescribeDrugs')">Prescribe a recipe</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </c:forEach>
-                </table>
-                <c:forEach var="patient" items="${patients}">        
-                    <div class="modal fade" id="patientDetail${patient.getCf()}" style="display:none" role="dialog">
+                    
+                    <div class="container-fluid" id="prescribeExaminations" style="display: none">
+                        <h1 class="mt-4">Prescribe examinations</h1>
+                        <div class="card mb-4">
+                            <div class="card-body">Here you can prescribe an examinations.</div>
+                        </div>
+                        <form method="POST" action="newExamination.handler">
+                            <input type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
+                            <div class="form-group">
+                                <select id="patient" name="patient" class="form-control selectpicker">
+                                    <option value="0" disabled selected hidden>Select patient:</option>
+                                    <c:forEach var="patient" items="${patients}">
+                                        <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select id="type" name="type" class="form-control selectpicker">
+                                    <option value="0" disabled selected hidden>Select type of examinations:</option>
+                                    <option value="1">Normal examination</option>
+                                    <option value="2">Special examination</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select id="doctor" name="doctor" class="form-control selectpicker">
+                                    <option value="0" disabled selected hidden>Select the doctor:</option>
+                                    <c:forEach var="doctor" items="${doctors}">
+                                        <option data-tokens="${doctor.getName()}${doctor.getSurname()}" value="${doctor.getCf()}">${doctor.getName()} ${doctor.getSurname()} specialization: ${doctor.getSpecialization()}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <br><br>
+                            <div class="form-group">
+                                <textarea class="form-control" name="analysis" id="analysis" placeholder="Write what needs to be done in the visit"></textarea>
+                            </div>
+                            <br><br>
+                            <div class="form-group">
+                                <input class="form-control" type="date" name="date" id="date">
+                            </div>
+                            <br><br>
+                            <div class="form-group">
+                                <input class="form-control" type="time" name="time" id="time">
+                            </div>
+                            <button class="btn btn-secondary" type="submit">Submit</button>
+                            <button class="btn btn-secondary" type="reset">Reset</button>
+                        </form>
+                    </div>
+                            
+                    <div class="container-fluid" id="prescribeExams" style="display: none">
+                        <h1 class="mt-4">Prescribe exams</h1>
+                        <div class="card mb-4">
+                            <div class="card-body">Here you can prescribe an exam.</div>
+                        </div>
+                        <form method="POST" action="newExam.handler">
+                            <input type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
+                            <div class="form-group">
+                                <select class="form-control selectpicker" id="patient" name="patient">
+                                    <option value="0" disabled selected hidden>Select patient:</option>
+                                    <c:forEach var="patient" items="${patients}">
+                                        <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control selectpicker" id="doctor" name="doctor" data-live-search="true">
+                                    <option value="0" disabled selected hidden>Select the doctor or the province service:</option>
+                                    <c:forEach var="doctor" items="${doctors}">
+                                        <option data-tokens="${doctor.getName()}${doctor.getSurname()}" value="${doctor.getCf()}">${doctor.getName()} ${doctor.getSurname()} specialization: ${doctor.getSpecialization()}</option>
+                                    </c:forEach>
+                                    <option data-tokens="ssp" value="${ssp.getId()}">Servizio sanitario della provincia di ${ssp.getProvinceName()}</option>    
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control selectpicker" id="recall" name="recall">
+                                    <option value="0" disabled selected hidden>Select if is a recall:</option>
+                                    <option value="true">This exam is a recall</option>
+                                    <option value="false">This exam isn't a recall</option>
+                                </select>
+                            </div>
+                            <br><br>
+                            <div class="form-group">
+                                <textarea class="form-control" name="analysis" id="analysis" placeholder="Write what needs to be done in the exam"></textarea>
+                            </div>
+                            <br><br>
+                            <div class="form-group">
+                                <input class="form-control" type="date" name="date" id="date">
+                            </div>
+                            <br><br>
+                            <div class="form-group">
+                                <input class="form-control" type="time" name="time" id="time">
+                            </div>                 
+                            <button class="btn btn-secondary" type="submit">Submit</button>
+                            <button class="btn btn-secondary" type="reset">Reset</button>
+                        </form>
+                    </div>
+                    
+                    <div class="container-fluid" id="prescribeDrugs" style="display: none">
+                        <h1 class="mt-4">Prescribe drugs</h1>
+                        <div class="card mb-4">
+                            <div class="card-body">Here you can prescribe some drugs.</div>
+                        </div>
+                        <form method="POST" action="newRecipe.handler">
+                            <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
+                            <div class="form-group">
+                                <select id="patient" name="patient" class="form-control selectpicker">
+                                    <option value="0" disabled selected hidden>Select patient:</option>
+                                    <c:forEach var="patient" items="${patients}">
+                                        <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <br><br>
+                            <jsp:scriptlet>
+                                int j=0; 
+                            </jsp:scriptlet>
+                            <div class="form-group">
+                                <select id="drug-1" name="drug-1" class="form-control selectpicker">
+                                    <option value="false" disabled selected hidden>Select drug 1:</option>
+                                    <c:forEach var="drug" items="${drugs}">
+                                        <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <jsp:scriptlet>
+                                j=0; 
+                            </jsp:scriptlet> 
+                            <div class="form-group">
+                                <select id="drug-2" name="drug-2" class="form-control selectpicker">
+                                    <option value="false" disabled selected hidden>Select drug 2:</option>
+                                    <c:forEach var="drug" items="${drugs}">
+                                        <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <jsp:scriptlet>
+                                j=0; 
+                            </jsp:scriptlet> 
+                            <div class="form-group">
+                                <select id="drug-3" name="drug-3" class="form-control selectpicker">
+                                    <option value="false" disabled selected hidden>Select drug 3:</option>
+                                    <c:forEach var="drug" items="${drugs}">
+                                        <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <jsp:scriptlet>
+                                j=0; 
+                            </jsp:scriptlet> 
+                            <div class="form-group">
+                                <select id="drug-4" name="drug-4" class="form-control selectpicker">
+                                    <option value="false" disabled selected hidden>Select drug 4:</option>
+                                    <c:forEach var="drug" items="${drugs}">
+                                        <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <jsp:scriptlet>
+                                j=0; 
+                            </jsp:scriptlet> 
+                            <div class="form-group">
+                                <select id="drug-5" name="drug-5" class="form-control selectpicker">
+                                    <option value="false" disabled selected hidden>Select drug 5:</option>
+                                    <c:forEach var="drug" items="${drugs}">
+                                        <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <jsp:scriptlet>
+                                j=0; 
+                            </jsp:scriptlet> 
+                            <br><br>
+                            <div class="form-group">
+                                <input class="form-control" name="analysis" id="analysis" placeholder="Write the information about the recipe"></textarea>
+                            </div>               
+                            <button class="btn btn-secondary" type="submit">Submit</button>
+                            <button class="btn btn-secondary" type="reset">Reset</button>
+                        </form>
+                    </div>
+                    
+                    
+                                    
+                    <div class="container-fluid" id="personalInformation" style="display: none">
+                        <h1 class="mt-4">Your personal information</h1>
+                        <div class="card mb-4">
+                            <div class="card-body">Here you can see your personal information.</div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="table-responsive">
+                            <table class="table borderless">
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        Name : 
+                                    </td>
+                                    <td>
+                                        ${user.getName()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Surname :
+                                    </td>
+                                    <td>
+                                        ${user.getSurname()}
+                                    </td>
+                                </tr>      
+                                <tr>
+                                    <td>
+                                        Age :
+                                    </td>
+                                    <td>
+                                        ${user.getAge()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Birthdate :
+                                    </td>
+                                    <td>
+                                        ${user.getBirthdate()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Birthplace :
+                                    </td>
+                                    <td>
+                                        ${birth_city_Patient.getName()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Address :
+                                    </td>
+                                    <td>
+                                        ${user.getAddress()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        City :
+                                    </td>
+                                    <td>
+                                        ${city_Patient.getName()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Gender :
+                                    </td>
+                                    <td>
+                                        ${user.getGender()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Codice fiscale :
+                                    </td>
+                                    <td>
+                                        ${user.getCf()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Email :
+                                    </td>
+                                    <td>
+                                        ${user.getEmail()}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h3><button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#uploadphoto">Change your photo</button></h3>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table> 
+                            </div>
+                        </div>
+                    </div>
+                                    
+                     <div class="modal fade" id="uploadphoto" style="display:none" role="dialog">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
+                                    <h4 class="modal-title">Change image of ${user.getName()} ${user.getSurname()}:</h4>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    <h4 class="modal-title">Information about ${patient.getName()} ${patient.getSurname()}:</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <nav class="navbar navbar-default">
-                                        <div class="container-fluid">
-                                            <ul class="nav navbar-nav">
-                                              <li class="active"><a href="#informationAbout${patient.getCf()}" data-toggle="tab">Information about</a></li>
-                                              <li><a href="#examsModal${patient.getCf()}" data-toggle="tab">Exams</a></li>
-                                              <li><a href="#examinationsModal${patient.getCf()}" data-toggle="tab">Examinations</a></li>
-                                            </ul>
-                                        </div>
-                                    </nav>
-                                </div>
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="informationAbout${patient.getCf()}" style="margin:20px">
-                                        <p>Fiscal code: ${patient.getCf()}</p>
-                                        <p>Name: ${patient.getName()}</p>
-                                        <p>Surname: ${patient.getSurname()}</p>
-                                        <p>Age: ${patient.getAge()}</p>
-                                        <p>Place of birth: ${patient.getBirth_city()}</p>
-                                        <p>Place: ${patient.getCity()}</p>
-                                        <p>Date of birth: ${patient.getBirthdate()}</p>
-                                        <p>Gender: ${patient.getBirthdate()}</p>
-                                        <p>Email: ${patient.getEmail()}</p>
-                                    </div>
-                                    <div class="tab-pane" id="examsModal${patient.getCf()}" style="margin:20px">
-                                        <table class="w3-table w3-bordered" id="myTable">
-                                            <tr>
-                                                <th>Code</th>
-                                                <th>Date</th>
-                                                <th>Result</th>
-                                            </tr>
-                                            <c:forEach var="exam" items="${patient.getExams()}">
-                                                <tr>
-                                                    <td>${exam.getCode()}</td>
-                                                    <td>${exam.getExaminationDate()}</td>
-                                                    <td>${exam.getResult()}</td>
-                                                </tr>
-                                            </c:forEach>
-                                        </table>
-                                    </div>
-                                    <div class="tab-pane" id="examinationsModal${patient.getCf()}" style="margin:20px">
-                                        <table class="w3-table w3-bordered" id="myTableexaminations">
-                                            <tr>
-                                                <th>Code</th>
-                                                <th>Date</th>
-                                                <th>Argument</th>
-                                            </tr>
-                                            <c:forEach var="examination" items="${patient.getExaminations()}">
-                                                <tr>
-                                                    <td>${examination.getSSD()}</td>
-                                                    <td>${examination.getExaminationDate()}</td>
-                                                    <td>${examination.getArgument()}</td>
-                                                </tr>
-                                            </c:forEach>
-                                        </table>
-                                    </div>
+                                    <p class="font-weight-normal">Please select the image in your device.</p>
+                                    <form method="POST" action="uploadImage.handler" enctype = "multipart/form-data">
+                                        <div class="upload-btn-wrapper">
+                                            <%--<button class="btnfile">Choose a file</button>--%>
+                                            <input type="file" name="myfile" accept="image/*" style="border-radius: 6px; width: 1000px"/>
+                                        </div>                                        
+                                        <br>
+                                        <button type="submit" class="btn btn-success">Upload file</button>
+                                    </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default w3-blue" data-dismiss="modal" onclick="openDash('screamExPrescriptions')">Prescibe an examination</button>
-                                    <button type="button" class="btn btn-default w3-blue" data-dismiss="modal" onclick="openDash('screamExamPrescriptions')">Prescibe an exam</button>
-                                    <button type="button" class="btn btn-default w3-blue" data-dismiss="modal" onclick="openDash('screamRePrescriptions')">Prescribe a recipe</button>
-                                    <button type="button" class="btn btn-default w3-blue" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </c:forEach>    
-            </div>
-            <div id="screamExPrescriptions" class="w3-container dash" style="display:none">
-                
-                <h3>Prescribe a new examination:</h3>
-                
-                <form class="w3-container " method="POST" action="newExamination.handler">
-                    <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
-                    <br><br>
-                    <select id="patient" name="patient" class="form-control selectpicker">
-                        <option value="0" disabled selected hidden>Select patient:</option>
-                        <c:forEach var="patient" items="${patients}">
-                            <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
-                        </c:forEach>
-                    </select>
-                    <br><br>
-                    <select id="type" name="type" class="form-control selectpicker">
-                        <option value="0" disabled selected hidden>Select type of examinations:</option>
-                        <option value="1">Normal examination</option>
-                        <option value="2">Special examination</option>
-                    </select>
-                    <br><br>
-                    <select id="doctor" name="doctor" class="form-control selectpicker">
-                        <option value="0" disabled selected hidden>Select the doctor:</option>
-                        <c:forEach var="doctor" items="${doctors}">
-                            <option data-tokens="${doctor.getName()}${doctor.getSurname()}" value="${doctor.getCf()}">${doctor.getName()} ${doctor.getSurname()} specialization: ${doctor.getSpecialization()}</option>
-                        </c:forEach>
-                    </select>
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" name="analysis" id="analysis" placeholder="Write what needs to be done in the visit"></textarea>
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" type="date" name="date" id="date">
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" type="time" name="time" id="time">
-                    <br><br>
-                    <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
-                    <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
-                </form>
-            </div>
-            <div id="screamExamPrescriptions" class="w3-container dash" style="display:none">
-                
-                <h3>Prescribe a new exam:</h3>
-                
-                <form class="w3-container " method="POST" action="newExam.handler">
-                    <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
-                    <br><br>
-                    <select class="form-control selectpicker" id="patient" name="patient">
-                        <option value="0" disabled selected hidden>Select patient:</option>
-                        <c:forEach var="patient" items="${patients}">
-                            <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
-                        </c:forEach>
-                    </select>
-                    <br><br>
-                    <select class="form-control selectpicker" id="doctor" name="doctor" data-live-search="true">
-                        <option value="0" disabled selected hidden>Select the doctor or the province service:</option>
-                        <c:forEach var="doctor" items="${doctors}">
-                            <option data-tokens="${doctor.getName()}${doctor.getSurname()}" value="${doctor.getCf()}">${doctor.getName()} ${doctor.getSurname()} specialization: ${doctor.getSpecialization()}</option>
-                        </c:forEach>
-                        <option data-tokens="ssp" value="${ssp.getId()}">Servizio sanitario della provincia di ${ssp.getProvinceName()}</option>    
-                    </select>
-                    <br><br>
-                    <select class="form-control selectpicker" id="recall" name="recall">
-                        <option value="0" disabled selected hidden>Select if is a recall:</option>
-                        <option value="true">This exam is a recall</option>
-                        <option value="false">This exam isn't a recall</option>
-                    </select>
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" name="analysis" id="analysis" placeholder="Write what needs to be done in the exam"></textarea>
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" type="date" name="date" id="date">
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" type="time" name="time" id="time">
-                    <br><br>                  
-                    <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
-                    <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
-                </form>
-            </div>
-            <div id="screamRePrescriptions" class="w3-container dash" style="display:none">
-                <h3>Prescribe a new recipe:</h3>
-                
-                <form class="w3-container " method="POST" action="newRecipe.handler">
-                    <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
-                    <br><br>
-                    <select id="patient" name="patient" class="form-control selectpicker">
-                        <option value="0" disabled selected hidden>Select patient:</option>
-                        <c:forEach var="patient" items="${patients}">
-                            <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
-                        </c:forEach>
-                    </select>
-                    <br><br>
-                    <jsp:scriptlet>
-                        int j=0; 
-                    </jsp:scriptlet>
-                    <select id="drug-1" name="drug-1" class="form-control selectpicker">
-                        <option value="false" disabled selected hidden>Select drug 1:</option>
-                        <c:forEach var="drug" items="${drugs}">
-                            <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
-                        </c:forEach>
-                    </select>
-                    <jsp:scriptlet>
-                        j=0; 
-                    </jsp:scriptlet> 
-                    <br><br>
-                    <select id="drug-2" name="drug-2" class="form-control selectpicker">
-                        <option value="false" disabled selected hidden>Select drug 2:</option>
-                        <c:forEach var="drug" items="${drugs}">
-                            <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
-                        </c:forEach>
-                    </select>
-                    <jsp:scriptlet>
-                        j=0; 
-                    </jsp:scriptlet> 
-                    <br><br>
-                    <select id="drug-3" name="drug-3" class="form-control selectpicker">
-                        <option value="false" disabled selected hidden>Select drug 3:</option>
-                        <c:forEach var="drug" items="${drugs}">
-                            <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
-                        </c:forEach>
-                    </select>
-                    <jsp:scriptlet>
-                        j=0; 
-                    </jsp:scriptlet> 
-                    <br><br>
-                    <select id="drug-4" name="drug-4" class="form-control selectpicker">
-                        <option value="false" disabled selected hidden>Select drug 4:</option>
-                        <c:forEach var="drug" items="${drugs}">
-                            <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
-                        </c:forEach>
-                    </select>
-                    <jsp:scriptlet>
-                        j=0; 
-                    </jsp:scriptlet> 
-                    <br><br>
-                    <select id="drug-5" name="drug-5" class="form-control selectpicker">
-                        <option value="false" disabled selected hidden>Select drug 5:</option>
-                        <c:forEach var="drug" items="${drugs}">
-                            <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
-                        </c:forEach>
-                    </select>
-                    <jsp:scriptlet>
-                        j=0; 
-                    </jsp:scriptlet> 
-                    <br><br>
-                    <input class="w3-input w3-border w3-light-grey" name="analysis" id="analysis" placeholder="Write the information about the recipe"></textarea>
-                    <br><br>               
-                    <button class="w3-button w3-round-large w3-blue" type="submit">Submit</button>
-                    <button class="w3-button w3-round-large w3-blue" type="reset">Reset</button>
-                </form>
+                    
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid" id="foot">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Software sanitario 2020</div>
+                            <div>
+                                <a href="<%=request.getContextPath()%>/download/cookie.pdf" download>Cookies</a>
+                                &middot;
+                                <a href="<%=request.getContextPath()%>/download/privacy.pdf" download>Privacy Policy</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
             </div>
         </div>
-        <br><br><br><br><br>
-        
-
-    <footer id="bottom" class="row text-left p-4">
-    <div class="col-12 col-md-4">
-    <h2>Copyright &copy; The Author</h2>
-    <form>
-    <div class="form-group">
-      <label for="exampleInputEmail1">Email</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Inserisci email">
-      <small id="emailHelp" class="form-text text-white">L'indirizzo e-mail non verrà condiviso.</small>
-    </div>
-    <div class="form-group">
-      <label for="exampleInputPassword1">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-    </div>
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">Approva</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    </div>
-    <div class="col-12 col-md-8">
-    <h2>Informazioni</h2>
-    <div class="row">
-      <div class="col-12 col-md-4">
-        Lorem ipsum ...
-      </div>
-      <div class="col-12 col-md-4">
-        Lorem ipsum ...
-      </div>
-      <div class="col-12 col-md-4">
-        <h2>Immagini</h2>
-        <div class="img"></div>
-        <div class="img"></div>
-        <div class="img"></div>
-        <div class="img"></div>
-      </div>
-    </div>
-    </div>
-    </footer>
-    <script type="text/javascript" src="<%=request.getContextPath()%>/linkers/connector.js"></script>
-    
-</body>    
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="<%=request.getContextPath()%>/js/scripts.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+        <script src="<%=request.getContextPath()%>/assets/demo/datatables-demo.js"></script>
+    </body>
 </html>

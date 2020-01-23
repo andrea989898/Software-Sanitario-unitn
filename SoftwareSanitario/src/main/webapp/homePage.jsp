@@ -244,7 +244,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="screamExamsTable">
-                                                    <c:forEach var="exam" items="${exams}">
+                                                    <c:forEach var="exam" items="${screamExams}">
                                                         <tr>
                                                             <td>${exam.getCode()}</td>
                                                             <td>${exam.getExaminationDate()}</td>
@@ -354,7 +354,7 @@
                     </div>
                     
                     <div class="container-fluid" id="screamTickets" style="display: none">
-                        <h1 class="mt-4">Tickets you have to paid</h1>
+                        <h1 class="mt-4">Tickets you have to pay</h1>
                         <div class="card mb-4">
                             <div class="card-body">Here you can see all the tickets you have to pay.</div>
                         </div>
@@ -410,7 +410,7 @@
                     </div>
                     
                     <div class="container-fluid" id="tickets" style="display: none">
-                        <h1 class="mt-4">Tickets you have to paid</h1>
+                        <h1 class="mt-4">Tickets</h1>
                         <div class="card mb-4">
                             <div class="card-body">Here you can see all the tickets, those you have to pay and those you have already paid.</div>
                         </div>
