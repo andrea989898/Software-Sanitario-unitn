@@ -128,7 +128,7 @@
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div
                             ></a>
                             <div class="collapse" id="collapsePrescriptions" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav"><a class="nav-link" onclick="openDash('prescribeExaminations')">Prescribe examinations</a><a class="nav-link" onclick="openDash('prescribeExams')">Prescribe exams</a><a class="nav-link" onclick="openDash('prescribeDrugs')">Prescribe some drugs</a></nav>
+                                <nav class="sb-sidenav-menu-nested nav"><a class="nav-link" onclick="openDashandClean('prescribeExaminations', 'patientExaminations')">Prescribe examinations</a><a class="nav-link" onclick="openDashandClean('prescribeExams', 'patientExams')">Prescribe exams</a><a class="nav-link" onclick="openDashandClean('prescribeDrugs', 'patientDrugs')">Prescribe some drugs</a></nav>
                             </div>
                         </div>
                     </div>
@@ -189,7 +189,9 @@
                             </c:choose>
                         </div>
                     </div>
-                    
+                    <jsp:scriptlet>
+                        int y=0;
+                    </jsp:scriptlet> 
                     <c:forEach var="patient" items="${patients}">        
                         <div class="modal fade" id="patientDetail${patient.getCf()}" style="display:none" role="dialog">
                             <div class="modal-dialog modal-lg">
@@ -272,11 +274,14 @@
                                               </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>                                                      
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="openDash('prescribeExaminations')">Prescibe an examination</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="openDash('prescribeExams')">Prescibe an exam</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="openDash('prescribeDrugs')">Prescribe a recipe</button>
+                                        <jsp:scriptlet>
+                                            y++;
+                                        </jsp:scriptlet> 
+                                        <button type="button" id="<%=(y)%>" name="${patient.getCf()}" class="btn btn-secondary" data-dismiss="modal" onclick="openDashandSaveName('prescribeExaminations', 'patientExaminations',<%=(y)%>)">Prescibe an examination</button>
+                                        <button type="button" id="<%=(y)%>" name="${patient.getCf()}" class="btn btn-secondary" data-dismiss="modal" onclick="openDashandSaveName('prescribeExams', 'patientExams',<%=(y)%>)">Prescibe an exam</button>
+                                        <button type="button" id="<%=(y)%>" name="${patient.getCf()}" class="btn btn-secondary" data-dismiss="modal" onclick="openDashandSaveName('prescribeDrugs','patientDrugs',<%=(y)%>)">Prescribe a recipe</button>
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     </div>
                                 </div>
@@ -292,7 +297,7 @@
                         <form method="POST" action="newExamination.handler">
                             <input type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
-                                <select id="patient" name="patient" class="form-control selectpicker">
+                                <select id="patientExaminations" name="patient" class="form-control selectpicker">
                                     <option value="0" disabled selected hidden>Select patient:</option>
                                     <c:forEach var="patient" items="${patients}">
                                         <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
@@ -339,7 +344,7 @@
                         <form method="POST" action="newExam.handler">
                             <input type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
-                                <select class="form-control selectpicker" id="patient" name="patient">
+                                <select class="form-control selectpicker" id="patientExams" name="patient">
                                     <option value="0" disabled selected hidden>Select patient:</option>
                                     <c:forEach var="patient" items="${patients}">
                                         <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
@@ -387,7 +392,7 @@
                         <form method="POST" action="newRecipe.handler">
                             <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
-                                <select id="patient" name="patient" class="form-control selectpicker">
+                                <select id="patientDrugs" name="patient" class="form-control selectpicker">
                                     <option value="0" disabled selected hidden>Select patient:</option>
                                     <c:forEach var="patient" items="${patients}">
                                         <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>

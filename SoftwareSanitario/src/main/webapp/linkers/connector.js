@@ -7,6 +7,34 @@ function closeModal(id) {
     document.getElementById(id).style.display='none'
 }
 
+function openDashandSaveName(dashName, id, valueToSelect) {
+    var i;
+    var x = document.getElementsByClassName("container-fluid");
+    for (i = 0; i < x.length; i++) {
+        if(x[i].id != "foot" && x[i].id != "modal")   x[i].style.display = "none";  
+    }
+    var dash = document.getElementById(dashName);
+    dash.style.display = "block";
+    
+    var patientCode = document.getElementById(valueToSelect).getAttribute("name");
+    selectElement(id, patientCode);
+}
+
+function openDashandClean(dashName, id) {
+    var i;
+    var x = document.getElementsByClassName("container-fluid");
+    for (i = 0; i < x.length; i++) {
+        if(x[i].id != "foot" && x[i].id != "modal")   x[i].style.display = "none";  
+    }
+    var dash = document.getElementById(dashName);
+    dash.style.display = "block";
+    selectElement(id, 0);
+}
+
+function selectElement(id, valueToSelect) {    
+    let element = document.getElementById(id);
+    element.value = valueToSelect;
+}
 
 function openDash(dashName) {
     var i;
