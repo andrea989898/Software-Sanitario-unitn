@@ -190,6 +190,7 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
     
     public boolean newExam(String date, String time, String idpatient, String iddoctor, String analisys, String recall, String prescriptor) throws DAOException {
         
+        System.out.println("tempo" + time);
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	Date d = new Date();
         String dayofprescription = dateFormat.format(d);

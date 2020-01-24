@@ -28,53 +28,35 @@
         <filter-class>com.mycompany.softwaresanitario.filters.AuthenticationFilter</filter-class>
     </filter>
     <filter>
-        <filter-name>PatientFilterByUser</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.PatientFilterByUser</filter-class>
+        <filter-name>PatientFilter</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.PatientFilter</filter-class>
     </filter>
     <filter>
-        <filter-name>GeneralDoctorFilterByPatient</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.GeneralDoctorFilterByPatient</filter-class>
+        <filter-name>GeneralDoctorFilter</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.GeneralDoctorFilter</filter-class>
     </filter>
     <filter>
-        <filter-name>SpecialistFilterByPatient</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.SpecialistFilterByPatient</filter-class>
+        <filter-name>SpecialistFilter</filter-name>
+        <filter-class>com.mycompany.softwaresanitario.filters.SpecialistFilter</filter-class>
     </filter>
-    <filter>
-        <filter-name>ExamsFilterByPatient</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.ExamsFilterByPatient</filter-class>
-    </filter>
-    <filter>
-        <filter-name>DrugFilterByDoctor</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.DrugFilterByDoctor</filter-class>
-    </filter>
-    <filter>
-        <filter-name>PrescriptionFilterByPatient</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.PrescriptionFilterByPatient</filter-class>
-    </filter>
-    <filter>
-        <filter-name>RecipeFilterByPatient</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.RecipeFilterByPatient</filter-class>
-    </filter>
-    <filter>
-        <filter-name>ExaminationsFilterByPatient</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.ExaminationsFilterByPatient</filter-class>
-    </filter>
-    <filter>
-        <filter-name>TicketsFilterByPatient</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.TicketsFilterByPatient</filter-class>
-    </filter>
-    <filter>
-        <filter-name>PatientFilterByDoctor</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.PatientFilterByDoctor</filter-class>
-    </filter>
-    <filter>
-        <filter-name>DoctorFilterByDoctor</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.DoctorFilterByDoctor</filter-class>
-    </filter>
-    <filter>
-        <filter-name>ExaminationsFilterBySpecialist</filter-name>
-        <filter-class>com.mycompany.softwaresanitario.filters.ExaminationsFilterBySpecialist</filter-class>
-    </filter>
+    <filter-mapping>
+        <filter-name>SpecialistFilter</filter-name>
+        <servlet-name>homeSpecialistPage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>GeneralDoctorFilter</filter-name>
+        <servlet-name>homeGeneralDoctorPage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PatientFilter</filter-name>
+        <servlet-name>HomePage</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>SspFilter</filter-name>
         <servlet-name>homePageSsp</servlet-name>
@@ -82,111 +64,9 @@
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>ExaminationsFilterBySpecialist</filter-name>
-        <servlet-name>homeSpecialistPage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>DoctorFilterByDoctor</filter-name>
-        <servlet-name>homeGeneralDoctorPage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>RecipeFilterByPatient</filter-name>
-        <servlet-name>HomePage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>PrescriptionFilterByPatient</filter-name>
-        <servlet-name>HomePage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>TicketsFilterByPatient</filter-name>
-        <servlet-name>HomePage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>DrugFilterByDoctor</filter-name>
-        <servlet-name>homeGeneralDoctorPage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>DrugFilterByDoctor</filter-name>
-        <servlet-name>homeSpecialistPage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>ExaminationsFilterByPatient</filter-name>
-        <servlet-name>HomePage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>ExamsFilterByPatient</filter-name>
-        <servlet-name>HomePage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/restricted/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>PatientFilterByUser</filter-name>
-        <servlet-name>HomePage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>PatientFilterByUser</filter-name>
-        <servlet-name>homeGeneralDoctorPage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>PatientFilterByUser</filter-name>
-        <servlet-name>homeSpecialistPage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>GeneralDoctorFilterByPatient</filter-name>
-        <servlet-name>HomePage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>SpecialistFilterByPatient</filter-name>
-        <servlet-name>HomePage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>GeneralDoctorFilterByPatient</filter-name>
-        <servlet-name>homeSpecialistPage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>SpecialistFilterByPatient</filter-name>
-        <servlet-name>homeGeneralDoctorPage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>PatientFilterByDoctor</filter-name>
-        <servlet-name>homeGeneralDoctorPage</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
     <listener>
         <description>ServletContextListener</description>

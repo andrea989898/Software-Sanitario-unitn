@@ -35,6 +35,7 @@
         <title>Healthcare software</title>
         <link href="<%=request.getContextPath()%>/css/styles.css" rel="stylesheet" />
         <link href="<%=request.getContextPath()%>/css/ourStyle.css" rel="stylesheet" />
+        <link rel="icon" href="<%=request.getContextPath()%>/images/favicon/ssp.png">
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -401,7 +402,7 @@
                                 <select id="drug-1" name="drug-1" class="form-control selectpicker">
                                     <option value="false" disabled selected hidden>Select drug 1:</option>
                                     <c:forEach var="drug" items="${drugs}">
-                                        <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
+                                        <option data-tokens="${drug.getName()}" value="<%=(++j)%>">${drug.getName()}</option>
                                     </c:forEach>
                                 </select>
                             </div>

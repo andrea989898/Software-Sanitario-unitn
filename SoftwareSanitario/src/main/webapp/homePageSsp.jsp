@@ -35,6 +35,7 @@
         <title>Healthcare software</title>
         <link href="<%=request.getContextPath()%>/css/styles.css" rel="stylesheet" />
         <link href="<%=request.getContextPath()%>/css/ourStyle.css" rel="stylesheet" />
+        <link rel="icon" href="<%=request.getContextPath()%>/images/favicon/ssp.png">
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -320,7 +321,7 @@
                                         <c:when test="${empty screamExamsByDone}">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    There aren't any prescriptions.
+                                                    There aren't any exams.
                                                 </div>
                                             </div>
                                         </c:when>

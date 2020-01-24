@@ -18,4 +18,6 @@ public interface SspDAO extends DAO<Ssp, String>{
     public Ssp getByEmailAndPassword(String email, String password) throws DAOException;
     
     public Ssp getByCity(Integer cityid) throws DAOException;
+    
+    public Ssp updatePassword(String email, String password) throws DAOException;
 }

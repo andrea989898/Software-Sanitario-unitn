@@ -5,12 +5,14 @@
  */
 package com.mycompany.softwaresanitario.servlet;
 
+import com.mycompany.softwaresanitario.commons.persistence.dao.SspDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Ssp;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -41,6 +43,7 @@ public class changePasswordServlet extends HttpServlet {
      */
     
     private UserDAO userDao;
+    private SspDAO sspDao;
     
     @Override
     public void init() throws ServletException {
@@ -52,6 +55,11 @@ public class changePasswordServlet extends HttpServlet {
             userDao = daoFactory.getDAO(UserDAO.class);
         } catch (DAOFactoryException ex) {
             throw new ServletException("Impossible to get dao factory for user storage system", ex);
+        }
+        try {
+            sspDao = daoFactory.getDAO(SspDAO.class);
+        } catch (DAOFactoryException ex) {
+            throw new ServletException("Impossible to get dao factory for ssp storage system", ex);
         }
     }
     
@@ -101,6 +109,7 @@ public class changePasswordServlet extends HttpServlet {
             throws ServletException, IOException {
         String password = request.getParameter("password");
         User user = null;
+        Ssp ssp = null;
         
         String contextPath = getServletContext().getContextPath();
         if (!contextPath.endsWith("/")) {
@@ -111,6 +120,7 @@ public class changePasswordServlet extends HttpServlet {
         
         if (session != null) {
             user = (User) session.getAttribute("user");
+            ssp = (Ssp) session.getAttribute("ssp");
         }else{
             request.getSession().setAttribute("newpassword", "nope");
             request.getSession().setAttribute("error", "nope");
@@ -125,13 +135,18 @@ public class changePasswordServlet extends HttpServlet {
         }
         
         try {
-            User user_ = userDao.updatePassword(user.getEmail(), password);
+            Ssp ssp_ = null;
+            User user_ = null;
+            if(user != null) user_ = userDao.updatePassword(user.getEmail(), password);
+            if(ssp != null)   ssp_ = sspDao.updatePassword(ssp.getEmail(), password);
             request.getSession().setAttribute("newpassword", "nope");
             request.getSession().setAttribute("error", "nope");
-            if (user_ == null) {
+            if (user_ == null && ssp_ == null) {
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
-            } else { 
+            } else if(ssp_ == null){ 
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
+            } else if(user_ == null){
+                response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePageSsp.html"));
             }
         } catch (DAOException ex) {
             request.getServletContext().log("Impossible to retrieve the user", ex);

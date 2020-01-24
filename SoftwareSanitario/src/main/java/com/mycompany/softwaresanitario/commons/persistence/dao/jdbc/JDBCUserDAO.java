@@ -167,7 +167,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
             
             
         } catch (SQLException ex) {
-            throw new DAOException("Impossible to insert the user", ex);
+            throw new DAOException("Impossible to update the password of the user", ex);
         }
         
     }
