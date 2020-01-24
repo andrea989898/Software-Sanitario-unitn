@@ -184,4 +184,99 @@ function testpass(modulo){
   return true;
 }
 
-                
+
+function testpassExaminations(modulo){
+  // Verifico che il campo password sia valorizzato in caso contrario
+  // avverto dell'errore tramite un Alert
+  if (modulo.patientExaminations.value == "0"){
+    alert("Error: choose the patient!");
+    modulo.patientExaminations.focus();
+    return false;
+  }
+  
+  if (modulo.type.value == "0"){
+    alert("Error: choose the type!");
+    modulo.type.focus();
+    return false;
+  }
+  
+  if (modulo.doctor.value == "0"){
+    alert("Error: choose the doctor!");
+    modulo.doctor.focus();
+    return false;
+  }
+  
+  if (modulo.analysis.value == ""){
+    alert("Error: write an analysis!");
+    modulo.analysis.focus();
+    return false;
+  }
+  
+  if (modulo.date.value == ""){
+    alert("Error: write a date!");
+    modulo.date.focus();
+    return false;
+  }
+  
+  if (modulo.time.value == ""){
+    alert("Error: write a time!");
+    //modulo.time.focus();
+    return false;
+  }
+  
+  return true;
+}
+
+function testpassExams(modulo){
+  // Verifico che il campo password sia valorizzato in caso contrario
+  // avverto dell'errore tramite un Alert
+  if (modulo.patientExams.value == "0"){
+    alert("Error: choose the patient!");
+    modulo.patientExams.focus();
+    return false;
+  }
+  
+  if (modulo.doctor.value == "0"){
+    alert("Error: choose the doctor!");
+    modulo.doctor.focus();
+    return false;
+  }
+  
+  if (modulo.recall.value == "0"){
+    alert("Error: select if it is a recall!");
+    modulo.recall.focus();
+    return false;
+  }
+  
+  if (modulo.analysis.value == "0"){
+    alert("Error: write an analysis!");
+    modulo.analysis.focus();
+    return false;
+  }
+  
+  if (modulo.date.value == ""){
+    alert("Error: write a date!");
+    modulo.date.focus();
+    return false;
+  }
+  
+  if (modulo.time.value == ""){
+    alert("Error: write a time!");
+    //modulo.time.focus();
+    return false;
+  }
+  
+  return true;
+}
+
+function testpassDrugs(modulo){
+  // Verifico che il campo password sia valorizzato in caso contrario
+  // avverto dell'errore tramite un Alert
+  if (modulo.patientDrugs.value == "0"){
+    alert("Error: choose the patient!");
+    modulo.patientDrugs.focus();
+    return false;
+  }
+  
+  return true;
+}
