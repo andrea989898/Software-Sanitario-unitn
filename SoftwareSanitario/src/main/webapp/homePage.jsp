@@ -164,6 +164,26 @@
             
             <div id="layoutSidenav_content">
                 <main>
+                    <c:choose>
+                        <c:when test="${notUploadImage.equals('yes')}">
+                            <div class="alert alert-danger">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Something went wrong!</strong> Can't upload the image. Check the size.
+                            </div>
+                            <c:set var = "notUploadImage" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
+                    <c:choose>
+                        <c:when test="${notUploadImage.equals('no')}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> Image uploaded. To see it please logout and then login.
+                            </div>
+                            <c:set var = "notUploadImage" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
                     <div class="container-fluid" id="exams">
                         <h1 class="mt-4">Exams</h1>
                         <div class="card mb-4">
