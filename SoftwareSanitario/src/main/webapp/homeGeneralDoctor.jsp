@@ -297,7 +297,7 @@
                         <form method="POST" action="newExamination.handler">
                             <input type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
-                                <select id="patientExaminations" name="patient" class="form-control selectpicker">
+                                <select id="patientExaminations" name="patientExaminations" class="form-control selectpicker">
                                     <option value="0" disabled selected hidden>Select patient:</option>
                                     <c:forEach var="patient" items="${patients}">
                                         <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
@@ -344,7 +344,7 @@
                         <form method="POST" action="newExam.handler">
                             <input type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
-                                <select class="form-control selectpicker" id="patientExams" name="patient">
+                                <select class="form-control selectpicker" id="patientExams" name="patientExams">
                                     <option value="0" disabled selected hidden>Select patient:</option>
                                     <c:forEach var="patient" items="${patients}">
                                         <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
@@ -392,7 +392,7 @@
                         <form method="POST" action="newRecipe.handler">
                             <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
-                                <select id="patientDrugs" name="patient" class="form-control selectpicker">
+                                <select id="patientDrugs" name="patientDrugs" class="form-control selectpicker">
                                     <option value="0" disabled selected hidden>Select patient:</option>
                                     <c:forEach var="patient" items="${patients}">
                                         <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>

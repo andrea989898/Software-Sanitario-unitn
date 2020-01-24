@@ -115,7 +115,7 @@ public class newExamServlet extends HttpServlet {
         String analysis = request.getParameter("analysis");
         String time = request.getParameter("time");
         String date = request.getParameter("date");
-        String idpatient = request.getParameter("patient");
+        String idpatient = request.getParameter("patientExams");
         String iddoctor = request.getParameter("doctor");
         //System.out.println(recall);
         idpatient = idpatient.replaceAll("\\s+$", "");
