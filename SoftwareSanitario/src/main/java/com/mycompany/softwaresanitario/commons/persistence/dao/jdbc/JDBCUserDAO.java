@@ -62,7 +62,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     user.setAddress(rs.getString("address"));
                     user.setAvatarPath(rs.getString("data"));
                     
-                    System.out.println(user.getAvatarPath());
+                    //System.out.println(user.getAvatarPath());
                     
                     return user;
                 }
@@ -176,7 +176,7 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
     public User getByCode(String ssd) throws DAOException{
         User user = new User();
    
-        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM users u WHERE code = ?")) {
+        try (PreparedStatement stm = CON.prepareStatement("SELECT * FROM Users u, Images i WHERE u.code = ? AND i.idpatient=u.code")) {
             stm.setString(1, ssd);
             //System.out.println(code);
             
@@ -200,8 +200,9 @@ public class JDBCUserDAO extends JDBCDAO<User, String> implements UserDAO{
                     user.setCity_id(rs.getInt("city_id"));
                     user.setGender(rs.getString("gender"));
                     user.setAddress(rs.getString("address"));
+                    user.setAvatarPath(rs.getString("data"));
                     
-                    System.out.println(user.getAvatarPath());
+                    //System.out.println(user.getAvatarPath());
                     
                     return user;
                 }

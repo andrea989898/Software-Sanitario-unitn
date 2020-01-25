@@ -182,6 +182,7 @@ public class SpecialistFilter implements Filter {
         }
         
         try {
+            User user2 = userDao.getByCode(user.getCf());
             Patient patient = patientDao.getByCode(user.getCf());
             if(patient != null){
                 User generaldoctorpatient = userDao.getByCode(patient.getGeneralDoctorCf());
@@ -192,7 +193,7 @@ public class SpecialistFilter implements Filter {
                 request.setAttribute("generaldoctorpatient", generaldoctorpatient);
                 request.setAttribute("birth_city_Patient", birth_city_Patient);
                 request.setAttribute("city_Patient", city_Patient);
-                String avatarPath = "../images/avatar/" + user.getAvatarPath();
+                String avatarPath = "../images/avatar/" + user2.getAvatarPath();
                 request.setAttribute("avatarPath", avatarPath);
             }
         } catch (DAOException ex) {
