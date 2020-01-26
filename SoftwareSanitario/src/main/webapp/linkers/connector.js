@@ -7,6 +7,34 @@ function closeModal(id) {
     document.getElementById(id).style.display='none'
 }
 
+function openDashandSaveName(dashName, id, valueToSelect) {
+    var i;
+    var x = document.getElementsByClassName("container-fluid");
+    for (i = 0; i < x.length; i++) {
+        if(x[i].id != "foot" && x[i].id != "modal")   x[i].style.display = "none";  
+    }
+    var dash = document.getElementById(dashName);
+    dash.style.display = "block";
+    
+    var patientCode = document.getElementById(valueToSelect).getAttribute("name");
+    selectElement(id, patientCode);
+}
+
+function openDashandClean(dashName, id) {
+    var i;
+    var x = document.getElementsByClassName("container-fluid");
+    for (i = 0; i < x.length; i++) {
+        if(x[i].id != "foot" && x[i].id != "modal")   x[i].style.display = "none";  
+    }
+    var dash = document.getElementById(dashName);
+    dash.style.display = "block";
+    selectElement(id, 0);
+}
+
+function selectElement(id, valueToSelect) {    
+    let element = document.getElementById(id);
+    element.value = valueToSelect;
+}
 
 function openDash(dashName) {
     var i;
@@ -156,4 +184,99 @@ function testpass(modulo){
   return true;
 }
 
-                
+
+function testpassExaminations(modulo){
+  // Verifico che il campo password sia valorizzato in caso contrario
+  // avverto dell'errore tramite un Alert
+  if (modulo.patientExaminations.value == "0"){
+    alert("Error: choose the patient!");
+    modulo.patientExaminations.focus();
+    return false;
+  }
+  
+  if (modulo.type.value == "0"){
+    alert("Error: choose the type!");
+    modulo.type.focus();
+    return false;
+  }
+  
+  if (modulo.doctor.value == "0"){
+    alert("Error: choose the doctor!");
+    modulo.doctor.focus();
+    return false;
+  }
+  
+  if (modulo.analysis.value == ""){
+    alert("Error: write an analysis!");
+    modulo.analysis.focus();
+    return false;
+  }
+  
+  if (modulo.date.value == ""){
+    alert("Error: write a date!");
+    modulo.date.focus();
+    return false;
+  }
+  
+  if (modulo.time.value == ""){
+    alert("Error: write a time!");
+    //modulo.time.focus();
+    return false;
+  }
+  
+  return true;
+}
+
+function testpassExams(modulo){
+  // Verifico che il campo password sia valorizzato in caso contrario
+  // avverto dell'errore tramite un Alert
+  if (modulo.patientExams.value == "0"){
+    alert("Error: choose the patient!");
+    modulo.patientExams.focus();
+    return false;
+  }
+  
+  if (modulo.doctor.value == "0"){
+    alert("Error: choose the doctor!");
+    modulo.doctor.focus();
+    return false;
+  }
+  
+  if (modulo.recall.value == "0"){
+    alert("Error: select if it is a recall!");
+    modulo.recall.focus();
+    return false;
+  }
+  
+  if (modulo.analysis.value == "0"){
+    alert("Error: write an analysis!");
+    modulo.analysis.focus();
+    return false;
+  }
+  
+  if (modulo.date.value == ""){
+    alert("Error: write a date!");
+    modulo.date.focus();
+    return false;
+  }
+  
+  if (modulo.time.value == ""){
+    alert("Error: write a time!");
+    //modulo.time.focus();
+    return false;
+  }
+  
+  return true;
+}
+
+function testpassDrugs(modulo){
+  // Verifico che il campo password sia valorizzato in caso contrario
+  // avverto dell'errore tramite un Alert
+  if (modulo.patientDrugs.value == "0"){
+    alert("Error: choose the patient!");
+    modulo.patientDrugs.focus();
+    return false;
+  }
+  
+  return true;
+}

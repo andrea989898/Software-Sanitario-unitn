@@ -35,6 +35,7 @@
         <title>Healthcare software</title>
         <link href="<%=request.getContextPath()%>/css/styles.css" rel="stylesheet" />
         <link href="<%=request.getContextPath()%>/css/ourStyle.css" rel="stylesheet" />
+        <link rel="icon" href="<%=request.getContextPath()%>/images/favicon/ssp.png">
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -127,7 +128,7 @@
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div
                             ></a>
                             <div class="collapse" id="collapsePrescriptions" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav"><a class="nav-link" onclick="openDash('prescribeExaminations')">Prescribe examinations</a><a class="nav-link" onclick="openDash('prescribeExams')">Prescribe exams</a><a class="nav-link" onclick="openDash('prescribeDrugs')">Prescribe some drugs</a></nav>
+                                <nav class="sb-sidenav-menu-nested nav"><a class="nav-link" onclick="openDashandClean('prescribeExaminations', 'patientExaminations')">Prescribe examinations</a><a class="nav-link" onclick="openDashandClean('prescribeExams', 'patientExams')">Prescribe exams</a><a class="nav-link" onclick="openDashandClean('prescribeDrugs', 'patientDrugs')">Prescribe some drugs</a></nav>
                             </div>
                         </div>
                     </div>
@@ -188,7 +189,9 @@
                             </c:choose>
                         </div>
                     </div>
-                    
+                    <jsp:scriptlet>
+                        int y=0;
+                    </jsp:scriptlet> 
                     <c:forEach var="patient" items="${patients}">        
                         <div class="modal fade" id="patientDetail${patient.getCf()}" style="display:none" role="dialog">
                             <div class="modal-dialog modal-lg">
@@ -271,11 +274,14 @@
                                               </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>                                                      
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="openDash('prescribeExaminations')">Prescibe an examination</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="openDash('prescribeExams')">Prescibe an exam</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="openDash('prescribeDrugs')">Prescribe a recipe</button>
+                                        <jsp:scriptlet>
+                                            y++;
+                                        </jsp:scriptlet> 
+                                        <button type="button" id="<%=(y)%>" name="${patient.getCf()}" class="btn btn-secondary" data-dismiss="modal" onclick="openDashandSaveName('prescribeExaminations', 'patientExaminations',<%=(y)%>)">Prescibe an examination</button>
+                                        <button type="button" id="<%=(y)%>" name="${patient.getCf()}" class="btn btn-secondary" data-dismiss="modal" onclick="openDashandSaveName('prescribeExams', 'patientExams',<%=(y)%>)">Prescibe an exam</button>
+                                        <button type="button" id="<%=(y)%>" name="${patient.getCf()}" class="btn btn-secondary" data-dismiss="modal" onclick="openDashandSaveName('prescribeDrugs','patientDrugs',<%=(y)%>)">Prescribe a recipe</button>
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     </div>
                                 </div>
@@ -286,12 +292,12 @@
                     <div class="container-fluid" id="prescribeExaminations" style="display: none">
                         <h1 class="mt-4">Prescribe examinations</h1>
                         <div class="card mb-4">
-                            <div class="card-body">Here you can prescribe an examinations.</div>
+                            <div class="card-body">Here you can prescribe an examinations. All fields are mandatory.</div>
                         </div>
-                        <form method="POST" action="newExamination.handler">
+                        <form method="POST" action="newExamination.handler" onsubmit="return testpassExaminations(this)">
                             <input type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
-                                <select id="patient" name="patient" class="form-control selectpicker">
+                                <select id="patientExaminations" name="patientExaminations" class="form-control selectpicker">
                                     <option value="0" disabled selected hidden>Select patient:</option>
                                     <c:forEach var="patient" items="${patients}">
                                         <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
@@ -333,12 +339,12 @@
                     <div class="container-fluid" id="prescribeExams" style="display: none">
                         <h1 class="mt-4">Prescribe exams</h1>
                         <div class="card mb-4">
-                            <div class="card-body">Here you can prescribe an exam.</div>
+                            <div class="card-body">Here you can prescribe an exam. All fields are mandatory.</div>
                         </div>
-                        <form method="POST" action="newExam.handler">
+                        <form method="POST" action="newExam.handler" onsubmit="return testpassExams(this)">
                             <input type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
-                                <select class="form-control selectpicker" id="patient" name="patient">
+                                <select class="form-control selectpicker" id="patientExams" name="patientExams">
                                     <option value="0" disabled selected hidden>Select patient:</option>
                                     <c:forEach var="patient" items="${patients}">
                                         <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
@@ -363,7 +369,66 @@
                             </div>
                             <br><br>
                             <div class="form-group">
-                                <textarea class="form-control" name="analysis" id="analysis" placeholder="Write what needs to be done in the exam"></textarea>
+                                <select class="form-control selectpicker" name="analysis" id="analysis">
+                                    <option value="0" disabled selected hidden>Select exam:</option>
+                                    <optgroup label="Estrazione e ricostruzione di denti">
+                                        <option value="Estrazione di dente deciduo (gratuita fino a 14 anni)">Estrazione di dente deciduo (gratuita fino a 14 anni)</option>
+                                        <option value="Estrazione di dente permanente (gratuita fino a 14 anni)">Estrazione di dente permanente (gratuita fino a 14 anni)</option>
+                                        <option value="Altra estrazione chirurgica dente (gratuita fino a 14 anni)">Altra estrazione chirurgica dente (gratuita fino a 14 anni)</option>
+                                        <option value="Ricostruzione dente con otturazione (gratuita fino a 14 anni solo in caso di evento traumatico)">Ricostruzione dente con otturazione (gratuita fino a 14 anni solo in caso di evento traumatico)</option>
+                                        <option value="Ricostruzione dente mediante otturazione a tre o più superfici">Ricostruzione dente mediante otturazione a tre o più superfici</option>
+                                        <option value="Ricostruzione dente mediante intarsio">Ricostruzione dente mediante intarsio</option>
+                                        <option value="Applicazione di corona">Applicazione di corona</option>
+                                        <option value="Applicazione di corona in lega aurea">Applicazione di corona in lega aurea</option>
+                                        <option value="Altra applicazione corona">Altra applicazione corona</option>
+                                        <option value="Applicazione corona e perno">Applicazione corona e perno</option>
+                                    </optgroup>
+                                    <optgroup label="Interventi su denti, gengive e alveoli">
+                                        <option value="Gengivoplastica">Gengivoplastica</option>
+                                        <option value="Asportazione di tessuto della gengiva (gratuita fino a 14 anni)">Asportazione di tessuto della gengiva (gratuita fino a 14 anni)</option>
+                                        <option value="Levigatura delle radici">Levigatura delle radici</option>
+                                        <option value="Intervento chirurgico preprotesico">Intervento chirurgico preprotesico</option>
+                                        <option value="Asportazione di lesione dentaria della mandibola (gratuita fino a 14 anni)">Asportazione di lesione dentaria della mandibola (gratuita fino a 14 anni)</option>
+                                        <option value="Trattamento ortodontico con apparecchi mobili">Trattamento ortodontico con apparecchi mobili</option>
+                                        <option value="Trattamento con apparecchi fissi">Trattamento con apparecchi fissi</option>
+                                        <option value="Trattamento con apparecchi funzionali">Trattamento con apparecchi funzionali</option>
+                                        <option value="Riparazione di apparecchio ortodontico">Riparazione di apparecchio ortodontico</option>
+                                        <option value="Radiologia diagnostica">Radiologia diagnostica</option>
+                                    </optgroup>
+                                    <optgroup label="Prestazioni di laboratorio">
+                                        <option value="Deossicortisolo">Deossicortisolo</option>
+                                        <option value="Acido 5 idrossi 3 indolacetico">Acido 5 idrossi 3 indolacetico</option>
+                                        <option value="Acido delta">Acido delta</option>
+                                        <option value="Ala deidrasi">Ala deidrasi</option>
+                                        <option value="Alanina">Alanina</option>
+                                        <option value="Albumina">Albumina</option>
+                                        <option value="Aldolasi">Aldolasi</option>
+                                        <option value="Alfa amilasi">Alfa amilasi</option>
+                                        <option value="Alfa amilasi isoenzimi">Alfa amilasi isoenzimi</option>
+                                        <option value="Androstenediolo">Androstenediolo</option>
+                                    </optgroup>
+                                    <optgroup label="Dermatologia allergologica">
+                                        <option value="Orticarie fisiche">Orticarie fisiche</option>
+                                        <option value="Inalanti">Inalanti</option>
+                                        <option value="Test epicutanei a lettura ritardata">Test epicutanei a lettura ritardata</option>
+                                        <option value="Test a lettura immediata">Test a lettura immediata</option>
+                                        <option value="Tomoscintigrafia miocardica (PET)">Tomoscintigrafia miocardica (PET)</option>
+                                        <option value="Tomoscintigrafia Cerebrale (PET)">Tomoscintigrafia Cerebrale (PET)</option>
+                                        <option value="Radioterapia stereotassica">Radioterapia stereotassica</option>
+                                        <option value="Irradiazione cutanea">Irradiazione cutanea</option>
+                                        <option value="Terapie e riabilitazioni">Terapie e riabilitazioni</option>
+                                    </optgroup>
+                                    <optgroup label="Altre procedure ed esami specialistici">
+                                        <option value="Ablazione tartaro">Ablazione tartaro</option>
+                                        <option value="Sigillatura solchi e fossette">Sigillatura solchi e fossette</option>
+                                        <option value="Rimozione protesi dentarie">Rimozione protesi dentarie</option>
+                                        <option value="Immunizzazione allergia">Immunizzazione allergia</option>
+                                        <option value="Immunizzazione malattia autoimmune">Immunizzazione malattia autoimmune</option>
+                                        <option value="Terapia luce ultravioletta">Terapia luce ultravioletta</option>
+                                        <option value="Splintaggio per gruppi di 4 denti">Splintaggio per gruppi di 4 denti</option>
+                                        <option value="Trattamento applicazioni protesi semovibili">Trattamento applicazioni protesi semovibili</option>
+                                    </optgroup>
+                                </select>
                             </div>
                             <br><br>
                             <div class="form-group">
@@ -381,12 +446,12 @@
                     <div class="container-fluid" id="prescribeDrugs" style="display: none">
                         <h1 class="mt-4">Prescribe drugs</h1>
                         <div class="card mb-4">
-                            <div class="card-body">Here you can prescribe some drugs.</div>
+                            <div class="card-body">Here you can prescribe some drugs. You have to prescribe at least one drug.</div>
                         </div>
-                        <form method="POST" action="newRecipe.handler">
+                        <form method="POST" action="newRecipe.handler" onsubmit="return testpassDrugs(this)">
                             <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
-                                <select id="patient" name="patient" class="form-control selectpicker">
+                                <select id="patientDrugs" name="patientDrugs" class="form-control selectpicker">
                                     <option value="0" disabled selected hidden>Select patient:</option>
                                     <c:forEach var="patient" items="${patients}">
                                         <option data-tokens="${patient.getName()}${patient.getSurname()}" value="${patient.getCf()}">${patient.getName()} ${patient.getSurname()}</option>
@@ -401,7 +466,7 @@
                                 <select id="drug-1" name="drug-1" class="form-control selectpicker">
                                     <option value="false" disabled selected hidden>Select drug 1:</option>
                                     <c:forEach var="drug" items="${drugs}">
-                                        <option data-tokens="${drug.getName()}" value="<%=(j++)%>">${drug.getName()}</option>
+                                        <option data-tokens="${drug.getName()}" value="<%=(++j)%>">${drug.getName()}</option>
                                     </c:forEach>
                                 </select>
                             </div>

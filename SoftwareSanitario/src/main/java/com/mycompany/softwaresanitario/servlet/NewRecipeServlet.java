@@ -118,7 +118,7 @@ public class NewRecipeServlet extends HttpServlet {
         drugs = new String[5];
         int y = 0;
         
-        String idpatient = request.getParameter("patient");
+        String idpatient = request.getParameter("patientDrugs");
         String analysis = request.getParameter("analysis");
         String prescriptor = request.getParameter("prescriptor");
         if(request.getParameter("drug-1") != null){

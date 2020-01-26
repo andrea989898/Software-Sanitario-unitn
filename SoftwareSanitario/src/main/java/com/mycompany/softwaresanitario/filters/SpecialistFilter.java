@@ -5,22 +5,31 @@
  */
 package com.mycompany.softwaresanitario.filters;
 
-import com.mycompany.softwaresanitario.commons.persistence.dao.RecipeDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.CityDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.DrugDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.ExamDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.ExaminationDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.GeneralDoctorDAO;
+import com.mycompany.softwaresanitario.commons.persistence.dao.PatientDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.UserDAO;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.exceptions.DAOFactoryException;
 import com.mycompany.softwaresanitario.commons.persistence.dao.factories.DAOFactory;
-import com.mycompany.softwaresanitario.commons.persistence.entities.Recipe;
+import com.mycompany.softwaresanitario.commons.persistence.entities.City;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Drug;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Exam;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Examination;
+import com.mycompany.softwaresanitario.commons.persistence.entities.GeneralDoctor;
+import com.mycompany.softwaresanitario.commons.persistence.entities.Patient;
 import com.mycompany.softwaresanitario.commons.persistence.entities.User;
+import com.mycompany.softwaresanitario.manipulate.ManipulateExam;
+import com.mycompany.softwaresanitario.manipulate.ManipulateExaminations;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -33,9 +42,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author PC Andrea
+ * @author franc
  */
-public class RecipeFilterByPatient implements Filter {
+public class SpecialistFilter implements Filter {
     
     private static final boolean debug = true;
 
@@ -44,14 +53,15 @@ public class RecipeFilterByPatient implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public RecipeFilterByPatient() {
+    public SpecialistFilter() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException, DAOFactoryException {
+            throws IOException, ServletException {
         if (debug) {
-            log("RecipeFilter:DoBeforeProcessing");
+            log("SpecialistFilter:DoBeforeProcessing");
         }
+
         DAOFactory daoFactory = (DAOFactory) request.getServletContext().getAttribute("daoFactory");
         if (daoFactory == null) {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system"));
@@ -64,12 +74,52 @@ public class RecipeFilterByPatient implements Filter {
             throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
         }
         
-        RecipeDAO recipeDao = null;
+        PatientDAO patientDao = null;
         try {
-            recipeDao = daoFactory.getDAO(RecipeDAO.class);
-            request.setAttribute("RecipeDao", recipeDao);
+            patientDao = daoFactory.getDAO(PatientDAO.class);
+            request.setAttribute("patientDao", patientDao);
         } catch (DAOFactoryException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get the dao factory for recipes storage system", ex));
+            throw new RuntimeException(new ServletException("Impossible to get dao factory for user storage system", ex));
+        }
+        
+        CityDAO cityDao = null;
+        try {
+            cityDao = daoFactory.getDAO(CityDAO.class);
+            request.setAttribute("cityDao", cityDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for cities storage system", ex));
+        }
+        
+        GeneralDoctorDAO generalDoctorDao = null;
+        try {
+            generalDoctorDao = daoFactory.getDAO(GeneralDoctorDAO.class);
+            request.setAttribute("GeneralDoctorDao", generalDoctorDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
+        }
+        
+        ExaminationDAO examinationDao = null;
+        try {
+            examinationDao = daoFactory.getDAO(ExaminationDAO.class);
+            request.setAttribute("ExaminationDao", examinationDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for examination storage system", ex));
+        }
+        
+        ExamDAO examDao = null;
+        try {
+            examDao = daoFactory.getDAO(ExamDAO.class);
+            request.setAttribute("ExamDao", examDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for exam storage system", ex));
+        }
+        
+        DrugDAO drugDao = null;
+        try {
+            drugDao = daoFactory.getDAO(DrugDAO.class);
+            request.setAttribute("drugDao", drugDao);
+        } catch (DAOFactoryException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the dao factory for generalDoctor storage system", ex));
         }
         
         String contextPath = request.getServletContext().getContextPath();
@@ -79,32 +129,93 @@ public class RecipeFilterByPatient implements Filter {
         request.setAttribute("contextPath", contextPath);
         
         User user = null;
+        String isSpecialist = null;
         
         
         HttpSession session = ((HttpServletRequest) request).getSession(false);
         if (session != null) {
             user = (User) session.getAttribute("user");
+            isSpecialist = (String) session.getAttribute("specialistSession");
         }
         
         if (user == null) {
-            ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "index.html"));
+            ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "/index.html"));
+            return;
+        }
+        
+        if(isSpecialist == null) {
+            ((HttpServletResponse) response).sendRedirect(((HttpServletResponse) response).encodeRedirectURL(contextPath + "/restricted/homePage.html"));
             return;
         }
         
         //System.out.println(request.getAttribute("patient"));
-        List<Recipe> recipes;
+        
+        
         try {
-            recipes = recipeDao.getAllBySSDPatient(user.getCf());
-            if(recipes.size() > 0)   request.setAttribute("recipes", recipes);
+            List<User> allPatients = patientDao.getAllExecptSSP();
+            request.setAttribute("patients", allPatients);
+            List<Exam> screamExamsByDone = new ArrayList<Exam>();
+            List<Exam> exams = examDao.getExamsOfSpecialist(user.getCf());
+            List<Examination> screamExaminationsByDone = new ArrayList<Examination>();
+            List<Examination> examinations = examinationDao.getExaminationsSpecialist(user.getCf());
+            if(examinations.size()>0)  {
+                screamExaminationsByDone = ManipulateExaminations.ScreamExaminationsByDone(examinations);
+                request.setAttribute("examinations", examinations);
+                if(screamExaminationsByDone.size()>0)    request.setAttribute("screamExaminationsByDone", screamExaminationsByDone);
+            }
+            if(exams.size()>0) {
+                screamExamsByDone = ManipulateExam.ScreamExamsByDone(exams);
+                request.setAttribute("exams", exams);
+                if(screamExamsByDone.size()>0)    request.setAttribute("screamExamsByDone", screamExamsByDone);
+            }
         } catch (DAOException ex) {
-            throw new RuntimeException(new ServletException("Impossible to get user or prescription", ex));
+            throw new RuntimeException(new ServletException("Impossible to get examinations or exams", ex));
         }
+        
+        //System.out.println(request.getAttribute("patient"));
+        ArrayList<Drug> drugs = new ArrayList();
+        try {
+            drugs = drugDao.getAllDrugs();
+            if(drugs.size() > 0)   request.setAttribute("drugs", drugs);
+        } catch (DAOException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get user or generalDoctor", ex));
+        }
+        
+        try {
+            User user2 = userDao.getByCode(user.getCf());
+            Patient patient = patientDao.getByCode(user.getCf());
+            if(patient != null){
+                User generaldoctorpatient = userDao.getByCode(patient.getGeneralDoctorCf());
+                //System.out.println(user.getBirth_city_id() + " " + user.getCity_id());
+                City birth_city_Patient = cityDao.getByCode(user.getBirth_city_id());
+                City city_Patient = cityDao.getByCode(user.getCity_id());
+                request.setAttribute("patient", patient);
+                request.setAttribute("generaldoctorpatient", generaldoctorpatient);
+                request.setAttribute("birth_city_Patient", birth_city_Patient);
+                request.setAttribute("city_Patient", city_Patient);
+                String avatarPath = "../images/avatar/" + user2.getAvatarPath();
+                request.setAttribute("avatarPath", avatarPath);
+            }
+        } catch (DAOException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get the patient", ex));
+        }
+        
+        try {
+            boolean isAGeneralDoctor = generalDoctorDao.isAGeneralDoctor(user.getCf());
+            GeneralDoctor generalDoctor = generalDoctorDao.getByCode(user.getCf());
+            List<User> generalDoctors = generalDoctorDao.getAllGeneralDoctors(user.getCf(), generalDoctor.getCf(), user.getCity_id());
+            if(generalDoctors != null)   request.setAttribute("AllGeneralDoctor", generalDoctors);
+            if(isAGeneralDoctor)   request.setAttribute("generalDoctor", "he/she is a doctor");
+        } catch (DAOException ex) {
+            throw new RuntimeException(new ServletException("Impossible to get user or generalDoctor", ex));
+        }
+        
     }    
     
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("RecipeFilter:DoAfterProcessing");
+            log("SpecialistFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -140,14 +251,10 @@ public class RecipeFilterByPatient implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("RecipeFilter:doFilter()");
+            log("SpecialistFilter:doFilter()");
         }
         
-        try {
-            doBeforeProcessing(request, response);
-        } catch (DAOFactoryException ex) {
-            Logger.getLogger(RecipeFilterByPatient.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        doBeforeProcessing(request, response);
         
         Throwable problem = null;
         try {
@@ -204,7 +311,7 @@ public class RecipeFilterByPatient implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("RecipeFilter:Initializing filter");
+                log("SpecialistFilter:Initializing filter");
             }
         }
     }
@@ -215,9 +322,9 @@ public class RecipeFilterByPatient implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("RecipeFilter()");
+            return ("SpecialistFilter()");
         }
-        StringBuffer sb = new StringBuffer("RecipeFilter(");
+        StringBuffer sb = new StringBuffer("SpecialistFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

@@ -111,7 +111,7 @@ public class newExaminationServlet extends HttpServlet {
         String analysis = request.getParameter("analysis");
         String time = request.getParameter("time");
         String date = request.getParameter("date");
-        String idpatient = request.getParameter("patient");
+        String idpatient = request.getParameter("patientExaminations");
         //System.out.println(analysis);
         String iddoctor = request.getParameter("doctor");
         

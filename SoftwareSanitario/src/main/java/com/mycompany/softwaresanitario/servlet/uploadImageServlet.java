@@ -139,6 +139,12 @@ public class uploadImageServlet extends HttpServlet {
         // maximum file size to be uploaded.
         upload.setSizeMax( maxFileSize );
         
+        String contextPath = getServletContext().getContextPath();
+        if (!contextPath.endsWith("/")) {
+              contextPath += "/";
+        }
+                  
+        
         try { 
             // Parse the request to get file items.
             List fileItems = upload.parseRequest(request);
@@ -156,7 +162,6 @@ public class uploadImageServlet extends HttpServlet {
                   boolean isInMemory = fi.isInMemory();
                   long sizeInBytes = fi.getSize();
                   
-                  
 
                   // Write the file
                   if( fileName.lastIndexOf("\\") >= 0 ) {
@@ -166,21 +171,19 @@ public class uploadImageServlet extends HttpServlet {
                   }
                   fi.write( file ) ;
                   
-
-                  String contextPath = getServletContext().getContextPath();
-                  if (!contextPath.endsWith("/")) {
-                        contextPath += "/";
-                  }
-                  
                   updateImage = userDao.updateImage(user.getCf(), user.getCf() + fileName);
                   
-                  if(updateImage)   response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
+                  if(updateImage){
+                      request.getSession().setAttribute("notUploadImage", "no");
+                      response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
+                  }
                   else response.sendRedirect(response.encodeRedirectURL(contextPath + "error.html"));
                   
                }
             }
          } catch(Exception ex) {
-            System.out.println(ex);
+            request.getSession().setAttribute("notUploadImage", "yes");
+            response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
          }
         
         

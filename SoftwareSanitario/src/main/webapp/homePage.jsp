@@ -30,6 +30,7 @@
         <meta name="author" content="I magici ragazzi" />
         <title>Healthcare software</title>
         <link href="<%=request.getContextPath()%>/css/styles.css" rel="stylesheet" />
+        <link rel="icon" href="<%=request.getContextPath()%>/images/favicon/ssp.png">
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     </head>
@@ -163,6 +164,26 @@
             
             <div id="layoutSidenav_content">
                 <main>
+                    <c:choose>
+                        <c:when test="${notUploadImage.equals('yes')}">
+                            <div class="alert alert-danger">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Something went wrong!</strong> Can't upload the image. Check the size. It can be at most of 60KB.
+                            </div>
+                            <c:set var = "notUploadImage" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
+                    <c:choose>
+                        <c:when test="${notUploadImage.equals('no')}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> Image uploaded.
+                            </div>
+                            <c:set var = "notUploadImage" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
                     <div class="container-fluid" id="exams">
                         <h1 class="mt-4">Exams</h1>
                         <div class="card mb-4">
@@ -289,6 +310,7 @@
                                                         <tr>
                                                             <th>Examination Code</th>
                                                             <th>Examination Date</th>
+                                                            <th>Examination Time</th>
                                                             <th>Done</th>
                                                        </tr>
                                                     </thead>
@@ -297,6 +319,7 @@
                                                         <tr>
                                                             <td>${examination.getSSD()}</td>
                                                             <td>${examination.getExaminationDate()}</td>
+                                                            <td>${examination.getTime()}</td>
                                                             <td>${examination.getIsDone()}</td>
                                                         </tr>          
                                                     </c:forEach>
@@ -333,6 +356,7 @@
                                                         <tr>
                                                             <th>Examination Code</th>
                                                             <th>Examination Date</th>
+                                                            <th>Examination Time</th>
                                                             <th>Done</th>
                                                        </tr>
                                                     </thead>
@@ -341,6 +365,7 @@
                                                         <tr>
                                                             <td>${examination.getSSD()}</td>
                                                             <td>${examination.getExaminationDate()}</td>
+                                                            <td>${examination.getTime()}</td>
                                                             <td>${examination.getIsDone()}</td>
                                                         </tr>          
                                                     </c:forEach>

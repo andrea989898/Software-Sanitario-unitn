@@ -108,6 +108,35 @@ public class JDBCSspDAO extends JDBCDAO<Ssp, String> implements SspDAO{
         }
     }
     
+    @Override
+    public Ssp updatePassword(String email, String password) throws DAOException{
+        Ssp ssp = new Ssp();
+   
+        try (PreparedStatement stm = CON.prepareStatement("UPDATE public.ssp\n" +
+                                                          "   SET password=?\n" +
+                                                          " WHERE email = ?;")) {
+            String psw = CryptPassword.hashPassword(password);
+            //System.out.println(psw);
+            stm.setString(1, psw);
+            stm.setString(2, email);
+            //System.out.println(code);
+            
+            
+            if(stm.executeUpdate()==1){
+                ssp.setEmail(email);
+                ssp.setPassword(password);
+                return ssp;
+            }else{
+                return null;
+            }
+            
+            
+        } catch (SQLException ex) {
+            throw new DAOException("Impossible to update the password of the ssp", ex);
+        }
+        
+    }
+    
 
     @Override
     public Long getCount() throws DAOException {
