@@ -93,7 +93,7 @@ public class TicketPDF {
                 
                 response.setContentType("application/pdf");
                 
-                response.setHeader("Content-disposition", "attachment; filename=ticket.pdf");
+                response.setHeader("Content-disposition", "attachment; filename=ticket"+ticket.getDate()+".pdf");
                 System.out.println("ticket-" + ticket.getCode() + "-" + Calendar.getInstance().getTimeInMillis() + ".pdf");
                 doc.save(response.getOutputStream());   
                 

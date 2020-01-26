@@ -225,7 +225,7 @@
                                                 <p>Place of birth: ${patient.getBirth_city()}</p>
                                                 <p>Place: ${patient.getCity()}</p>
                                                 <p>Date of birth: ${patient.getBirthdate()}</p>
-                                                <p>Gender: ${patient.getBirthdate()}</p>
+                                                <p>Gender: ${patient.getGender()}</p>
                                                 <p>Email: ${patient.getEmail()}</p>
                                               </div>
                                               <div id="examsModal${patient.getCf()}" class="container tab-pane fade"><br>
@@ -295,7 +295,7 @@
                             <div class="card-body">Here you can prescribe an examinations. All fields are mandatory.</div>
                         </div>
                         <form method="POST" action="newExamination.handler" onsubmit="return testpassExaminations(this)">
-                            <input type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
+                            <input type="text" name="prescriptor" id="prescriptor" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
                                 <select id="patientExaminations" name="patientExaminations" class="form-control selectpicker">
                                     <option value="0" disabled selected hidden>Select patient:</option>
@@ -342,7 +342,7 @@
                             <div class="card-body">Here you can prescribe an exam. All fields are mandatory.</div>
                         </div>
                         <form method="POST" action="newExam.handler" onsubmit="return testpassExams(this)">
-                            <input type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
+                            <input type="text" name="prescriptor" id="prescriptor" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
                                 <select class="form-control selectpicker" id="patientExams" name="patientExams">
                                     <option value="0" disabled selected hidden>Select patient:</option>
@@ -449,7 +449,7 @@
                             <div class="card-body">Here you can prescribe some drugs. You have to prescribe at least one drug.</div>
                         </div>
                         <form method="POST" action="newRecipe.handler" onsubmit="return testpassDrugs(this)">
-                            <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
+                            <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="prescriptor" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
                                 <select id="patientDrugs" name="patientDrugs" class="form-control selectpicker">
                                     <option value="0" disabled selected hidden>Select patient:</option>

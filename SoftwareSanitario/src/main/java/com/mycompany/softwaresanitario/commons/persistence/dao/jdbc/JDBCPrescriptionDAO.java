@@ -75,6 +75,11 @@ public class JDBCPrescriptionDAO extends JDBCDAO<Prescription, Integer> implemen
                 Prescription prescription = new Prescription();
                 while (rst.next()) {
                     prescription.setCode(rst.getInt("code"));
+                    prescription.setAnalisys(rst.getString("analysis"));
+                    prescription.setDate(rst.getDate("date"));
+                    prescription.setIddoctor(rst.getString("iddoctor"));
+                    prescription.setIdpatient(rst.getString("idpatient"));
+                    prescription.setIdrecipe(rst.getInt("idrecipe"));
                     //System.out.println(prescription.code + " " + prescription.examType + prescription.idPatient);
                 }
                 stm.close();

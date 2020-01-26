@@ -208,6 +208,7 @@
                                                         <tr>
                                                              <th>Exam Code</th>
                                                              <th>Exam Date</th>
+                                                             <th>Exam Time</th>
                                                              <th>Done</th>
                                                              <th>Get the pdf</th>
                                                         </tr>
@@ -217,6 +218,7 @@
                                                         <tr>
                                                             <td>${exam.getCode()}</td>
                                                             <td>${exam.getExaminationDate()}</td>
+                                                            <td>${exam.getTime()}</td>
                                                             <td>${exam.getIsDone()}</td>
                                                             <td>
                                                                 <a href="exportToPDF.handler?id=${exam.getCode()}&type=exam">
@@ -260,6 +262,7 @@
                                                         <tr>
                                                              <th>Exam Code</th>
                                                              <th>Exam Date</th>
+                                                             <th>Exam Time</th>
                                                              <th>Done</th>
                                                              <th>Get the pdf</th>
                                                         </tr>
@@ -269,6 +272,7 @@
                                                         <tr>
                                                             <td>${exam.getCode()}</td>
                                                             <td>${exam.getExaminationDate()}</td>
+                                                            <td>${exam.getTime()}</td>
                                                             <td>${exam.getIsDone()}</td>
                                                             <td>
                                                                 <a href="exportToPDF.handler?id=${exam.getCode()}&type=exam">

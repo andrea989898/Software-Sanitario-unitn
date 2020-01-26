@@ -63,6 +63,7 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     exam.setIDDoctor(rs.getString("IDDoctor"));
                     exam.setExaminationDate(rs.getDate("ExaminationDate"));
                     exam.setIsDone(rs.getBoolean("IsDone"));
+                    exam.setTime(rs.getString("Time"));
                     exam.setResult(rs.getString("Result"));
                     exam.setIDPatient(rs.getString("IDPatient"));
                     exam.setIsRecall(rs.getBoolean("IsRecall"));
@@ -98,6 +99,7 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     exam.setIDDoctor(rst.getString("IDDoctor"));
                     exam.setExaminationDate(rst.getDate("ExaminationDate"));
                     exam.setIsDone(rst.getBoolean("IsDone"));
+                    exam.setTime(rst.getString("Time"));
                     exam.setIDPatient(rst.getString("IDPatient"));
                     exam.setIsRecall(rst.getBoolean("IsRecall"));
                     if(exam.getIsDone()==false){
@@ -135,6 +137,7 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     exam.setExaminationDate(rst.getDate("ExaminationDate"));
                     exam.setIsDone(rst.getBoolean("IsDone"));
                     exam.setIDPatient(rst.getString("IDPatient"));
+                    exam.setTime(rst.getString("Time"));
                     exam.setIsRecall(rst.getBoolean("IsRecall"));
                     if(exam.getIsDone()==false){
                         exam.setResult("not done yet"); 
@@ -171,6 +174,7 @@ public class JDBCExamDAO extends JDBCDAO<Exam, String> implements ExamDAO {
                     exam.setExaminationDate(rst.getDate("ExaminationDate"));
                     exam.setIsDone(rst.getBoolean("IsDone"));
                     exam.setIDPatient(rst.getString("IDPatient"));
+                    exam.setTime(rst.getString("Time"));
                     exam.setIsRecall(rst.getBoolean("IsRecall"));
                     if(exam.getIsDone()==false){
                         exam.setResult("not done yet"); 
