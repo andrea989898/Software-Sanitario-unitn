@@ -168,7 +168,7 @@
                         <c:when test="${notUploadImage.equals('yes')}">
                             <div class="alert alert-danger">
                                 <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <strong>Something went wrong!</strong> Can't upload the image. Check the size.
+                                <strong>Something went wrong!</strong> Can't upload the image. Check the size. It can be at most of 60KB.
                             </div>
                             <c:set var = "notUploadImage" scope = "session" value = "${null}"/>
                         </c:when>
@@ -178,7 +178,7 @@
                         <c:when test="${notUploadImage.equals('no')}">
                             <div class="alert alert-success">
                                 <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                <strong>Success!</strong> Image uploaded. To see it please logout and then login.
+                                <strong>Success!</strong> Image uploaded.
                             </div>
                             <c:set var = "notUploadImage" scope = "session" value = "${null}"/>
                         </c:when>
@@ -310,6 +310,7 @@
                                                         <tr>
                                                             <th>Examination Code</th>
                                                             <th>Examination Date</th>
+                                                            <th>Examination Time</th>
                                                             <th>Done</th>
                                                        </tr>
                                                     </thead>
@@ -318,6 +319,7 @@
                                                         <tr>
                                                             <td>${examination.getSSD()}</td>
                                                             <td>${examination.getExaminationDate()}</td>
+                                                            <td>${examination.getTime()}</td>
                                                             <td>${examination.getIsDone()}</td>
                                                         </tr>          
                                                     </c:forEach>
@@ -354,6 +356,7 @@
                                                         <tr>
                                                             <th>Examination Code</th>
                                                             <th>Examination Date</th>
+                                                            <th>Examination Time</th>
                                                             <th>Done</th>
                                                        </tr>
                                                     </thead>
@@ -362,6 +365,7 @@
                                                         <tr>
                                                             <td>${examination.getSSD()}</td>
                                                             <td>${examination.getExaminationDate()}</td>
+                                                            <td>${examination.getTime()}</td>
                                                             <td>${examination.getIsDone()}</td>
                                                         </tr>          
                                                     </c:forEach>
