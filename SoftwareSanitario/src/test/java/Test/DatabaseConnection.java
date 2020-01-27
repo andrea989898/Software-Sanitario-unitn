@@ -15,11 +15,7 @@ import java.util.*;
 public class DatabaseConnection{
  
     private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
-    private final String user = "postgres";
-
-
-    private final String password = "chiaravise";
-
+    Properties props = new Properties();
 
  
     /**
@@ -28,9 +24,11 @@ public class DatabaseConnection{
      * @return a Connection object
      */
     public Connection connect() {
+        props.setProperty ("user", "postgres");//change this with your user
+        props.setProperty("password","61223180");//change this with your password
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(url, user, password);
+            conn = DriverManager.getConnection(url, props.getProperty("user"), props.getProperty("password"));
             System.out.println("Connected to the PostgreSQL server successfully.");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -47,12 +45,12 @@ public class DatabaseConnection{
       
         DatabaseConnection app = new DatabaseConnection();
         Connection conn = app.connect();
-            try{
+            /*try{
                 drop(conn); //cancello tabella person
             }
             catch(SQLException e){
                 System.out.println(e.getMessage());
-            }
+            }*/
             try{
                 create(conn); //creo tabella person
             }
