@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class DatabaseConnection{
  
-    private final String url = "jdbc:postgresql://localhost/SoftwareSanitario";
+    private final String url = "jdbc:postgresql://localhost/softwaresanitario";
     Properties props = new Properties();
 
  
@@ -25,7 +25,7 @@ public class DatabaseConnection{
      */
     public Connection connect() {
         props.setProperty ("user", "postgres");//change this with your user
-        props.setProperty("password","61223180");//change this with your password
+        props.setProperty("password","chiaravise");//change this with your password
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url, props.getProperty("user"), props.getProperty("password"));
@@ -45,12 +45,12 @@ public class DatabaseConnection{
       
         DatabaseConnection app = new DatabaseConnection();
         Connection conn = app.connect();
-            /*try{
+            try{
                 drop(conn); //cancello tabella person
             }
             catch(SQLException e){
                 System.out.println(e.getMessage());
-            }*/
+            }
             try{
                 create(conn); //creo tabella person
             }
