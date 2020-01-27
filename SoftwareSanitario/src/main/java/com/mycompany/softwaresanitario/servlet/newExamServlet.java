@@ -143,6 +143,7 @@ public class newExamServlet extends HttpServlet {
             
             if (exam) {
                 //request.getSession().setAttribute("user", user);
+                request.getSession().setAttribute("creationExamSuccess", patientName + " " + patientSurname);
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homeGeneralDoctor.html"));
             }else{
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "errorPage.html"));

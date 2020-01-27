@@ -69,7 +69,10 @@ public class changeGeneralDoctorServlet extends HttpServlet {
         if (!contextPath.endsWith("/")) {
             contextPath += "/";
         }
-        if(patient)    response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
+        if(patient){
+            request.getSession().setAttribute("changeDoctorSuccess", request.getParameter("id"));
+            response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

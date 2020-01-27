@@ -149,6 +149,26 @@
             
             <div id="layoutSidenav_content">
                 <main>
+                    <c:choose>
+                        <c:when test="${!empty confirmExamSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> Exam ${confirmExamSuccess} confirmed.
+                            </div>
+                            <c:set var = "confirmExamSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
+                    <c:choose>
+                        <c:when test="${!empty confirmExaminationSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> Examination ${confirmExaminationSuccess} confirmed.
+                            </div>
+                            <c:set var = "confirmExaminationSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
                     <div class="container-fluid" id="allPatients">
                         <h1 class="mt-4">Patients</h1>
                         <div class="card mb-4">

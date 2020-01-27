@@ -141,6 +141,36 @@
             
             <div id="layoutSidenav_content">
                 <main>
+                    <c:choose>
+                        <c:when test="${!empty creationExamSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> New exam prescribed to ${creationExamSuccess}
+                            </div>
+                            <c:set var = "creationExamSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
+                    <c:choose>
+                        <c:when test="${!empty creationExaminationSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> New examination prescribed to ${creationExaminationSuccess}
+                            </div>
+                            <c:set var = "creationExaminationSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
+                    <c:choose>
+                        <c:when test="${!empty creationDrugsSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> New drugs prescribed to ${creationDrugsSuccess}
+                            </div>
+                            <c:set var = "creationDrugsSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
                     <div class="container-fluid" id="patients">
                         <h1 class="mt-4">Patients</h1>
                         <div class="card mb-4">
@@ -449,7 +479,7 @@
                             <div class="card-body">Here you can prescribe some drugs. You have to prescribe at least one drug.</div>
                         </div>
                         <form method="POST" action="newRecipe.handler" onsubmit="return testpassDrugs(this)">
-                            <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="prescriptor" value="${user.getCf()}" style="display:none">
+                            <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="prescripto" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
                                 <select id="patientDrugs" name="patientDrugs" class="form-control selectpicker">
                                     <option value="0" disabled selected hidden>Select patient:</option>

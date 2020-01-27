@@ -104,6 +104,7 @@ public class confirmExaminationServlet extends HttpServlet {
             
             if (examination) {
                 //request.getSession().setAttribute("user", user);
+                request.getSession().setAttribute("confirmExaminationSuccess", id);
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homeSpecialist.html"));
             }else{
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "errorPage.html"));

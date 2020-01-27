@@ -105,6 +105,7 @@ public class confirmExamServlet extends HttpServlet {
             
             if (exam) {
                 //request.getSession().setAttribute("user", user);
+                request.getSession().setAttribute("confirmExamSuccess", id);
                 if(type.contains("ssp")) response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePageSsp.html"));
                 else    response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homeSpecialist.html"));
             }else{

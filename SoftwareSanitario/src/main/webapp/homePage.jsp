@@ -184,6 +184,26 @@
                         </c:when>
                     </c:choose>
                     
+                    <c:choose>
+                        <c:when test="${!empty changeDoctorSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> You have a new doctor with ssd ${changeDoctorSuccess}
+                            </div>
+                            <c:set var = "changeDoctorSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
+                    <c:choose>
+                        <c:when test="${!empty changePasswordUserSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> Password changed. 
+                            </div>
+                            <c:set var = "changePasswordUserSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
                     <div class="container-fluid" id="exams">
                         <h1 class="mt-4">Exams</h1>
                         <div class="card mb-4">
