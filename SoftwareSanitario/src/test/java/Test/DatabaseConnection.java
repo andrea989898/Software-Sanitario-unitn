@@ -25,7 +25,7 @@ public class DatabaseConnection{
      */
     public Connection connect() {
         props.setProperty ("user", "postgres");//change this with your user
-        props.setProperty("password","chiaravise");//change this with your password
+        props.setProperty("password","0000");//change this with your password
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url, props.getProperty("user"), props.getProperty("password"));

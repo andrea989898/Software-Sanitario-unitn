@@ -156,7 +156,7 @@
     </div>                
 
   <!-- Masthead -->
-  <header class="masthead text-white text-center" style="background-image: url('<%=request.getContextPath()%>/img/Sistemasanitario.jpg');">
+  <header class="masthead text-white text-center" style="background-image: url('<%=request.getContextPath()%>/img/HomePage.jpg');">
     <div class="overlay"></div>
     <div class="container" >
       <div class="row">
