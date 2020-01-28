@@ -668,10 +668,10 @@
                                 </div>
                                 <div class="modal-body">
                                     <p class="font-weight-normal">Please select the image in your device.</p>
-                                    <form method="POST" action="uploadImage.handler" enctype = "multipart/form-data">
+                                    <form method="POST" action="uploadImage.handler" enctype = "multipart/form-data" onsubmit="return testpassUploadPhoto(this)">
                                         <div class="upload-btn-wrapper">
                                             <%--<button class="btnfile">Choose a file</button>--%>
-                                            <input type="file" name="myfile" accept="image/*" style="border-radius: 6px; width: 1000px"/>
+                                            <input type="file" id="myfile" name="myfile" accept="image/*" style="border-radius: 6px; width: 1000px"/>
                                         </div>                                        
                                         <br>
                                         <button type="submit" class="btn btn-success">Upload file</button>

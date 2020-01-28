@@ -298,3 +298,13 @@ function putMinDate(){
         dateFields[i].setAttribute("min", today);
     }
 }
+
+function testpassUploadPhoto(modulo){
+    if (modulo.myfile.value == ""){
+    alert("Error: choose an image!");
+    //modulo.myfile.focus();
+    return false;
+  }
+  
+  return true;
+}
