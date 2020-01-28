@@ -207,7 +207,7 @@
                                                             <td>${patient.getSurname()}</td> 
                                                             <td>${patient.getAge()}</td>
                                                             <td>
-                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">-></button>
+                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">Show info</button>
                                                             </td>
                                                         </tr> 
                                                     </c:forEach>

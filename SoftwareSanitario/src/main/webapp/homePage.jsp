@@ -242,7 +242,7 @@
                                                             <td>${exam.getIsDone()}</td>
                                                             <td>
                                                                 <a href="exportToPDF.handler?id=${exam.getCode()}&type=exam">
-                                                                    <button class="btn btn-secondary">go</button>
+                                                                    <button class="btn btn-secondary">Download</button>
                                                                 </a>
                                                             </td>
                                                         </tr>          
@@ -296,7 +296,7 @@
                                                             <td>${exam.getIsDone()}</td>
                                                             <td>
                                                                 <a href="exportToPDF.handler?id=${exam.getCode()}&type=exam">
-                                                                    <button class="btn btn-secondary">go</button>
+                                                                    <button class="btn btn-secondary">Download</button>
                                                                 </a>
                                                             </td>
                                                         </tr>          
@@ -447,7 +447,7 @@
                                                             <td>
                                                                 <%--<button class="w3-button w3-round-large w3-blue">--%>
                                                                     <a href="exportToPDF.handler?id=${ticket.getCode()}&type=ticket">
-                                                                        <button class="btn btn-secondary">Go</button>
+                                                                        <button class="btn btn-secondary">Download</button>
                                                                     </a>
                                                                 <%--</button>--%>
                                                             </td>
@@ -503,7 +503,7 @@
                                                             <td>
                                                                 <%--<button class="w3-button w3-round-large w3-blue">--%>
                                                                     <a href="exportToPDF.handler?id=${ticket.getCode()}&type=ticket">
-                                                                        <button class="btn btn-secondary">Go</button>
+                                                                        <button class="btn btn-secondary">Download</button>
                                                                     </a>
                                                                 <%--</button>--%>
                                                             </td>
@@ -558,7 +558,7 @@
                                                             <td>${prescription.getIdpatient()}</td>
                                                             <td>
                                                                 <a href="exportToPDF.handler?id=${prescription.getCode()}&type=prescription">
-                                                                    <button class="btn btn-secondary">Go</button>
+                                                                    <button class="btn btn-secondary">Download</button>
                                                                 </a>
                                                             </td>
                                                         </tr>          

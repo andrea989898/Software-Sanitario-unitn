@@ -205,7 +205,7 @@
                                                             <td>${patient.getSurname()}</td> 
                                                             <td>${patient.getAge()}</td>
                                                             <td>
-                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">-></button>
+                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">Show info</button>
                                                             </td>
                                                         </tr> 
                                                     </c:forEach>
@@ -344,7 +344,7 @@
                                                             <td>${examination.getIsDone()}</td>
                                                             <td>${examination.getArgument()}</td>
                                                             <td>
-                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#examinationToConfirm${examination.getSSD()}">-></button>
+                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#examinationToConfirm${examination.getSSD()}">Show info</button>
                                                             </td>
                                                         </tr>    
                                                         <div class="modal fade" id="examinationToConfirm${examination.getSSD()}" style="display:none" role="dialog">
@@ -472,7 +472,7 @@
                                                             <td>${exam.getIsDone()}</td>
                                                             <td>${exam.getIsRecall()}</td>
                                                             <td>
-                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#examToConfirm${exam.getCode()}">-></button>
+                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#examToConfirm${exam.getCode()}">Show info</button>
                                                             </td>
                                                         </tr>    
                                                         <div class="modal fade" id="examToConfirm${exam.getCode()}" style="display:none" role="dialog">

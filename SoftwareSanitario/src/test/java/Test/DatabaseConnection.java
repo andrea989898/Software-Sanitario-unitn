@@ -172,7 +172,7 @@ public class DatabaseConnection{
             
             String myDrug = "CREATE TABLE Drugs( \n"+
             "Code INT PRIMARY KEY NOT NULL,\n"+
-            "Name char(100))";
+            "Name char(250))";
             
             String myPrescription = "CREATE TABLE Prescriptions( \n" +
             "Code INT PRIMARY KEY NOT NULL,\n"+
