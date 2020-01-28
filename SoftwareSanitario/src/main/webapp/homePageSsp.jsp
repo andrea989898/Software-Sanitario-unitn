@@ -104,7 +104,7 @@
                                 <img src="${avatarPath}" style="width:85%;" class="rounded"/><br>
                             </div>
                             <div class="sb-sidenav-menu-heading">Your dashboard</div>
-                            <a class="nav-link" href="homePage.html"
+                            <a class="nav-link" href="homePageSsp.html"
                                 ><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard</a>
                             <div class="sb-sidenav-menu-heading">Action</div>

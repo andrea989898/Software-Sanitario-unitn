@@ -277,6 +277,7 @@
                                                             <th>Time</th>
                                                             <th>Done</th>
                                                             <th>Argument</th>
+                                                            <th>Report</th>
                                                         </tr>   
                                                     </thead>
                                                     <tbody id="examinationTable">
@@ -288,6 +289,7 @@
                                                             <td>${examination.getTime()}</td>
                                                             <td>${examination.getIsDone()}</td>
                                                             <td>${examination.getArgument()}</td>
+                                                            <td>${examination.getReport()}</td>
                                                         </tr>                 
                                                     </c:forEach>
                                                     </tbody>

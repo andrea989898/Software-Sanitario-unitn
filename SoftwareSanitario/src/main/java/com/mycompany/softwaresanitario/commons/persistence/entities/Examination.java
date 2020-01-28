@@ -21,6 +21,15 @@ public class Examination{
     private Date examinationDate;
     private boolean isDone;
     private String argument;
+    private String report;
+
+    public void setReport(String report) {
+        this.report = report;
+    }
+
+    public String getReport() {
+        return report;
+    }
 
     public void setIDPatient(String IDPatient) {
         this.IDPatient = IDPatient;

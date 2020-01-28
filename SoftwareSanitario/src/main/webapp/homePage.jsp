@@ -335,6 +335,7 @@
                                                             <th>Examination Code</th>
                                                             <th>Examination Date</th>
                                                             <th>Examination Time</th>
+                                                            <th>Examination Report</th> 
                                                             <th>Done</th>
                                                        </tr>
                                                     </thead>
@@ -344,6 +345,7 @@
                                                             <td>${examination.getSSD()}</td>
                                                             <td>${examination.getExaminationDate()}</td>
                                                             <td>${examination.getTime()}</td>
+                                                            <td>${examination.getReport()}</td>
                                                             <td>${examination.getIsDone()}</td>
                                                         </tr>          
                                                     </c:forEach>
@@ -381,6 +383,7 @@
                                                             <th>Examination Code</th>
                                                             <th>Examination Date</th>
                                                             <th>Examination Time</th>
+                                                            <th>Examination Report</th>
                                                             <th>Done</th>
                                                        </tr>
                                                     </thead>
@@ -390,6 +393,7 @@
                                                             <td>${examination.getSSD()}</td>
                                                             <td>${examination.getExaminationDate()}</td>
                                                             <td>${examination.getTime()}</td>
+                                                            <td>${examination.getReport()}</td>
                                                             <td>${examination.getIsDone()}</td>
                                                         </tr>          
                                                     </c:forEach>
