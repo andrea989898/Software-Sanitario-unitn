@@ -66,7 +66,7 @@
                         <div class="modal-body">
                             <form method="POST" action="login.handler">
                                 <div class="form-group"><h6>Wrong login previously, wrong email or password! Try again...</h6></div>
-                                <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" type="email" id="username" name="username" placeholder="mariorossi@email.it" value="<%=email%>" /></div>
+                                <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" type="email" id="username" name="username" placeholder="mariorossi@email.it" value="<%=email%>" autofocus /></div>
                                 <div class="form-group"><label class="small mb-1" for="inputPassword">Password</label><input class="form-control py-4" type="password" name="password" id="password" placeholder="password" value="<%=password%>" /></div>
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" name="remember" value="1" /><label class="custom-control-label" for="rememberPasswordCheck">Remember password</label></div>
@@ -92,7 +92,7 @@
                         <div class="modal-body">
                             <form method="POST" action="login.handler">
                                 <div class="form-group"><h6>New password sent to your email!</h6></div>
-                                <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" type="email" id="username" name="username" placeholder="mariorossi@email.it" value="<%=email%>" /></div>
+                                <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" type="email" id="username" name="username" placeholder="mariorossi@email.it" value="<%=email%>" autofocus /></div>
                                 <div class="form-group"><label class="small mb-1" for="inputPassword">Password</label><input class="form-control py-4" type="password" name="password" id="password" placeholder="password" value="<%=password%>" /></div>
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" name="remember" value="1" /><label class="custom-control-label" for="rememberPasswordCheck">Remember password</label></div>
@@ -117,7 +117,7 @@
                       </div>
                       <div class="modal-body">
                           <form method="POST" action="login.handler">
-                              <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" type="email" id="username" name="username" placeholder="mariorossi@email.it" value="<%=email%>" /></div>
+                              <div class="form-group"><label class="small mb-1" for="inputEmailAddress">Email</label><input class="form-control py-4" type="email" id="username" name="username" placeholder="mariorossi@email.it" value="<%=email%>" autofocus /></div>
                               <div class="form-group"><label class="small mb-1" for="inputPassword">Password</label><input class="form-control py-4" type="password" name="password" id="password" placeholder="password" value="<%=password%>" /></div>
                               <div class="form-group">
                                   <div class="custom-control custom-checkbox"><input class="custom-control-input" id="rememberPasswordCheck" type="checkbox" name="remember" value="1" /><label class="custom-control-label" for="rememberPasswordCheck">Remember password</label></div>
