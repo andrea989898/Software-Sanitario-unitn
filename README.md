@@ -4,6 +4,12 @@ La finalità è quella di poter gestire le principali funzioni sanitarie di ogni
 del paziente, del dottore generale, di uno specialista ed eventualmente il lato paziente anche per un dottore. Inoltre 
 la supervisione del sistema è effettuabile da parte del servizio sanitario con speciali funzioni di visualizzazione complessiva.
 
+# Analisi iniziale del software da realizzare
+Nella fase iniziale della realizzazione sono state effettuate:
+- Analisi dei requisiti tramite Use-Case Diagram che è possibile trovare nel percorso Analisi requisiti/Use case IPW.pdf
+- Analisi del processo di business che è possibile trovare nel percorso Analisi requisiti/BPMN IPW.pdf
+- Analisi dei possibili utenti che è possibile trovare nel percorso
+
 ## Funzionalità
 Di seguito le funzionalità suddivise:
 
@@ -74,7 +80,7 @@ Abbiamo usato [Git](https://git-scm.com) per il versioning.
 
 
 ## Sviluppatori
-- Francesco di Flumeri
+- Francesco Di Flumeri
 - Andrea Bovo
 - Francesco Pozzobon
 
