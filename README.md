@@ -8,7 +8,7 @@ la supervisione del sistema è effettuabile da parte del servizio sanitario con 
 Nella fase iniziale della realizzazione sono state effettuate:
 - Analisi dei requisiti tramite Use-Case Diagram che è possibile trovare nel percorso Analisi requisiti/Use case IPW.pdf
 - Analisi del processo di business che è possibile trovare nel percorso Analisi requisiti/BPMN IPW.pdf
-- Analisi dei possibili utenti che è possibile trovare nel percorso
+- Analisi dei possibili utenti che è possibile trovare nel percorso Analisi requisiti/Personas
 
 ## Funzionalità
 Di seguito le funzionalità suddivise:
