@@ -74,7 +74,7 @@ Abbiamo usato [Git](https://git-scm.com) per il versioning.
 
 
 ## Sviluppatori
-- Francesco di Flumeri
+- Francesco Di Flumeri
 - Andrea Bovo
 - Francesco Pozzobon
 
