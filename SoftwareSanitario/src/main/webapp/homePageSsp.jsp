@@ -104,7 +104,7 @@
                                 <img src="${avatarPath}" style="width:85%;" class="rounded"/><br>
                             </div>
                             <div class="sb-sidenav-menu-heading">Your dashboard</div>
-                            <a class="nav-link" href="homePage.html"
+                            <a class="nav-link" href="homePageSsp.html"
                                 ><div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard</a>
                             <div class="sb-sidenav-menu-heading">Action</div>
@@ -135,6 +135,26 @@
             
             <div id="layoutSidenav_content">
                 <main>
+                    <c:choose>
+                        <c:when test="${!empty confirmExamSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> Exam ${confirmExamSuccess} confirmed.
+                            </div>
+                            <c:set var = "confirmExamSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
+                    <c:choose>
+                        <c:when test="${!empty changePasswordSspSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> Password changed. 
+                            </div>
+                            <c:set var = "changePasswordSspSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
                     <div class="container-fluid" id="allPatients">
                         <h1 class="mt-4">Patients</h1>
                         <div class="card mb-4">
@@ -171,7 +191,7 @@
                                                             <td>${patient.getSurname()}</td> 
                                                             <td>${patient.getAge()}</td>
                                                             <td>
-                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">-></button>
+                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">Show info</button>
                                                             </td>
                                                         </tr> 
                                                     </c:forEach>
@@ -351,7 +371,7 @@
                                                             <td>${exam.getIsDone()}</td>
                                                             <td>${exam.getIsRecall()}</td>
                                                             <td>
-                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#examToConfirm${exam.getCode()}">-></button>
+                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#examToConfirm${exam.getCode()}">Show info</button>
                                                             </td>
                                                         </tr>    
                                                         <div class="modal fade" id="examToConfirm${exam.getCode()}" style="display:none" role="dialog">
@@ -430,7 +450,7 @@
                                 </div>
                                 <div class="modal-body">
                                     <p class="font-weight-normal">Please select the image in your device.</p>
-                                    <form method="POST" action="uploadImage.handler" enctype = "multipart/form-data">
+                                    <form method="POST" action="uploadImage.handler" enctype = "multipart/form-data" onsubmit="return testpassUploadPhoto(this)">
                                         <div class="upload-btn-wrapper">
                                             <%--<button class="btnfile">Choose a file</button>--%>
                                             <input type="file" name="myfile" accept="image/*" style="border-radius: 6px; width: 1000px"/>

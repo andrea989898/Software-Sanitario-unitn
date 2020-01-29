@@ -71,7 +71,7 @@ public class ExamPDF {
             } catch (DAOException ex) {
                 throw new RuntimeException(new ServletException("Impossible to get exam", ex));
             }
-            qrCodeMessage = "Prescription code: " + prescription.getCode() + "  Doctor id: " + exam.getIDDoctor() + "  Patient id: " + exam.getIDPatient() + "  Exame date: " + exam.getExaminationDate().toString() + " Exam type: " + prescription.getAnalisys().toString();
+            qrCodeMessage = "Prescription code: " + prescription.getCode() + "  Doctor id: " + exam.getIDDoctor() + "  Patient id: " + exam.getIDPatient() + "  Exam date: " + exam.getExaminationDate().toString() + " Exam type: " + prescription.getAnalisys();
             
             try (PDDocument doc = new PDDocument()) {
                 PDPage page = new PDPage();
@@ -105,10 +105,10 @@ public class ExamPDF {
                     scriviPdf(doc, contents, 30, 540, Color.BLACK, "SSD patient: ", String.valueOf(exam.getIDPatient()), font, fontBold, fontSize);
                     scriviPdf(doc, contents, 30, 520, Color.BLACK, "SSD doctor: ", String.valueOf(exam.getIDDoctor()), font, fontBold, fontSize);
                     scriviPdf(doc, contents, 30, 500, Color.BLACK, "Exam date: ", String.valueOf(exam.getExaminationDate()), font, fontBold, fontSize);
-                    scriviPdf(doc, contents, 30, 500, Color.BLACK, "Exam type: ", String.valueOf(prescription.getAnalisys()), font, fontBold, fontSize);
-                    scriviPdf(doc, contents, 30, 480, Color.BLACK, "The exam has been already done: ", String.valueOf(exam.getIsDone()), font, fontBold, fontSize);
-                    scriviPdf(doc, contents, 30, 460, Color.BLACK, "The exam is a recall: ", String.valueOf(exam.getIsRecall()), font, fontBold, fontSize);
-                    scriviPdf(doc, contents, 30, 440, Color.BLACK, "Result of the exam: ", String.valueOf(exam.getResult()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 480, Color.BLACK, "Exam type: ", String.valueOf(prescription.getAnalisys()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 460, Color.BLACK, "The exam has been already done: ", String.valueOf(exam.getIsDone()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 440, Color.BLACK, "The exam is a recall: ", String.valueOf(exam.getIsRecall()), font, fontBold, fontSize);
+                    scriviPdf(doc, contents, 30, 420, Color.BLACK, "Result of the exam: ", String.valueOf(exam.getResult()), font, fontBold, fontSize);
                     
                 }
                 //"C:\\Users\\franc\\Desktop\\Software-Sanitario-unitn\\SoftwareSanitario\\src\\main\\webapp\\pdfs"
@@ -117,7 +117,7 @@ public class ExamPDF {
                 
                 response.setContentType("application/pdf");
                 
-                response.setHeader("Content-disposition", "attachment; filename=exam.pdf");
+                response.setHeader("Content-disposition", "attachment; filename=exam" + exam.getExaminationDate() + ".pdf");
                 //System.out.println("ticket-" + ticket.getCode() + "-" + Calendar.getInstance().getTimeInMillis() + ".pdf");
                 doc.save(response.getOutputStream());   
                 

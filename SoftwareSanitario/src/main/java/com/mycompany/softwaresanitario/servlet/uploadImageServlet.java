@@ -13,8 +13,10 @@ import com.mycompany.softwaresanitario.commons.persistence.entities.User;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -161,17 +163,19 @@ public class uploadImageServlet extends HttpServlet {
                   String contentType = fi.getContentType();
                   boolean isInMemory = fi.isInMemory();
                   long sizeInBytes = fi.getSize();
+                  Random random = new Random();
+                  String randomNumber = Integer.toString(random.nextInt(999));
                   
 
                   // Write the file
                   if( fileName.lastIndexOf("\\") >= 0 ) {
-                     file = new File( filePath + user.getCf() + fileName.substring( fileName.lastIndexOf("\\"))) ;
+                     file = new File( filePath + user.getCf() + randomNumber + fileName.substring( fileName.lastIndexOf("\\"))) ;
                   } else {
-                     file = new File( filePath + user.getCf() + fileName.substring(fileName.lastIndexOf("\\")+1)) ;
+                     file = new File( filePath + user.getCf() + randomNumber + fileName.substring(fileName.lastIndexOf("\\")+1)) ;
                   }
                   fi.write( file ) ;
                   
-                  updateImage = userDao.updateImage(user.getCf(), user.getCf() + fileName);
+                  updateImage = userDao.updateImage(user.getCf(), user.getCf() + randomNumber + fileName);
                   
                   if(updateImage){
                       request.getSession().setAttribute("notUploadImage", "no");
@@ -182,6 +186,7 @@ public class uploadImageServlet extends HttpServlet {
                }
             }
          } catch(Exception ex) {
+            System.out.println(ex);
             request.getSession().setAttribute("notUploadImage", "yes");
             response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
          }

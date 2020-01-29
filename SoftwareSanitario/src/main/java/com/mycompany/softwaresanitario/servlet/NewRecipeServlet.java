@@ -154,8 +154,6 @@ public class NewRecipeServlet extends HttpServlet {
         String patientSurname = userPatient.getSurname().replaceAll("\\s+$", "");
         String msg= new String("Ciao "+ patientName + " " + patientSurname + " ti sono stati prescritti nuovi farmaci. Entra nella tua area riservata per visualizzarli.");  
         //System.out.print(password);
-          
-        Mailer.send(userPatient.getEmail(), subject, msg);
         
         String contextPath = getServletContext().getContextPath();
         if (!contextPath.endsWith("/")) {
@@ -173,7 +171,11 @@ public class NewRecipeServlet extends HttpServlet {
                     if (drug) x++;
                     drug = false;
                 }
-                if(x==y) response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homeGeneralDoctor.html"));
+                if(x==y){
+                    Mailer.send(userPatient.getEmail(), subject, msg);
+                    request.getSession().setAttribute("creationDrugsSuccess", patientName + " " + patientSurname);
+                    response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homeGeneralDoctor.html"));
+                }
                 else response.sendRedirect(response.encodeRedirectURL(contextPath + "errorPage.html"));
             }
         } catch (DAOException ex) {

@@ -16,10 +16,19 @@ public class Exam {
     private String IDDoctor;
     private Date ExaminationDate;
     private String Result;
+    private String time;
     private boolean IsDone;
     private String IDPatient;
     private boolean IsRecall;
 
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+    
     public void setIsRecall(boolean IsRecall) {
         this.IsRecall = IsRecall;
     }

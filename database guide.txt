@@ -1,0 +1,49 @@
+Creation of the database
+
+> Change database options in the file database.properties before you start the database
+
+- Create the database
+
+  1. Open the SQL Shell
+  2. Provide the data requested
+  3. Enter the command
+
+     
+console
+	CREATE DATABASE softwaresanitario;
+     
+
+
+  4. Open command line window
+  5. Go to PostgreSQL bin folder
+
+     
+console
+     $ PG_HOME/bin
+     
+6. Copy all file that are in \Software-Sanitario-unitn\SoftwareSanitario\database\
+7. Paste all file in C:\Users\Public\Documents\dbIPW19      if you don’t have the folder dbIPW19 create it.
+
+8. Open the project SoftwareSanitario in netbeans
+9. Go to the file DatabaseConnection.java witch is stored in TestPackages/Test/
+10. Change the following part of code:
+
+props.setProperty ("user", “name”);                       //change name with your user
+props.setProperty("password”,”**********”);          //change ********** with your password
+
+11. Build and run the file DatabaseConnection.java (not run the project) : right click on the editor and select run file or press shift+F6.
+12. Wait a minute for the execution...
+
+
+Changing web.xml
+
+1. Open the project with netbeans and then go in WEB-INF and make the following updates.
+
+2. Change this part of code:
+
+	<context-param>
+        		<param-name>dburl</param-name>
+        		<param-value>jdbc:postgresql://localhost/SoftwareSanitario?user=[name]&amp;password=[password]</param-value>
+    	</context-param>
+
+3. You have to replace the [name] and [password] fields with your data.

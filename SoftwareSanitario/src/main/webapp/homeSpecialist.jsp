@@ -149,6 +149,26 @@
             
             <div id="layoutSidenav_content">
                 <main>
+                    <c:choose>
+                        <c:when test="${!empty confirmExamSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> Exam ${confirmExamSuccess} confirmed.
+                            </div>
+                            <c:set var = "confirmExamSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
+                    <c:choose>
+                        <c:when test="${!empty confirmExaminationSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> Examination ${confirmExaminationSuccess} confirmed.
+                            </div>
+                            <c:set var = "confirmExaminationSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
                     <div class="container-fluid" id="allPatients">
                         <h1 class="mt-4">Patients</h1>
                         <div class="card mb-4">
@@ -185,7 +205,7 @@
                                                             <td>${patient.getSurname()}</td> 
                                                             <td>${patient.getAge()}</td>
                                                             <td>
-                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">-></button>
+                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">Show info</button>
                                                             </td>
                                                         </tr> 
                                                     </c:forEach>
@@ -257,6 +277,7 @@
                                                             <th>Time</th>
                                                             <th>Done</th>
                                                             <th>Argument</th>
+                                                            <th>Report</th>
                                                         </tr>   
                                                     </thead>
                                                     <tbody id="examinationTable">
@@ -268,6 +289,7 @@
                                                             <td>${examination.getTime()}</td>
                                                             <td>${examination.getIsDone()}</td>
                                                             <td>${examination.getArgument()}</td>
+                                                            <td>${examination.getReport()}</td>
                                                         </tr>                 
                                                     </c:forEach>
                                                     </tbody>
@@ -322,7 +344,7 @@
                                                             <td>${examination.getIsDone()}</td>
                                                             <td>${examination.getArgument()}</td>
                                                             <td>
-                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#examinationToConfirm${examination.getSSD()}">-></button>
+                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#examinationToConfirm${examination.getSSD()}">Show info</button>
                                                             </td>
                                                         </tr>    
                                                         <div class="modal fade" id="examinationToConfirm${examination.getSSD()}" style="display:none" role="dialog">
@@ -450,7 +472,7 @@
                                                             <td>${exam.getIsDone()}</td>
                                                             <td>${exam.getIsRecall()}</td>
                                                             <td>
-                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#examToConfirm${exam.getCode()}">-></button>
+                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#examToConfirm${exam.getCode()}">Show info</button>
                                                             </td>
                                                         </tr>    
                                                         <div class="modal fade" id="examToConfirm${exam.getCode()}" style="display:none" role="dialog">
@@ -599,10 +621,10 @@
                                 </div>
                                 <div class="modal-body">
                                     <p class="font-weight-normal">Please select the image in your device.</p>
-                                    <form method="POST" action="uploadImage.handler" enctype = "multipart/form-data">
+                                    <form method="POST" action="uploadImage.handler" enctype = "multipart/form-data" onsubmit="return testpassUploadPhoto(this)">
                                         <div class="upload-btn-wrapper">
                                             <%--<button class="btnfile">Choose a file</button>--%>
-                                            <input type="file" name="myfile" accept="image/*" style="border-radius: 6px; width: 1000px"/>
+                                            <input type="file" name="myfile" accept="image/*" id="myfile" style="border-radius: 6px; width: 1000px"/>
                                         </div>                                        
                                         <br>
                                         <button type="submit" class="btn btn-success">Upload file</button>

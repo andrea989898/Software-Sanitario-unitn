@@ -280,3 +280,31 @@ function testpassDrugs(modulo){
   
   return true;
 }
+
+function putMinDate(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    if(dd<10){
+        dd='0'+dd
+    } 
+    if(mm<10){
+        mm='0'+mm
+    }
+    today = yyyy+'-'+mm+'-'+dd;
+    var dateFields = document.getElementsByName("date");
+    for(i=0; i<dateFields.length; i++){
+        dateFields[i].setAttribute("min", today);
+    }
+}
+
+function testpassUploadPhoto(modulo){
+    if (modulo.myfile.value == ""){
+    alert("Error: choose an image!");
+    //modulo.myfile.focus();
+    return false;
+  }
+  
+  return true;
+}

@@ -144,8 +144,10 @@ public class changePasswordServlet extends HttpServlet {
             if (user_ == null && ssp_ == null) {
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "index.html"));
             } else if(ssp_ == null){ 
+                request.getSession().setAttribute("changePasswordUserSuccess", "yes");
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePage.html"));
             } else if(user_ == null){
+                request.getSession().setAttribute("changePasswordSspSuccess", "yes");
                 response.sendRedirect(response.encodeRedirectURL(contextPath + "restricted/homePageSsp.html"));
             }
         } catch (DAOException ex) {

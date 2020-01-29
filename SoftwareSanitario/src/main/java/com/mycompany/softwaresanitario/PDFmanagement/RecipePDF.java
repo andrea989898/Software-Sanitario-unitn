@@ -108,7 +108,7 @@ public class RecipePDF {
                 
                 response.setContentType("application/pdf");
                 
-                response.setHeader("Content-disposition", "attachment; filename=prescription.pdf");
+                response.setHeader("Content-disposition", "attachment; filename=prescription"+prescription.getDate()+".pdf");
                 doc.save(response.getOutputStream());   
                 
                 //doc.close();

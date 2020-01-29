@@ -71,6 +71,7 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     examination.setTime(rs.getString("time"));
                     examination.setIDPatient(rs.getString("IDPatient"));
                     examination.setIDRecipe(rs.getInt("IDRecipe"));
+                    examination.setReport(rs.getString("report"));
                    
                     return examination;
                     
@@ -103,6 +104,7 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     examination.setIsDone(rst.getBoolean("isdone"));
                     examination.setTime(rst.getString("time"));
                     examination.setIDPatient(rst.getString("IDPatient"));
+                    examination.setReport(rst.getString("report"));
                     //examination.setIDPrescription(rst.getInt("IDPrescription"));
                     //examination.setIDRecipe(rst.getInt("IDRecipe"));
                     examinations.add(examination); 
@@ -232,6 +234,7 @@ public class JDBCExaminationDAO extends JDBCDAO<Examination, String> implements 
                     examination.setIsDone(rst.getBoolean("isdone"));
                     examination.setTime(rst.getString("time"));
                     examination.setIDPatient(rst.getString("idpatient"));
+                    examination.setReport(rst.getString("report"));
                     //examination.setIDPrescription(rst.getInt("IDPrescription"));
                     //examination.setIDRecipe(rst.getInt("IDRecipe"));
                     examinations.add(examination); 

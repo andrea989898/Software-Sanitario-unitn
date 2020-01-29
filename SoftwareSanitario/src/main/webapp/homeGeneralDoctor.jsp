@@ -39,7 +39,7 @@
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     </head>
-    <body class="sb-nav-fixed">
+    <body class="sb-nav-fixed" onload="putMinDate()">
         <script type="text/javascript" src="<%=request.getContextPath()%>/linkers/connector.js"></script>
         
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -141,6 +141,36 @@
             
             <div id="layoutSidenav_content">
                 <main>
+                    <c:choose>
+                        <c:when test="${!empty creationExamSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> New exam prescribed to ${creationExamSuccess}
+                            </div>
+                            <c:set var = "creationExamSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
+                    <c:choose>
+                        <c:when test="${!empty creationExaminationSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> New examination prescribed to ${creationExaminationSuccess}
+                            </div>
+                            <c:set var = "creationExaminationSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
+                    <c:choose>
+                        <c:when test="${!empty creationDrugsSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> New drugs prescribed to ${creationDrugsSuccess}
+                            </div>
+                            <c:set var = "creationDrugsSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
                     <div class="container-fluid" id="patients">
                         <h1 class="mt-4">Patients</h1>
                         <div class="card mb-4">
@@ -177,7 +207,7 @@
                                                             <td>${patient.getSurname()}</td> 
                                                             <td>${patient.getAge()}</td>
                                                             <td>
-                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">-></button>
+                                                                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#patientDetail${patient.getCf()}">Show info</button>
                                                             </td>
                                                         </tr> 
                                                     </c:forEach>
@@ -225,7 +255,7 @@
                                                 <p>Place of birth: ${patient.getBirth_city()}</p>
                                                 <p>Place: ${patient.getCity()}</p>
                                                 <p>Date of birth: ${patient.getBirthdate()}</p>
-                                                <p>Gender: ${patient.getBirthdate()}</p>
+                                                <p>Gender: ${patient.getGender()}</p>
                                                 <p>Email: ${patient.getEmail()}</p>
                                               </div>
                                               <div id="examsModal${patient.getCf()}" class="container tab-pane fade"><br>
@@ -295,7 +325,7 @@
                             <div class="card-body">Here you can prescribe an examinations. All fields are mandatory.</div>
                         </div>
                         <form method="POST" action="newExamination.handler" onsubmit="return testpassExaminations(this)">
-                            <input type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
+                            <input type="text" name="prescriptor" id="prescriptor" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
                                 <select id="patientExaminations" name="patientExaminations" class="form-control selectpicker">
                                     <option value="0" disabled selected hidden>Select patient:</option>
@@ -342,7 +372,7 @@
                             <div class="card-body">Here you can prescribe an exam. All fields are mandatory.</div>
                         </div>
                         <form method="POST" action="newExam.handler" onsubmit="return testpassExams(this)">
-                            <input type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
+                            <input type="text" name="prescriptor" id="prescriptor" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
                                 <select class="form-control selectpicker" id="patientExams" name="patientExams">
                                     <option value="0" disabled selected hidden>Select patient:</option>
@@ -449,7 +479,7 @@
                             <div class="card-body">Here you can prescribe some drugs. You have to prescribe at least one drug.</div>
                         </div>
                         <form method="POST" action="newRecipe.handler" onsubmit="return testpassDrugs(this)">
-                            <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="time" value="${user.getCf()}" style="display:none">
+                            <input class="w3-input w3-border w3-light-grey" type="text" name="prescriptor" id="prescripto" value="${user.getCf()}" style="display:none">
                             <div class="form-group">
                                 <select id="patientDrugs" name="patientDrugs" class="form-control selectpicker">
                                     <option value="0" disabled selected hidden>Select patient:</option>
@@ -638,10 +668,10 @@
                                 </div>
                                 <div class="modal-body">
                                     <p class="font-weight-normal">Please select the image in your device.</p>
-                                    <form method="POST" action="uploadImage.handler" enctype = "multipart/form-data">
+                                    <form method="POST" action="uploadImage.handler" enctype = "multipart/form-data" onsubmit="return testpassUploadPhoto(this)">
                                         <div class="upload-btn-wrapper">
                                             <%--<button class="btnfile">Choose a file</button>--%>
-                                            <input type="file" name="myfile" accept="image/*" style="border-radius: 6px; width: 1000px"/>
+                                            <input type="file" id="myfile" name="myfile" accept="image/*" style="border-radius: 6px; width: 1000px"/>
                                         </div>                                        
                                         <br>
                                         <button type="submit" class="btn btn-success">Upload file</button>

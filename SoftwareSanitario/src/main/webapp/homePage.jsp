@@ -184,6 +184,26 @@
                         </c:when>
                     </c:choose>
                     
+                    <c:choose>
+                        <c:when test="${!empty changeDoctorSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> You have a new doctor with ssd ${changeDoctorSuccess}
+                            </div>
+                            <c:set var = "changeDoctorSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
+                    <c:choose>
+                        <c:when test="${!empty changePasswordUserSuccess}">
+                            <div class="alert alert-success">
+                                <a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success!</strong> Password changed. 
+                            </div>
+                            <c:set var = "changePasswordUserSuccess" scope = "session" value = "${null}"/>
+                        </c:when>
+                    </c:choose>
+                    
                     <div class="container-fluid" id="exams">
                         <h1 class="mt-4">Exams</h1>
                         <div class="card mb-4">
@@ -208,6 +228,7 @@
                                                         <tr>
                                                              <th>Exam Code</th>
                                                              <th>Exam Date</th>
+                                                             <th>Exam Time</th>
                                                              <th>Done</th>
                                                              <th>Get the pdf</th>
                                                         </tr>
@@ -217,10 +238,11 @@
                                                         <tr>
                                                             <td>${exam.getCode()}</td>
                                                             <td>${exam.getExaminationDate()}</td>
+                                                            <td>${exam.getTime()}</td>
                                                             <td>${exam.getIsDone()}</td>
                                                             <td>
                                                                 <a href="exportToPDF.handler?id=${exam.getCode()}&type=exam">
-                                                                    <button class="btn btn-secondary">go</button>
+                                                                    <button class="btn btn-secondary">Download</button>
                                                                 </a>
                                                             </td>
                                                         </tr>          
@@ -260,6 +282,7 @@
                                                         <tr>
                                                              <th>Exam Code</th>
                                                              <th>Exam Date</th>
+                                                             <th>Exam Time</th>
                                                              <th>Done</th>
                                                              <th>Get the pdf</th>
                                                         </tr>
@@ -269,10 +292,11 @@
                                                         <tr>
                                                             <td>${exam.getCode()}</td>
                                                             <td>${exam.getExaminationDate()}</td>
+                                                            <td>${exam.getTime()}</td>
                                                             <td>${exam.getIsDone()}</td>
                                                             <td>
                                                                 <a href="exportToPDF.handler?id=${exam.getCode()}&type=exam">
-                                                                    <button class="btn btn-secondary">go</button>
+                                                                    <button class="btn btn-secondary">Download</button>
                                                                 </a>
                                                             </td>
                                                         </tr>          
@@ -311,6 +335,7 @@
                                                             <th>Examination Code</th>
                                                             <th>Examination Date</th>
                                                             <th>Examination Time</th>
+                                                            <th>Examination Report</th> 
                                                             <th>Done</th>
                                                        </tr>
                                                     </thead>
@@ -320,6 +345,7 @@
                                                             <td>${examination.getSSD()}</td>
                                                             <td>${examination.getExaminationDate()}</td>
                                                             <td>${examination.getTime()}</td>
+                                                            <td>${examination.getReport()}</td>
                                                             <td>${examination.getIsDone()}</td>
                                                         </tr>          
                                                     </c:forEach>
@@ -357,6 +383,7 @@
                                                             <th>Examination Code</th>
                                                             <th>Examination Date</th>
                                                             <th>Examination Time</th>
+                                                            <th>Examination Report</th>
                                                             <th>Done</th>
                                                        </tr>
                                                     </thead>
@@ -366,6 +393,7 @@
                                                             <td>${examination.getSSD()}</td>
                                                             <td>${examination.getExaminationDate()}</td>
                                                             <td>${examination.getTime()}</td>
+                                                            <td>${examination.getReport()}</td>
                                                             <td>${examination.getIsDone()}</td>
                                                         </tr>          
                                                     </c:forEach>
@@ -419,7 +447,7 @@
                                                             <td>
                                                                 <%--<button class="w3-button w3-round-large w3-blue">--%>
                                                                     <a href="exportToPDF.handler?id=${ticket.getCode()}&type=ticket">
-                                                                        <button class="btn btn-secondary">Go</button>
+                                                                        <button class="btn btn-secondary">Download</button>
                                                                     </a>
                                                                 <%--</button>--%>
                                                             </td>
@@ -475,7 +503,7 @@
                                                             <td>
                                                                 <%--<button class="w3-button w3-round-large w3-blue">--%>
                                                                     <a href="exportToPDF.handler?id=${ticket.getCode()}&type=ticket">
-                                                                        <button class="btn btn-secondary">Go</button>
+                                                                        <button class="btn btn-secondary">Download</button>
                                                                     </a>
                                                                 <%--</button>--%>
                                                             </td>
@@ -530,7 +558,7 @@
                                                             <td>${prescription.getIdpatient()}</td>
                                                             <td>
                                                                 <a href="exportToPDF.handler?id=${prescription.getCode()}&type=prescription">
-                                                                    <button class="btn btn-secondary">Go</button>
+                                                                    <button class="btn btn-secondary">Download</button>
                                                                 </a>
                                                             </td>
                                                         </tr>          
@@ -784,10 +812,10 @@
                                 </div>
                                 <div class="modal-body">
                                     <p class="font-weight-normal">Please select the image in your device.</p>
-                                    <form method="POST" action="uploadImage.handler" enctype = "multipart/form-data">
+                                    <form method="POST" action="uploadImage.handler" enctype = "multipart/form-data" onsubmit="return testpassUploadPhoto(this)">
                                         <div class="upload-btn-wrapper">
                                             <%--<button class="btnfile">Choose a file</button>--%>
-                                            <input type="file" name="myfile" accept="image/*" style="border-radius: 6px; width: 1000px"/>
+                                            <input type="file" name="myfile" id="myfile" accept="image/*" style="border-radius: 6px; width: 1000px"/>
                                         </div>                                        
                                         <br>
                                         <button type="submit" class="btn btn-success">Upload file</button>
