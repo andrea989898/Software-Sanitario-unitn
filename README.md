@@ -6,9 +6,9 @@ la supervisione del sistema è effettuabile da parte del servizio sanitario con 
 
 # Analisi iniziale del software da realizzare
 Nella fase iniziale della realizzazione sono state effettuate:
-- Analisi dei requisiti tramite Use-Case Diagram che è possibile trovare nel percorso 
+- Analisi dei requisiti tramite Use-Case Diagram che è possibile trovare nel percorso Analisi requisiti/Use case IPW.pdf
 - Analisi del processo di business che è possibile trovare nel percorso Analisi requisiti/BPMN IPW.pdf
-- [ Analisi dei possibili utenti](https://commons.apache.org/proper/commons-io/javadocs/api-2.5/org/apache/commons/io/FilenameUtils.html)
+- Analisi dei possibili utenti che è possibile trovare nel percorso
 
 ## Funzionalità
 Di seguito le funzionalità suddivise:
